@@ -386,8 +386,8 @@ exports.report5 = function (req, res, next) {
         //   .eqJoin('seller_id',r.db('external_f3').table('seller')).pluck('left',{right:['seller_tax_id','seller_name_th','seller_address_th','']}).zip()
         .run()
         .then(function (result) {
-            res.json(result);
-            res._ireport("payment/report5.jasper", req.query.export || "pdf", result, parameters);
+            // res.json([result]);
+            res._ireport("payment/report5.jasper", req.query.export || "pdf", [result], parameters);
         });
 
 }
@@ -426,7 +426,7 @@ exports.report8 = function (req, res, next) {
                 result.push({});
             }
             // res.json(result);
-            res._ireport("payment/report8.jasper", req.query.export || "pdf", result, parameters);
+            res._ireport("payment/report5.jasper", req.query.export || "pdf", result, parameters);
         });
 
 }
