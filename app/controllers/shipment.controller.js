@@ -116,12 +116,12 @@ exports.report1 = function (req, res, next) {
                                 .pluck('exporter_id')
                                 .getField('exporter_id')
                                 .map(function (m1) {
-                                    return r.db('external_f3').table('exporter').get(m1).getField('trader_id')
+                                    return r.db('external').table('exporter').get(m1).getField('seller_id')
                                         .do(function (d1) {
-                                            return r.db('external_f3').table('trader').get(d1).getField('seller_id')
-                                                .do(function (d2) {
-                                                    return r.db('external_f3').table('seller').get(d2).getField('seller_name_th')
-                                                })
+                                            // return r.db('external').table('trader').get(d1).getField('seller_id')
+                                            //     .do(function (d2) {
+                                            return r.db('external').table('seller').get(d1).getField('seller_name_th')
+                                            // })
                                         })
                                 })
                                 .reduce(function (l, r) {
@@ -314,12 +314,12 @@ exports.report2 = function (req, res, next) {
                                 .pluck('exporter_id')
                                 .getField('exporter_id')
                                 .map(function (m1) {
-                                    return r.db('external_f3').table('exporter').get(m1).getField('trader_id')
+                                    return r.db('external').table('exporter').get(m1).getField('seller_id')
                                         .do(function (d1) {
-                                            return r.db('external_f3').table('trader').get(d1).getField('seller_id')
-                                                .do(function (d2) {
-                                                    return r.db('external_f3').table('seller').get(d2).getField('seller_name_th')
-                                                })
+                                            // return r.db('external').table('trader').get(d1).getField('seller_id')
+                                            //     .do(function (d2) {
+                                            return r.db('external').table('seller').get(d1).getField('seller_name_th')
+                                            // })
                                         })
                                 })
                                 .reduce(function (l, r) {
@@ -439,12 +439,12 @@ exports.report3 = function (req, res, next) {
                     .reduce(function (l, r) {
                         return r.add("/ ").add(l)
                     }),
-                exporter: r.db('external_f3').table('exporter').get(m('exporter_id')).getField('trader_id')
+                exporter: r.db('external').table('exporter').get(m('exporter_id')).getField('seller_id')
                     .do(function (d1) {
-                        return r.db('external_f3').table('trader').get(d1).getField('seller_id')
-                            .do(function (d2) {
-                                return r.db('external_f3').table('seller').get(d2).getField('seller_name_th')
-                            })
+                        // return r.db('external').table('trader').get(d1).getField('seller_id')
+                        //     .do(function (d2) {
+                        return r.db('external').table('seller').get(d1).getField('seller_name_th')
+                        // })
                     })
             }
         })
@@ -506,12 +506,12 @@ exports.report4 = function (req, res, next) {
                                     return left.add(', ', right)
                                 }),
                             ship_count: exporter('book').getField('ship_lot_no').count(),
-                            exporter_name: r.db('external_f3').table('exporter').get(exporter('exporter_id')).getField('trader_id')
-                                .do(function (trader) {
-                                    return r.db('external_f3').table('trader').get(trader).getField('seller_id')
-                                        .do(function (seller) {
-                                            return r.db('external_f3').table('seller').get(seller).getField('seller_name_th')
-                                        })
+                            exporter_name: r.db('external').table('exporter').get(exporter('exporter_id')).getField('seller_id')
+                                .do(function (seller) {
+                                    // return r.db('external').table('trader').get(trader).getField('seller_id')
+                                    //     .do(function (seller) {
+                                    return r.db('external').table('seller').get(seller).getField('seller_name_th')
+                                    // })
                                 }),
                             total_quantity: exporter('book').sum('shm_det_quantity')
                         }
@@ -521,8 +521,8 @@ exports.report4 = function (req, res, next) {
         .getField('exporter')
         .run()
         .then(function (result) {
-          // res.json(result);
-           res._ireport("shipment/report4.jasper", req.query.export || "pdf", result, parameters);
+            // res.json(result);
+            res._ireport("shipment/report4.jasper", req.query.export || "pdf", result, parameters);
         })
         .error(function (err) {
             res.json(err)
@@ -546,12 +546,12 @@ exports.report5 = function (req, res, next) {
                 shipment_detail: r.db('g2g').table('shipment_detail').getAll(m('id'), { index: 'book_id' }).coerceTo('array')
                     .merge(function (m1) {
                         return {
-                            exporter_name: r.db('external_f3').table('exporter').get(m1('exporter_id')).getField('trader_id')
+                            exporter_name: r.db('external').table('exporter').get(m1('exporter_id')).getField('seller_id')
                                 .do(function (d1) {
-                                    return r.db('external_f3').table('trader').get(d1).getField('seller_id')
-                                        .do(function (d2) {
-                                            return r.db('external_f3').table('seller').get(d2).getField('seller_name_en')
-                                        })
+                                    // return r.db('external').table('trader').get(d1).getField('seller_id')
+                                    //     .do(function (d2) {
+                                    return r.db('external').table('seller').get(d1).getField('seller_name_en')
+                                    // })
                                 }),
                             type_rice_name: r.db('common').table('type_rice').get(m1('type_rice_id')).getField('type_rice_name_en'),
                             package_name: r.db('common').table('package').get(m1('package_id')).getField('package_kg_per_bag').coerceTo('string').add('KG'),
@@ -603,8 +603,8 @@ exports.report5 = function (req, res, next) {
         .orderBy([r.row('ship_lot_no').coerceTo('number'), r.row('invoice_no')])
         .run()
         .then(function (result) {
-             res.json(result)
-           // res._ireport("shipment/report5.jasper", req.query.export || "pdf", result, parameters);
+            res.json(result)
+            // res._ireport("shipment/report5.jasper", req.query.export || "pdf", result, parameters);
         })
         .error(function (err) {
             res.json(err)
