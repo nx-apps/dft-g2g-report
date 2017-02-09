@@ -14,13 +14,16 @@
 	<field name="seller_name_th" class="java.lang.String"/>
 	<field name="seller_tax_id" class="java.lang.String"/>
 	<field name="TOTAL" class="java.lang.Integer"/>
-	<variable name="SUM_PAY" class="java.lang.Integer" calculation="Sum">
+	<variable name="SUM_PAY" class="java.lang.Double" calculation="Sum">
 		<variableExpression><![CDATA[$F{pay_amount}]]></variableExpression>
 	</variable>
 	<variable name="SUM_TOTAL" class="java.lang.Integer" calculation="Sum">
 		<variableExpression><![CDATA[$F{TOTAL}]]></variableExpression>
 	</variable>
 	<variable name="PageSum" class="java.lang.Integer" resetType="Page" calculation="Sum"/>
+	<variable name="SUM_PAY_1" class="java.lang.Integer" resetType="Page" calculation="Sum">
+		<variableExpression><![CDATA[$F{pay_amount}]]></variableExpression>
+	</variable>
 	<background>
 		<band splitType="Stretch"/>
 	</background>
@@ -393,7 +396,7 @@
 					<bottomPen lineWidth="0.0"/>
 					<rightPen lineWidth="0.0"/>
 				</box>
-				<textElement verticalAlignment="Middle">
+				<textElement verticalAlignment="Top">
 					<font fontName="TH SarabunPSK" size="10" pdfFontName="THSarabun.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
 				</textElement>
 				<textFieldExpression><![CDATA[($F{seller_address_th}!=null)?$F{seller_address_th}:""]]></textFieldExpression>
@@ -484,7 +487,7 @@
 				<textElement textAlignment="Right" verticalAlignment="Middle">
 					<font fontName="TH SarabunPSK" size="12" pdfFontName="THSarabun.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$V{SUM_TOTAL}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[($V{SUM_TOTAL}==null?"":$V{SUM_TOTAL})]]></textFieldExpression>
 			</textField>
 		</band>
 	</columnFooter>

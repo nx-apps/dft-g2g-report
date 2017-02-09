@@ -394,7 +394,7 @@ exports.report5 = function (req, res, next) {
 exports.report7 = function (req, res, next) {
     var r = req._r;
     var parameters = {
-        CURRENT_DATE: new Date().toISOString().slice(0, 3),
+        CURRENT_DATE: new Date().toISOString().slice(0, 10),
         SUBREPORT_DIR: __dirname.replace('controller', 'report') + '\\' + req.baseUrl.replace("/api/", "") + '\\'
     };
     // console.log( parameters.CURRENT_DATE);
@@ -407,12 +407,24 @@ exports.report7 = function (req, res, next) {
             }
         })
         .merge(function (m) {
-            return r.db('external_f3').table('exporter').get(m('exporter_id')).pluck('trader_id')
+            return r.db('external').table('exporter').get(m('exporter_id')).pluck('seller_id')
         })
-        .merge(r.db('external_f3').table('trader').get(r.row('trader_id')).pluck('seller_id'))
-        .merge(r.db('external_f3').table('seller').get(r.row('seller_id')).pluck('seller_tax_id', 'seller_name_th', 'seller_address_th'))
+        // .merge(r.db('external_f3').table('trader').get(r.row('trader_id')).pluck('seller_id'))
+        .merge(r.db('external').table('seller').get(r.row('seller_id')).pluck('seller_tax_id', 'seller_name_th', 'seller_address_th'))
         .without('payment_detail', 'tags')  
-        // .pluck('TOTAL','pay_amount','pay_date')     
+        .pluck('TOTAL','pay_amount','pay_date')  
+   .merge(function (r1){
+        return {
+          count_exporter:r.db('g2g').table('payment').between(date_start, date_end, { index: 'pay_date' })
+          .count()
+        }
+   }) 
+    .merge(function (m) {
+            return {
+                page_count:  m('count_exporter').div(6).floor().add(1)
+            }
+    })     
+
         .run()
         .then(function (result) {
             // res.json(result);
@@ -428,7 +440,7 @@ exports.report8 = function (req, res, next) {
         SUBREPORT_DIR: __dirname.replace('controller', 'report') + '\\' + req.baseUrl.replace("/api/", "") + '\\'
     };
     date_start = "2017-02-1";
-    date_end = "2017-02-28";
+    date_end = "2017-02-31";
     r.db('g2g').table('payment').between(date_start, date_end, { index: 'pay_date' })
         .merge(function (m) {
             return {
@@ -438,7 +450,6 @@ exports.report8 = function (req, res, next) {
         .merge(function (m) {
             return r.db('external').table('exporter').get(m('exporter_id')).pluck('seller_id')
         })
-        // .merge(r.db('external').table('trader').get(r.row('trader_id')).pluck('seller_id'))
         .merge(r.db('external').table('seller').get(r.row('seller_id')).pluck('seller_tax_id', 'seller_name_th', 'seller_address_th'))
         .without('payment_detail', 'tags')
         .merge(function (row) {
