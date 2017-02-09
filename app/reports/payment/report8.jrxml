@@ -4,6 +4,7 @@
 	<property name="ireport.x" value="0"/>
 	<property name="ireport.y" value="0"/>
 	<parameter name="CURRENT_DATE" class="java.lang.String"/>
+	<parameter name="PAGE" class="java.lang.String"/>
 	<queryString>
 		<![CDATA[]]>
 	</queryString>
@@ -19,6 +20,7 @@
 	<variable name="SUM_TOTAL" class="java.lang.Integer" calculation="Sum">
 		<variableExpression><![CDATA[$F{TOTAL}]]></variableExpression>
 	</variable>
+	<variable name="PageSum" class="java.lang.Integer" resetType="Page" calculation="Sum"/>
 	<background>
 		<band splitType="Stretch"/>
 	</background>
@@ -232,7 +234,7 @@
 				<textElement textAlignment="Right" verticalAlignment="Middle">
 					<font fontName="TH SarabunPSK" size="12" pdfFontName="THSarabun.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
 				</textElement>
-				<textFieldExpression><![CDATA["แผ่นที่  "+$V{PAGE_COUNT}  +"  ในจำนวน  "+"แผ่น"]]></textFieldExpression>
+				<textFieldExpression><![CDATA["แผ่นที่  "+$V{PAGE_NUMBER}  +"  ในจำนวน  "+ $P{PAGE} +"แผ่น"]]></textFieldExpression>
 			</textField>
 			<staticText>
 				<reportElement x="32" y="70" width="268" height="37" uuid="ed6a8ec6-5127-4b5b-a742-f0d9a9cd3d13"/>
@@ -298,8 +300,7 @@
 				<textElement textAlignment="Right" verticalAlignment="Middle">
 					<font fontName="TH SarabunPSK" size="10" pdfFontName="THSarabun.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
 				</textElement>
-				<textFieldExpression><![CDATA[($F{pay_amount}!=null)?$F{pay_amount}:""
-]]></textFieldExpression>
+				<textFieldExpression><![CDATA[($F{pay_amount}!=null)?$F{pay_amount}:""]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement x="531" y="0" width="28" height="50" uuid="4e3c9350-82c2-4977-8e1e-387cd5a84f7f"/>
@@ -330,8 +331,7 @@
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font fontName="TH SarabunPSK" size="10" pdfFontName="THSarabun.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
 				</textElement>
-				<textFieldExpression><![CDATA[($F{pay_date}!=null)?$F{pay_date}:""
-]]></textFieldExpression>
+				<textFieldExpression><![CDATA[($F{pay_date}!=null)?$F{pay_date}:""]]></textFieldExpression>
 			</textField>
 			<line>
 				<reportElement x="333" y="6" width="1" height="14" uuid="b7c371ed-8d87-40e6-b7b9-37581d197a15"/>
@@ -365,8 +365,7 @@
 				<textElement textAlignment="Right" verticalAlignment="Middle">
 					<font fontName="TH SarabunPSK" size="10" pdfFontName="THSarabun.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
 				</textElement>
-				<textFieldExpression><![CDATA[($F{TOTAL}!=null)?$F{TOTAL}:""
-]]></textFieldExpression>
+				<textFieldExpression><![CDATA[($F{TOTAL}!=null)?$F{TOTAL}:""]]></textFieldExpression>
 			</textField>
 			<line>
 				<reportElement x="312" y="6" width="1" height="14" uuid="41fe923c-5d48-4890-acf1-8cebc2e69007"/>
@@ -439,8 +438,7 @@
 				<textElement verticalAlignment="Middle">
 					<font fontName="TH SarabunPSK" size="10" pdfFontName="THSarabun.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
 				</textElement>
-				<textFieldExpression><![CDATA[($F{seller_tax_id}!=null)?$F{seller_tax_id}:""
-]]></textFieldExpression>
+				<textFieldExpression><![CDATA[($F{seller_tax_id}!=null)?$F{seller_tax_id}:""]]></textFieldExpression>
 			</textField>
 		</band>
 	</detail>

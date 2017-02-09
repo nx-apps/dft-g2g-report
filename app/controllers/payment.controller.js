@@ -391,9 +391,39 @@ exports.report5 = function (req, res, next) {
         });
 
 }
+exports.report7 = function (req, res, next) {
+    var r = req._r;
+    var parameters = {
+        CURRENT_DATE: new Date().toISOString().slice(0, 3),
+        SUBREPORT_DIR: __dirname.replace('controller', 'report') + '\\' + req.baseUrl.replace("/api/", "") + '\\'
+    };
+    // console.log( parameters.CURRENT_DATE);
+    date_start = "2017-02-1";
+    date_end = "2017-02-28";
+    r.db('g2g').table('payment').between(date_start, date_end, { index: 'pay_date' })
+        .merge(function (m) {
+            return {
+                TOTAL: m('pay_amount').mul(0.01).div(100)
+            }
+        })
+        .merge(function (m) {
+            return r.db('external_f3').table('exporter').get(m('exporter_id')).pluck('trader_id')
+        })
+        .merge(r.db('external_f3').table('trader').get(r.row('trader_id')).pluck('seller_id'))
+        .merge(r.db('external_f3').table('seller').get(r.row('seller_id')).pluck('seller_tax_id', 'seller_name_th', 'seller_address_th'))
+        .without('payment_detail', 'tags')  
+        // .pluck('TOTAL','pay_amount','pay_date')     
+        .run()
+        .then(function (result) {
+            // res.json(result);
+            res._ireport("payment/report7.jasper", req.query.export || "pdf", result, parameters);
+        });
+
+}
 exports.report8 = function (req, res, next) {
     var r = req._r;
     var parameters = {
+        PAGE:'',
         CURRENT_DATE: new Date().toISOString().slice(0, 10),
         SUBREPORT_DIR: __dirname.replace('controller', 'report') + '\\' + req.baseUrl.replace("/api/", "") + '\\'
     };
@@ -425,8 +455,10 @@ exports.report8 = function (req, res, next) {
             for (var i = 0; i < (6 - count % 6); i++) {
                 result.push({});
             }
+            // console.log(result.length/6)
+        parameters["PAGE"]=result.length/6;
             // res.json(result);
-            res._ireport("payment/report5.jasper", req.query.export || "pdf", result, parameters);
+            res._ireport("payment/report8.jasper", req.query.export || "pdf", result, parameters);
         });
 
 }
