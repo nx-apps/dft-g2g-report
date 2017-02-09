@@ -397,9 +397,9 @@ exports.report7 = function (req, res, next) {
         CURRENT_DATE: new Date().toISOString().slice(0, 10),
         SUBREPORT_DIR: __dirname.replace('controller', 'report') + '\\' + req.baseUrl.replace("/api/", "") + '\\'
     };
-    // console.log( parameters.CURRENT_DATE);
-    date_start = "2017-02-1";
-    date_end = "2017-02-28";
+    // console.log( req.query.date_start);
+    date_start = req.query.date_start;
+    date_end = req.query.date_end;
     r.db('g2g').table('payment').between(date_start, date_end, { index: 'pay_date' })
         .merge(function (m) {
             return {
@@ -439,8 +439,8 @@ exports.report8 = function (req, res, next) {
         CURRENT_DATE: new Date().toISOString().slice(0, 10),
         SUBREPORT_DIR: __dirname.replace('controller', 'report') + '\\' + req.baseUrl.replace("/api/", "") + '\\'
     };
-    date_start = "2017-02-1";
-    date_end = "2017-02-31";
+    date_start = req.query.date_start;
+    date_end = req.query.date_end;
     r.db('g2g').table('payment').between(date_start, date_end, { index: 'pay_date' })
         .merge(function (m) {
             return {
@@ -459,13 +459,13 @@ exports.report8 = function (req, res, next) {
         })
         .run()
         .then(function (result) {
-            for (var i = 0; i < 5; i++) {
-                result.push({});
-            }
-            var count = result.length;
-            for (var i = 0; i < (6 - count % 6); i++) {
-                result.push({});
-            }
+            // for (var i = 0; i < 5; i++) {
+            //     result.push({});
+            // }
+            // var count = result.length;
+            // for (var i = 0; i < (6 - count % 6); i++) {
+            //     result.push({});
+            // }
             // console.log(result.length/6)
         parameters["PAGE"]=result.length/6;
             // res.json(result);
