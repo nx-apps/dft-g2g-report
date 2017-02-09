@@ -462,10 +462,10 @@ exports.report8 = function (req, res, next) {
             // for (var i = 0; i < 5; i++) {
             //     result.push({});
             // }
-            // var count = result.length;
-            // for (var i = 0; i < (6 - count % 6); i++) {
-            //     result.push({});
-            // }
+            var count = result.length;
+            for (var i = 0; i < (6 - count % 6); i++) {
+                result.push({});
+            }
             // console.log(result.length/6)
         parameters["PAGE"]=result.length/6;
             // res.json(result);

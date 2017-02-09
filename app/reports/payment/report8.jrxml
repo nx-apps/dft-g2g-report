@@ -237,7 +237,7 @@
 				<textElement textAlignment="Right" verticalAlignment="Middle">
 					<font fontName="TH SarabunPSK" size="12" pdfFontName="THSarabun.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
 				</textElement>
-				<textFieldExpression><![CDATA["แผ่นที่  "+$V{PAGE_NUMBER}  +"  ในจำนวน  "+ $P{PAGE} +"แผ่น"]]></textFieldExpression>
+				<textFieldExpression><![CDATA["แผ่นที่  "+$V{PAGE_NUMBER}  +"  ในจำนวน  "+ $P{PAGE} +"  แผ่น"]]></textFieldExpression>
 			</textField>
 			<staticText>
 				<reportElement x="32" y="70" width="268" height="37" uuid="ed6a8ec6-5127-4b5b-a742-f0d9a9cd3d13"/>
@@ -274,7 +274,8 @@
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font fontName="TH SarabunPSK" size="10" pdfFontName="THSarabun.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$V{REPORT_COUNT}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[
+($F{seller_name_th}!=null)?$V{REPORT_COUNT}:""]]></textFieldExpression>
 			</textField>
 			<rectangle>
 				<reportElement mode="Transparent" x="302" y="6" width="52" height="14" uuid="613853bf-50eb-41ff-bdc4-6d4cfe653185"/>
