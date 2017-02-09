@@ -265,9 +265,9 @@ exports.report2 = function (req, res, next) {
                                         .eqJoin("shm_id", r.db('g2g').table("shipment")).without({ right: ["id", "date_created", "date_updated", "creater", "updater"] }).zip()
                                         .eqJoin("cl_id", r.db('g2g').table("confirm_letter")).without({ right: ['id', 'date_created', 'date_updated', 'creater', 'updater', "cl_date", "cl_name", "cl_quality"] }).zip()
                                         .eqJoin("package_id", r.db('common').table("package")).without({ right: ["id", "date_created", "date_updated", "creater", "updater"] }).zip()
-                                        .eqJoin("exporter_id", r.db('external_f3').table("exporter")).without({ right: ["id", "date_created", "date_updated", "creater", "updater"] }).zip()
-                                        .eqJoin("trader_id", r.db('external_f3').table("trader")).without({ right: ["id", "date_created", "date_updated", "creater", "updater"] }).zip()
-                                        .eqJoin("seller_id", r.db('external_f3').table("seller")).without({ right: ['id', 'date_created', 'date_updated', 'creater', 'updater', "country_id"] }).zip()
+                                        .eqJoin("exporter_id", r.db('external').table("exporter")).without({ right: ["id", "date_created", "date_updated", "creater", "updater"] }).zip()
+                                        // .eqJoin("trader_id", r.db('external').table("trader")).without({ right: ["id", "date_created", "date_updated", "creater", "updater"] }).zip()
+                                        .eqJoin("seller_id", r.db('external').table("seller")).without({ right: ['id', 'date_created', 'date_updated', 'creater', 'updater', "country_id"] }).zip()
                                         .merge(function (m1) {
                                             return {
                                                 shm_det_id: m1('id'),
@@ -320,9 +320,9 @@ exports.report2 = function (req, res, next) {
                                             .merge(function (m2) {
                                                 return {
                                                     exporter_date_approve: m2('exporter_date_approve').split('T')(0),
-                                                    exporter_date_update: m2('exporter_date_update').split('T')(0),
+                                                    // exporter_date_update: m2('exporter_date_update').split('T')(0),
                                                     invoice_date: m2('invoice_date').split('T')(0),
-                                                    trader_date_approve: m2('trader_date_approve').split('T')(0)
+                                                    // trader_date_approve: m2('trader_date_approve').split('T')(0)
                                                 }
                                             })
                                     })
@@ -377,13 +377,13 @@ exports.report5 = function (req, res, next) {
                 TOTAL: m('pay_amount').mul(0.01).div(100)
             }
         })
-        .merge(r.db('external_f3').table('exporter').get(r.row('exporter_id')).pluck('trader_id'))
-        .merge(r.db('external_f3').table('trader').get(r.row('trader_id')).pluck('seller_id'))
-        .merge(r.db('external_f3').table('seller').get(r.row('seller_id')).pluck('seller_tax_id', 'seller_name_th', 'seller_address_th'))
+        .merge(r.db('external').table('exporter').get(r.row('exporter_id')).pluck('seller_id'))
+        // .merge(r.db('external').table('trader').get(r.row('trader_id')).pluck('seller_id'))
+        .merge(r.db('external').table('seller').get(r.row('seller_id')).pluck('seller_tax_id', 'seller_name_th', 'seller_address_th'))
         .without('payment_detail', 'tags')
-        //   .eqJoin('exporter_id',r.db('external_f3').table('exporter')).pluck('left',{right:'trader_id'}).zip()
-        //   .eqJoin('trader_id',r.db('external_f3').table('trader')).pluck('left',{right:'seller_id'}).zip()
-        //   .eqJoin('seller_id',r.db('external_f3').table('seller')).pluck('left',{right:['seller_tax_id','seller_name_th','seller_address_th','']}).zip()
+        //   .eqJoin('exporter_id',r.db('external').table('exporter')).pluck('left',{right:'trader_id'}).zip()
+        //   .eqJoin('trader_id',r.db('external').table('trader')).pluck('left',{right:'seller_id'}).zip()
+        //   .eqJoin('seller_id',r.db('external').table('seller')).pluck('left',{right:['seller_tax_id','seller_name_th','seller_address_th','']}).zip()
         .run()
         .then(function (result) {
             // res.json([result]);
@@ -406,10 +406,10 @@ exports.report8 = function (req, res, next) {
             }
         })
         .merge(function (m) {
-            return r.db('external_f3').table('exporter').get(m('exporter_id')).pluck('trader_id')
+            return r.db('external').table('exporter').get(m('exporter_id')).pluck('seller_id')
         })
-        .merge(r.db('external_f3').table('trader').get(r.row('trader_id')).pluck('seller_id'))
-        .merge(r.db('external_f3').table('seller').get(r.row('seller_id')).pluck('seller_tax_id', 'seller_name_th', 'seller_address_th'))
+        // .merge(r.db('external').table('trader').get(r.row('trader_id')).pluck('seller_id'))
+        .merge(r.db('external').table('seller').get(r.row('seller_id')).pluck('seller_tax_id', 'seller_name_th', 'seller_address_th'))
         .without('payment_detail', 'tags')
         .merge(function (row) {
             return {
