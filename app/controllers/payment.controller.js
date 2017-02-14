@@ -365,63 +365,104 @@ exports.report2 = function (req, res, next) {
             res.json(err)
         })
 }
-exports.report3_1 = function (req, res, next) {
+exports.report3_1 = function (req, res, next) { 
     var r = req._r;
     var parameters = {
         CURRENT_DATE: new Date().toISOString().slice(0, 10),
         SUBREPORT_DIR: __dirname.replace('controller', 'report') + '\\' + req.baseUrl.replace("/api/", "") + '\\'
     };
-  r.db('g2g').table('shipment')
-        .merge(function (shm) {
-            return {
-                exporter: r.db('g2g').table('shipment_detail').getAll(shm('id'), { index: 'shm_id' }).coerceTo('array').without('tags')
-              .eqJoin('book_id', r.db('g2g').table('book')).pluck('left', { right: ['ship_lot_no', 'ship', 'dest_port_id'] }).zip()
-              .merge(function (ships) {
-                return {
-                  ship: ships('ship')
-                  .merge(function (ship) {
-                    return r.db('common').table('ship').get(ship('ship_id')).pluck('ship_name')
+   r.db('g2g').table('fee_detail')
+    .merge(function (invoice_merge){
+    return {
+      invoice :invoice_merge('invoice')     
+      .merge(function (invoice_detail_merge){
+        return { 
+          invoice_detail:invoice_detail_merge('invoice_detail') 
+          .merge(function (ship_det_merge){
+            return r.db('g2g').table('shipment_detail').get(ship_det_merge('shm_det_id')).without('tags') 
+              .merge(function (m){
+                return r.db('g2g').table('book').get(m('book_id')).pluck('ship','ship_lot_no','dest_port_id')  
                   })
-                  .without('ship_id')
-                  .map(function (ship) {
-                    return ship('ship_name').add(' V.', ship('ship_voy_no'))
-                  }).reduce(function (left, right) {
-                    return left.add(' / ', right)
-                  }),
-                  port_name: r.db('common').table('port').get(ships('dest_port_id')).getField('port_name'),
-                  country_name: r.db('g2g').table('contract').get(shm('contract_id')).getField('buyer_id')
-                  .do(function (buyer) {
-                    return r.db('common').table('buyer').get(buyer).getField('country_id')
-                      .do(function (country) {
-                        return r.db('common').table('country').get(country).getField('country_fullname_th')
-                      })
-                  }),
-                  cl_no: r.db('g2g').table('confirm_letter').get(shm('cl_id')).getField('cl_no'),
-                            shm_no: shm('shm_no')
-            }
-        })
-              .merge(function (exporter_merge){
+              .merge(function(ship_merge){
+      					return {
+    						  ship:ship_merge('ship')
+                  .merge(function(ship_name_merge){
+     								   return r.db('common').table('ship').get(ship_name_merge('ship_id')).pluck('ship_name')   
+											      })
+                  .map(function(ship_name_merge){
+      								  return ship_name_merge('ship_name').add(' V.',ship_name_merge('ship_voy_no'))    
+  													    })
+                   .reduce(function(left,right){       
+      										  return left.add(' / ',right)       
+   											   }),
+                  
+                  port_name: r.db('common').table('port').get(ship_merge('dest_port_id')).getField('port_name'),
+            //      country_name: r.db('g2g').table('contract').get(table_shipment('contract_id')).getField('buyer_id')
+                  
+                                    }
+                                })
+              .merge(function (rate_merge) {
                 return {
-                  seller_name: r.db('external').table('exporter').get(exporter_merge('exporter_id')).getField('seller_id') 
-                  .do(function (seller) {
-                                            return r.db('external').table('seller').get(seller).getField('seller_name_th')
-                  })
+                  rate_bank: (invoice_merge('rate_bank')),
+                  fee_id: (invoice_merge('fee_id'))
                 }
               })
-            }
+               .merge(function (type_rice_merge){
+                 return {
+                   type_rice_name: r.db('common').table('type_rice').get(type_rice_merge('type_rice_id')).getField('type_rice_name_th'),
+                   amount_of_rice:(type_rice_merge('shm_det_quantity')).mul(type_rice_merge('price_per_ton')),
+                   seller_name: r.db('external').table('exporter').get(type_rice_merge('exporter_id')).getField('seller_id')
+                   .do(function (seller) {
+                     return r.db('external').table('seller').get(seller).getField('seller_name_th')
+                  })
+                 }
+               })
+          })
+        }
+      })
+       .map(function (invoice_merge) {
+                        return invoice_merge.getField('invoice_detail')     
+                    })(0)
+    }
+    })
+   .map(function (invoice_merge) {
+            return invoice_merge.getField('invoice')                
         })
-  .without('tags')
-  .map(function (shm){
-                return shm.getField('exporter')
-              })
-  .reduce(function(left,right){
+        .reduce(function(left,right){
             return left.add(right)
         })
-  .merge(function (m){
+  .eqJoin('fee_id', r.db('g2g').table('fee')).pluck('left', { right: 'fee_no'}).zip()
+  .eqJoin('shm_id',r.db('g2g').table('shipment')).pluck('left', { right: ['cl_id','contract_id']}).zip()
+   .merge(function (buyer_merge){
+     return {country_name: r.db('g2g').table('contract').get(buyer_merge('contract_id')).getField('buyer_id')
+       .do(function (buyer) {
+         return r.db('common').table('buyer').get(buyer).getField('country_id')
+           .do(function (country) {
+             return r.db('common').table('country').get(country).getField('country_fullname_th')
+           })
+       }),
+       buyer_name: r.db('g2g').table('contract').get(buyer_merge('contract_id')).getField('buyer_id')
+       .do(function (buyer_name) {
+         return r.db('common').table('buyer').get(buyer_name).getField('buyer_name')
+       })
+       }
+   })
+    .merge(function (sum_merge){
     return {
-      amount_of_rice:(m('shm_det_quantity')).mul(m('price_per_ton'))
+      sum_rate_bank:(sum_merge('rate_bank')).mul(sum_merge('amount_of_rice'))
     }
   })
+   .merge(function (mul_merge){
+    return {
+   sum_tax : mul_merge('sum_rate_bank').mul(0.01)
+    }
+  })
+   .merge(function (sub_merge){
+    return {
+   balance : sub_merge('sum_rate_bank').sub(sub_merge('sum_tax'))
+    }
+  })
+ 
         .run()
         .then(function (result) {
             // res.json(result);
@@ -438,7 +479,7 @@ exports.report5 = function (req, res, next) {
     r.db('g2g').table('payment').get(req.params.id)
         .merge(function (m) {
             return {
-                TOTAL: m('pay_amount').mul(0.01).div(100)
+                TOTAL: m('pay_amount').mul(0.01)
             }
         })
         .merge(r.db('external').table('exporter').get(r.row('exporter_id')).pluck('seller_id'))
