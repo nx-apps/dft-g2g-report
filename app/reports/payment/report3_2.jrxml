@@ -65,7 +65,7 @@
 				<text><![CDATA[ลำที่]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="30" y="0" width="188" height="62" uuid="59c6333e-1f27-4dbb-a681-1fc073a62709"/>
+				<reportElement x="30" y="0" width="160" height="62" uuid="59c6333e-1f27-4dbb-a681-1fc073a62709"/>
 				<box>
 					<pen lineWidth="1.0"/>
 					<topPen lineWidth="1.0"/>
@@ -79,7 +79,7 @@
 				<text><![CDATA[ชื่อเรือ]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="218" y="0" width="36" height="62" uuid="ecb42a6b-5f6e-48de-b8a6-96c8c24f66cf"/>
+				<reportElement x="190" y="0" width="53" height="62" uuid="ecb42a6b-5f6e-48de-b8a6-96c8c24f66cf"/>
 				<box leftPadding="3" rightPadding="3">
 					<pen lineWidth="1.0"/>
 					<topPen lineWidth="1.0"/>
@@ -95,7 +95,7 @@
 ]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="254" y="0" width="67" height="62" uuid="3bebac1a-319a-47b2-8c90-84399df7abfa"/>
+				<reportElement x="243" y="0" width="67" height="62" uuid="3bebac1a-319a-47b2-8c90-84399df7abfa"/>
 				<box>
 					<pen lineWidth="1.0"/>
 					<topPen lineWidth="1.0"/>
@@ -111,7 +111,7 @@
 (2)]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="321" y="0" width="58" height="62" uuid="8e5aee75-5ef4-422e-8006-c71186e95fe5"/>
+				<reportElement x="310" y="0" width="69" height="62" uuid="8e5aee75-5ef4-422e-8006-c71186e95fe5"/>
 				<box>
 					<pen lineWidth="1.0"/>
 					<topPen lineWidth="1.0"/>
@@ -225,7 +225,7 @@ USD
 				<textFieldExpression><![CDATA[$F{ship_lot_no}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="30" y="0" width="188" height="27" uuid="10bdd57e-c576-4d7c-b78b-4a6f776373f9"/>
+				<reportElement x="30" y="0" width="160" height="27" uuid="10bdd57e-c576-4d7c-b78b-4a6f776373f9"/>
 				<box leftPadding="5" rightPadding="5">
 					<pen lineWidth="1.0"/>
 					<topPen lineWidth="1.0"/>
@@ -239,7 +239,7 @@ USD
 				<textFieldExpression><![CDATA[$F{ship}]]></textFieldExpression>
 			</textField>
 			<textField pattern="#,##0.00" isBlankWhenNull="true">
-				<reportElement x="218" y="0" width="36" height="27" uuid="0ca41256-5323-4fac-adbf-e98b8321c97b"/>
+				<reportElement x="190" y="0" width="53" height="27" uuid="0ca41256-5323-4fac-adbf-e98b8321c97b"/>
 				<box leftPadding="5" rightPadding="5">
 					<pen lineWidth="1.0"/>
 					<topPen lineWidth="1.0"/>
@@ -253,7 +253,7 @@ USD
 				<textFieldExpression><![CDATA[$F{shm_det_quantity}]]></textFieldExpression>
 			</textField>
 			<textField pattern="#,##0.00">
-				<reportElement x="254" y="0" width="67" height="27" uuid="0a03ad24-58d5-4108-8e6a-b8176f2c8b46"/>
+				<reportElement x="243" y="0" width="67" height="27" uuid="0a03ad24-58d5-4108-8e6a-b8176f2c8b46"/>
 				<box leftPadding="5" rightPadding="5">
 					<pen lineWidth="1.0"/>
 					<topPen lineWidth="1.0"/>
@@ -267,7 +267,7 @@ USD
 				<textFieldExpression><![CDATA[$F{price_per_ton}]]></textFieldExpression>
 			</textField>
 			<textField pattern="#,##0.00">
-				<reportElement x="321" y="0" width="58" height="27" uuid="737b09a5-caa1-47e2-802e-3406aaf1c1b0"/>
+				<reportElement x="310" y="0" width="69" height="27" uuid="737b09a5-caa1-47e2-802e-3406aaf1c1b0"/>
 				<box leftPadding="5" rightPadding="5">
 					<pen lineWidth="1.0"/>
 					<topPen lineWidth="1.0"/>
@@ -355,7 +355,7 @@ USD
 	<summary>
 		<band height="27">
 			<staticText>
-				<reportElement x="254" y="0" width="67" height="27" uuid="1dd3b98a-4550-4d46-8560-7356886970e4"/>
+				<reportElement x="243" y="0" width="67" height="27" uuid="1dd3b98a-4550-4d46-8560-7356886970e4"/>
 				<box>
 					<pen lineWidth="1.5"/>
 					<topPen lineWidth="1.5"/>
@@ -369,7 +369,7 @@ USD
 				<text><![CDATA[]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="30" y="0" width="188" height="27" uuid="d7b2baf5-cb8f-41de-9816-15540d80d2c8"/>
+				<reportElement x="30" y="0" width="160" height="27" uuid="d7b2baf5-cb8f-41de-9816-15540d80d2c8"/>
 				<box>
 					<pen lineWidth="1.5"/>
 					<topPen lineWidth="1.5"/>
@@ -397,7 +397,7 @@ USD
 				<text><![CDATA[]]></text>
 			</staticText>
 			<textField pattern="#,##0.00" isBlankWhenNull="true">
-				<reportElement x="218" y="0" width="36" height="27" uuid="3fdac4cc-c0af-41d5-b8b7-4a9b6a657252"/>
+				<reportElement x="190" y="0" width="53" height="27" uuid="3fdac4cc-c0af-41d5-b8b7-4a9b6a657252"/>
 				<box leftPadding="5" rightPadding="5">
 					<pen lineWidth="1.5"/>
 					<topPen lineWidth="1.5"/>
@@ -408,7 +408,7 @@ USD
 				<textElement textAlignment="Right" verticalAlignment="Middle">
 					<font fontName="TH SarabunPSK" size="14" pdfFontName="THSarabun.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$F{shm_det_quantity}$V{SUM_SHM_DET}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$V{SUM_SHM_DET}]]></textFieldExpression>
 			</textField>
 			<textField pattern="#,##0.00">
 				<reportElement x="459" y="0" width="85" height="27" uuid="cd1cbca8-4102-4ce8-8b93-6cdee9d8c8ea"/>
@@ -425,7 +425,7 @@ USD
 				<textFieldExpression><![CDATA[$V{SUM_INVOIC_FEE}]]></textFieldExpression>
 			</textField>
 			<textField pattern="#,##0.00">
-				<reportElement x="321" y="0" width="58" height="27" uuid="d9c6261d-6ed8-464d-9f1e-6ced3d3f3493"/>
+				<reportElement x="310" y="0" width="69" height="27" uuid="d9c6261d-6ed8-464d-9f1e-6ced3d3f3493"/>
 				<box leftPadding="5" rightPadding="5">
 					<pen lineWidth="1.5"/>
 					<topPen lineWidth="1.5"/>
