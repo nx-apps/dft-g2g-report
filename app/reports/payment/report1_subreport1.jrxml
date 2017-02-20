@@ -9,7 +9,7 @@
 	<field name="package_name_en" class="java.lang.String"/>
 	<field name="package_weight_bag" class="java.lang.Integer"/>
 	<field name="price_per_ton" class="java.lang.Integer"/>
-	<field name="inct_name" class="java.lang.String"/>
+	<field name="incoterms" class="java.lang.String"/>
 	<field name="weight_gross" class="java.lang.Double"/>
 	<field name="weight_tare" class="java.lang.Double"/>
 	<field name="weight_net" class="java.lang.Double"/>
@@ -118,7 +118,7 @@
 "PACKING : IN STRONG EXPORT SEAWORTHY "+$F{package_name_en}.toUpperCase()+
 "NET WITH MINIMUM TARE WEIGHT TO BE AT "+$F{package_weight_bag}+" GRAM/BAG."+
 "TWO PERCENT (2%) MARKED SPARE EMPTY BAGS TO BE SUPPLIED FREE OF CHARGE BY THE SELLER ALONG WITH THE SHIPENT.\n"+
-"PRICE : USD "+$F{price_per_ton}+"PER METRIC TON, "+$F{inct_name}.toUpperCase()+
+"PRICE : USD "+$F{price_per_ton}+"PER METRIC TON, "+$F{incoterms}.toUpperCase()+
 " BANGKOK OR LEAM CHABANG AT BUYER'S OPTION."]]></textFieldExpression>
 			</textField>
 		</band>
