@@ -13,6 +13,7 @@
 	<field name="balance" class="java.lang.Integer"/>
 	<field name="invoice_fee" class="java.lang.Integer"/>
 	<field name="sum_bath" class="java.lang.Integer"/>
+	<field name="fee_no" class="java.lang.String"/>
 	<variable name="SUM_SHM_DET" class="java.lang.Integer" calculation="Sum">
 		<variableExpression><![CDATA[$F{shm_det_quantity}]]></variableExpression>
 	</variable>
@@ -44,7 +45,7 @@
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font fontName="TH SarabunPSK" size="16" isBold="true" pdfFontName="THSarabun.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
 				</textElement>
-				<textFieldExpression><![CDATA["รายละเอียดค่าข้าวและค่าใช้จ่ายส่งมอบ COFCO Lot ที่ 10 ครั้งที่ 18"]]></textFieldExpression>
+				<textFieldExpression><![CDATA["รายละเอียดค่าข้าวและค่าใช้จ่ายส่งมอบ COFCO Lot ที่ 10 ครั้งที่ "+$F{fee_no}]]></textFieldExpression>
 			</textField>
 		</band>
 	</title>
