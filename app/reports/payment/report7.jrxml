@@ -882,8 +882,7 @@
 				<reportElement x="6" y="175" width="10" height="10" uuid="f4524203-7cd2-431b-b07f-feba4e57ea7b">
 					<printWhenExpression><![CDATA[($P{NO_MONTH}==1)]]></printWhenExpression>
 				</reportElement>
-				<imageExpression><![CDATA[new java.io.ByteArrayInputStream(com.sun.org.apache.xerces.internal.impl.dv.util.Base64.decode($P{check}))
-]]></imageExpression>
+				<imageExpression><![CDATA[new java.io.ByteArrayInputStream(com.sun.org.apache.xerces.internal.impl.dv.util.Base64.decode($P{check}))]]></imageExpression>
 			</image>
 			<textField>
 				<reportElement x="4" y="176" width="10" height="10" uuid="0027a9bd-c058-4da7-a793-f7fd1ee713f9"/>
@@ -1011,78 +1010,67 @@
 				<reportElement x="6" y="192" width="10" height="10" uuid="880de111-1a9e-4724-bb1e-53f757a7e057">
 					<printWhenExpression><![CDATA[($P{NO_MONTH}==2)]]></printWhenExpression>
 				</reportElement>
-				<imageExpression><![CDATA[new java.io.ByteArrayInputStream(com.sun.org.apache.xerces.internal.impl.dv.util.Base64.decode($P{check}))
-]]></imageExpression>
+				<imageExpression><![CDATA[new java.io.ByteArrayInputStream(com.sun.org.apache.xerces.internal.impl.dv.util.Base64.decode($P{check}))]]></imageExpression>
 			</image>
 			<image>
 				<reportElement x="6" y="209" width="10" height="10" uuid="91d9ec42-1302-4db0-a225-bb2c4336d73f">
 					<printWhenExpression><![CDATA[($P{NO_MONTH}==3)]]></printWhenExpression>
 				</reportElement>
-				<imageExpression><![CDATA[new java.io.ByteArrayInputStream(com.sun.org.apache.xerces.internal.impl.dv.util.Base64.decode($P{check}))
-]]></imageExpression>
+				<imageExpression><![CDATA[new java.io.ByteArrayInputStream(com.sun.org.apache.xerces.internal.impl.dv.util.Base64.decode($P{check}))]]></imageExpression>
 			</image>
 			<image>
 				<reportElement x="91" y="192" width="10" height="10" uuid="7b3a8ef0-1f82-45fb-b63d-21c1f2fee823">
 					<printWhenExpression><![CDATA[($P{NO_MONTH}==5)]]></printWhenExpression>
 				</reportElement>
-				<imageExpression><![CDATA[new java.io.ByteArrayInputStream(com.sun.org.apache.xerces.internal.impl.dv.util.Base64.decode($P{check}))
-]]></imageExpression>
+				<imageExpression><![CDATA[new java.io.ByteArrayInputStream(com.sun.org.apache.xerces.internal.impl.dv.util.Base64.decode($P{check}))]]></imageExpression>
 			</image>
 			<image>
 				<reportElement x="91" y="209" width="10" height="10" uuid="35e3cfec-492c-48cf-8668-2ba8660e846f">
 					<printWhenExpression><![CDATA[($P{NO_MONTH}==6)]]></printWhenExpression>
 				</reportElement>
-				<imageExpression><![CDATA[new java.io.ByteArrayInputStream(com.sun.org.apache.xerces.internal.impl.dv.util.Base64.decode($P{check}))
-]]></imageExpression>
+				<imageExpression><![CDATA[new java.io.ByteArrayInputStream(com.sun.org.apache.xerces.internal.impl.dv.util.Base64.decode($P{check}))]]></imageExpression>
 			</image>
 			<image>
 				<reportElement x="91" y="175" width="10" height="10" uuid="b1b6e159-cf81-42b8-aab0-0e856c36631a">
 					<printWhenExpression><![CDATA[($P{NO_MONTH}==4)]]></printWhenExpression>
 				</reportElement>
-				<imageExpression><![CDATA[new java.io.ByteArrayInputStream(com.sun.org.apache.xerces.internal.impl.dv.util.Base64.decode($P{check}))
-]]></imageExpression>
+				<imageExpression><![CDATA[new java.io.ByteArrayInputStream(com.sun.org.apache.xerces.internal.impl.dv.util.Base64.decode($P{check}))]]></imageExpression>
 			</image>
 			<image>
 				<reportElement x="174" y="190" width="10" height="10" uuid="e3c95404-b345-40b3-940f-3d84c5c64d25">
 					<printWhenExpression><![CDATA[($P{NO_MONTH}==8)]]></printWhenExpression>
 				</reportElement>
-				<imageExpression><![CDATA[new java.io.ByteArrayInputStream(com.sun.org.apache.xerces.internal.impl.dv.util.Base64.decode($P{check}))
-]]></imageExpression>
+				<imageExpression><![CDATA[new java.io.ByteArrayInputStream(com.sun.org.apache.xerces.internal.impl.dv.util.Base64.decode($P{check}))]]></imageExpression>
 			</image>
 			<image>
 				<reportElement x="174" y="207" width="10" height="10" uuid="11a976a0-91b7-4d23-a865-9baf21829a92">
 					<printWhenExpression><![CDATA[($P{NO_MONTH}==9)]]></printWhenExpression>
 				</reportElement>
-				<imageExpression><![CDATA[new java.io.ByteArrayInputStream(com.sun.org.apache.xerces.internal.impl.dv.util.Base64.decode($P{check}))
-]]></imageExpression>
+				<imageExpression><![CDATA[new java.io.ByteArrayInputStream(com.sun.org.apache.xerces.internal.impl.dv.util.Base64.decode($P{check}))]]></imageExpression>
 			</image>
 			<image>
 				<reportElement x="174" y="173" width="10" height="10" uuid="8f482f8a-2fd2-400d-b8e2-d890e23407c0">
 					<printWhenExpression><![CDATA[($P{NO_MONTH}==7)]]></printWhenExpression>
 				</reportElement>
-				<imageExpression><![CDATA[new java.io.ByteArrayInputStream(com.sun.org.apache.xerces.internal.impl.dv.util.Base64.decode($P{check}))
-]]></imageExpression>
+				<imageExpression><![CDATA[new java.io.ByteArrayInputStream(com.sun.org.apache.xerces.internal.impl.dv.util.Base64.decode($P{check}))]]></imageExpression>
 			</image>
 			<image>
 				<reportElement x="259" y="191" width="10" height="10" uuid="50c435d9-b2f6-4f6f-8c25-8bfae3731c23">
 					<printWhenExpression><![CDATA[($P{NO_MONTH}==11)]]></printWhenExpression>
 				</reportElement>
-				<imageExpression><![CDATA[new java.io.ByteArrayInputStream(com.sun.org.apache.xerces.internal.impl.dv.util.Base64.decode($P{check}))
-]]></imageExpression>
+				<imageExpression><![CDATA[new java.io.ByteArrayInputStream(com.sun.org.apache.xerces.internal.impl.dv.util.Base64.decode($P{check}))]]></imageExpression>
 			</image>
 			<image>
 				<reportElement x="259" y="208" width="10" height="10" uuid="60715bb0-9d83-470a-840f-b89d60d7ce59">
 					<printWhenExpression><![CDATA[($P{NO_MONTH}==12)]]></printWhenExpression>
 				</reportElement>
-				<imageExpression><![CDATA[new java.io.ByteArrayInputStream(com.sun.org.apache.xerces.internal.impl.dv.util.Base64.decode($P{check}))
-]]></imageExpression>
+				<imageExpression><![CDATA[new java.io.ByteArrayInputStream(com.sun.org.apache.xerces.internal.impl.dv.util.Base64.decode($P{check}))]]></imageExpression>
 			</image>
 			<image>
 				<reportElement x="259" y="174" width="10" height="10" uuid="43958617-94ee-4e3b-be61-219fc7a377f1">
 					<printWhenExpression><![CDATA[($P{NO_MONTH}==10)]]></printWhenExpression>
 				</reportElement>
-				<imageExpression><![CDATA[new java.io.ByteArrayInputStream(com.sun.org.apache.xerces.internal.impl.dv.util.Base64.decode($P{check}))
-]]></imageExpression>
+				<imageExpression><![CDATA[new java.io.ByteArrayInputStream(com.sun.org.apache.xerces.internal.impl.dv.util.Base64.decode($P{check}))]]></imageExpression>
 			</image>
 		</band>
 	</pageHeader>
@@ -1128,7 +1116,7 @@
 				<text><![CDATA[รายการที่แนบอย่างใดอย่างหนึ่ง ดังนี้]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="260" y="39" width="18" height="20" uuid="34bcabf4-c79b-441f-a48a-6834231e210e"/>
+				<reportElement x="260" y="39" width="30" height="20" uuid="34bcabf4-c79b-441f-a48a-6834231e210e"/>
 				<textElement verticalAlignment="Middle">
 					<font fontName="TH SarabunPSK" size="14" isBold="true" pdfFontName="THSarabun.ttf" pdfEncoding="Identity-H"/>
 				</textElement>
@@ -1403,8 +1391,7 @@
 			</textField>
 			<image>
 				<reportElement x="241" y="12" width="10" height="10" uuid="6bf1d4f6-2c77-4146-b26a-09f203672b06"/>
-				<imageExpression><![CDATA[new java.io.ByteArrayInputStream(com.sun.org.apache.xerces.internal.impl.dv.util.Base64.decode($P{check}))
-]]></imageExpression>
+				<imageExpression><![CDATA[new java.io.ByteArrayInputStream(com.sun.org.apache.xerces.internal.impl.dv.util.Base64.decode($P{check}))]]></imageExpression>
 			</image>
 		</band>
 	</summary>

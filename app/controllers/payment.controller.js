@@ -1,5 +1,5 @@
 exports.report1 = function (req, res, next) {
-    var r = req._r;
+    var r = req.r;
     var parameters = {
         CURRENT_DATE: new Date().toISOString().slice(0, 10),
         SUBREPORT_DIR: __dirname.replace('controller', 'report') + '\\' + req.baseUrl.replace("/api/", "") + '\\'
@@ -239,13 +239,13 @@ exports.report1 = function (req, res, next) {
         .run()
         .then(function (result) {
             // res.json([result]);
-            res._ireport("payment/report1.jasper", req.query.export || "pdf", [result], parameters);
+            res.ireport("payment/report1.jasper", req.query.export || "pdf", [result], parameters);
         });
 
 
 }
 exports.report2 = function (req, res, next) {
-    var r = req._r;
+    var r = req.r;
     var parameters = {
         CURRENT_DATE: new Date().toISOString().slice(0, 10),
         SUBREPORT_DIR: __dirname.replace('controller', 'report') + '\\' + req.baseUrl.replace("/api/", "") + '\\'
@@ -258,93 +258,93 @@ exports.report2 = function (req, res, next) {
                     return fee_map.merge(function (fee_merge1) {
                         return r.db('g2g2').table('invoice')
                             .get(fee_merge1('invoice_id'))
-                            // .merge(function (m) {
-                            //     return {
-                            //         shipment_detail: r.db('g2g2').table('shipment_detail')
-                            //             .getAll(m('book_id'), { index: 'book_id' })
-                            //             .coerceTo('array')
-                            //             .pluck("id", "cl_id", "package_id", "exporter_id", "shm_det_quantity", "type_rice_id")
-                            //             // .eqJoin("shm_id", r.db('g2g2').table("shipment")).without({ right: ["id", "date_created", "date_updated", "creater", "updater"] }).zip()
-                            //             .eqJoin("cl_id", r.db('g2g2').table("confirm_letter")).without({ right: ['id', 'date_created', 'date_updated', 'creater', 'updater', "cl_date", "cl_name", "cl_quality"] }).zip()
-                            //             .eqJoin("package_id", r.db('common').table("package")).without({ right: ["id", "date_created", "date_updated", "creater", "updater"] }).zip()
-                            //             .eqJoin("exporter_id", r.db('external').table("exporter")).without({ right: ["id", "date_created", "date_updated", "creater", "updater"] }).zip()
-                            //             // .eqJoin("trader_id", r.db('external').table("trader")).without({ right: ["id", "date_created", "date_updated", "creater", "updater"] }).zip()
-                            //             .eqJoin("seller_id", r.db('external').table("seller")).without({ right: ['id', 'date_created', 'date_updated', 'creater', 'updater', "country_id"] }).zip()
-                            //             .merge(function (m1) {
-                            //                 return {
-                            //                     shm_det_id: m1('id'),
-                            //                     price_per_ton: m1('price_per_ton'),
-                            //                     // price_per_ton: m1('cl_type_rice')
-                            //                     //     .filter(function (tb) {
-                            //                     //         return tb('type_rice_id').eq(m1('type_rice_id'))
-                            //                     //     }).getField("package")(0)
-                            //                     //     .filter(function (f) {
-                            //                     //         return f('package_id').eq(m1('package_id'))
-                            //                     //     })(0)
-                            //                     //     .pluck('price_per_ton')
-                            //                     //     .values()(0),
-                            //                     quantity_tons: m1('shm_det_quantity'),
-                            //                     quantity_bags: m1('shm_det_quantity').mul(1000).div(m1('package_kg_per_bag'))
+                        // .merge(function (m) {
+                        //     return {
+                        //         shipment_detail: r.db('g2g2').table('shipment_detail')
+                        //             .getAll(m('book_id'), { index: 'book_id' })
+                        //             .coerceTo('array')
+                        //             .pluck("id", "cl_id", "package_id", "exporter_id", "shm_det_quantity", "type_rice_id")
+                        //             // .eqJoin("shm_id", r.db('g2g2').table("shipment")).without({ right: ["id", "date_created", "date_updated", "creater", "updater"] }).zip()
+                        //             .eqJoin("cl_id", r.db('g2g2').table("confirm_letter")).without({ right: ['id', 'date_created', 'date_updated', 'creater', 'updater', "cl_date", "cl_name", "cl_quality"] }).zip()
+                        //             .eqJoin("package_id", r.db('common').table("package")).without({ right: ["id", "date_created", "date_updated", "creater", "updater"] }).zip()
+                        //             .eqJoin("exporter_id", r.db('external').table("exporter")).without({ right: ["id", "date_created", "date_updated", "creater", "updater"] }).zip()
+                        //             // .eqJoin("trader_id", r.db('external').table("trader")).without({ right: ["id", "date_created", "date_updated", "creater", "updater"] }).zip()
+                        //             .eqJoin("seller_id", r.db('external').table("seller")).without({ right: ['id', 'date_created', 'date_updated', 'creater', 'updater', "country_id"] }).zip()
+                        //             .merge(function (m1) {
+                        //                 return {
+                        //                     shm_det_id: m1('id'),
+                        //                     price_per_ton: m1('price_per_ton'),
+                        //                     // price_per_ton: m1('cl_type_rice')
+                        //                     //     .filter(function (tb) {
+                        //                     //         return tb('type_rice_id').eq(m1('type_rice_id'))
+                        //                     //     }).getField("package")(0)
+                        //                     //     .filter(function (f) {
+                        //                     //         return f('package_id').eq(m1('package_id'))
+                        //                     //     })(0)
+                        //                     //     .pluck('price_per_ton')
+                        //                     //     .values()(0),
+                        //                     quantity_tons: m1('shm_det_quantity'),
+                        //                     quantity_bags: m1('shm_det_quantity').mul(1000).div(m1('package_kg_per_bag'))
 
-                            //                 }
-                            //             })
-                            //             .merge(function (m1) {
-                            //                 return {
-                            //                     weight_gross: m1('quantity_bags').mul(m1('package_kg_per_bag').add(m1('package_weight_bag').div(1000))).div(1000),
-                            //                     weight_net: m1('quantity_bags').mul(m1('package_kg_per_bag')).div(1000),
-                            //                     weight_tare: m1('quantity_bags').mul(m1('package_weight_bag').div(1000)).div(1000)
-                            //                 }
-                            //             })
-                            //             .merge(function (m1) {
-                            //                 return {
-                            //                     amount_usd: m1('price_per_ton').mul(m1('weight_net'))
-                            //                 }
-                            //             })
-                            //             .without('id', 'cl_type_rice', 'shm_det_quantity')
-                            //     }
-                            // })
-                            // .merge(function (m) {
-                            //     return r.db('g2g2').table('book').get(m('book_id')).without('id', 'date_created', 'date_updated', 'creater', 'updater')
-                            // })
-                            // .merge(function (m) {
-                            //     return {
-                            //         invoice_id: m('id'),
-                            //         // ship: m('group_ship')('ship')(0),
-                            //         // shipline_id: m('group_ship')('shipline_id')(0),
-                            //         // ship_lot_no: m('group_ship')('ship_lot_no')(0),
-                            //         //  ship_voy_no: m('group_ship')('ship_voy_no')(0),
-                            //         weight_gross: m('shipment_detail').sum('weight_gross'),
-                            //         weight_net: m('shipment_detail').sum('weight_net'),
-                            //         weight_tare: m('shipment_detail').sum('weight_tare'),
-                            //         amount_usd: m('shipment_detail').sum('amount_usd'),
-                            //         invoice_date: m('invoice_date').split('T')(0),
-                            //         invoice_detail: fee_merge1('invoice_detail').map(function (map1) {
-                            //             return m('shipment_detail').filter({ shm_det_id: map1('shm_det_id') })(0).merge(map1)
-                            //                 .merge(function (m2) {
-                            //                     return {
-                            //                         exporter_date_approve: m2('exporter_date_approve').split('T')(0),
-                            //                         // exporter_date_update: m2('exporter_date_update').split('T')(0),
-                            //                         invoice_date: m2('invoice_date').split('T')(0),
-                            //                         // trader_date_approve: m2('trader_date_approve').split('T')(0)
-                            //                     }
-                            //                 })
-                            //         })
-                            //     }
-                            // })
-                            // .without("id", "shipment_detail")
-                            // .merge(function (m) {
-                            //     return r.db('common').table("shipline").get(m('shipline_id')).without('id', 'date_created', 'date_updated', 'creater', 'updater')
-                            //     // r.db('common').table("ship").get(m('ship_id')).without('id'),
-                            // })
-                            // .merge(function (m) {
-                            //     return {
-                            //         ship: m('ship').map(function (arr_ship) {
-                            //             return arr_ship.merge(function (row_ship) {
-                            //                 return r.db('common').table('ship').get(row_ship('ship_id')).without('id', 'date_created', 'date_updated', 'creater', 'updater')
-                            //             })
-                            //         })
-                            //     }
-                            // })
+                        //                 }
+                        //             })
+                        //             .merge(function (m1) {
+                        //                 return {
+                        //                     weight_gross: m1('quantity_bags').mul(m1('package_kg_per_bag').add(m1('package_weight_bag').div(1000))).div(1000),
+                        //                     weight_net: m1('quantity_bags').mul(m1('package_kg_per_bag')).div(1000),
+                        //                     weight_tare: m1('quantity_bags').mul(m1('package_weight_bag').div(1000)).div(1000)
+                        //                 }
+                        //             })
+                        //             .merge(function (m1) {
+                        //                 return {
+                        //                     amount_usd: m1('price_per_ton').mul(m1('weight_net'))
+                        //                 }
+                        //             })
+                        //             .without('id', 'cl_type_rice', 'shm_det_quantity')
+                        //     }
+                        // })
+                        // .merge(function (m) {
+                        //     return r.db('g2g2').table('book').get(m('book_id')).without('id', 'date_created', 'date_updated', 'creater', 'updater')
+                        // })
+                        // .merge(function (m) {
+                        //     return {
+                        //         invoice_id: m('id'),
+                        //         // ship: m('group_ship')('ship')(0),
+                        //         // shipline_id: m('group_ship')('shipline_id')(0),
+                        //         // ship_lot_no: m('group_ship')('ship_lot_no')(0),
+                        //         //  ship_voy_no: m('group_ship')('ship_voy_no')(0),
+                        //         weight_gross: m('shipment_detail').sum('weight_gross'),
+                        //         weight_net: m('shipment_detail').sum('weight_net'),
+                        //         weight_tare: m('shipment_detail').sum('weight_tare'),
+                        //         amount_usd: m('shipment_detail').sum('amount_usd'),
+                        //         invoice_date: m('invoice_date').split('T')(0),
+                        //         invoice_detail: fee_merge1('invoice_detail').map(function (map1) {
+                        //             return m('shipment_detail').filter({ shm_det_id: map1('shm_det_id') })(0).merge(map1)
+                        //                 .merge(function (m2) {
+                        //                     return {
+                        //                         exporter_date_approve: m2('exporter_date_approve').split('T')(0),
+                        //                         // exporter_date_update: m2('exporter_date_update').split('T')(0),
+                        //                         invoice_date: m2('invoice_date').split('T')(0),
+                        //                         // trader_date_approve: m2('trader_date_approve').split('T')(0)
+                        //                     }
+                        //                 })
+                        //         })
+                        //     }
+                        // })
+                        // .without("id", "shipment_detail")
+                        // .merge(function (m) {
+                        //     return r.db('common').table("shipline").get(m('shipline_id')).without('id', 'date_created', 'date_updated', 'creater', 'updater')
+                        //     // r.db('common').table("ship").get(m('ship_id')).without('id'),
+                        // })
+                        // .merge(function (m) {
+                        //     return {
+                        //         ship: m('ship').map(function (arr_ship) {
+                        //             return arr_ship.merge(function (row_ship) {
+                        //                 return r.db('common').table('ship').get(row_ship('ship_id')).without('id', 'date_created', 'date_updated', 'creater', 'updater')
+                        //             })
+                        //         })
+                        //     }
+                        // })
                     })
                 })
             }
@@ -369,104 +369,105 @@ exports.report2 = function (req, res, next) {
         })
 }
 exports.report3_1 = function (req, res, next) {
-    var r = req._r;
+    var r = req.r;
     var parameters = {
         CURRENT_DATE: new Date().toISOString().slice(0, 10),
         SUBREPORT_DIR: __dirname.replace('controller', 'report') + '\\' + req.baseUrl.replace("/api/", "") + '\\'
     };
     // console.log('>',req.params)
-    r.db('g2g2').table('fee_detail')
-    // .get(req.params.id)
-        .merge(function (invoice_merge) {
+      r.db('g2g2').table('shipment_detail').getAll(('2e49a709-6c78-431d-bf0b-704a9d6a9b83'), { index: 'book_id' })
+      //.get(req.params.id)
+        .merge({ shm_det_id: r.row('id') }).without('id')
+        .merge(function (m) {
+            return r.db('g2g2').table('book').get(m('book_id')).without('id')
+        })
+        .merge(function (ship_merge) {
             return {
-                invoice: invoice_merge('invoice')
-                    .merge(function (invoice_detail_merge) {
-                        return {
-                            invoice_detail: invoice_detail_merge('invoice_detail')
-                          .merge(function (ship_det_merge) {
-                                    return r.db('g2g2').table('shipment_detail').get(ship_det_merge('shm_det_id')).without('tags')
-                            .merge(function (m) {
-                                            return r.db('g2g2').table('book').get(m('book_id')).pluck('ship', 'ship_lot_no', 'dest_port_id','id')
-                                        })            
-                                      .merge(function (ship_merge) {
-                                            return {
-                                                ship: ship_merge('ship')
-                                                    .merge(function (ship_name_merge) {
-                                                        return r.db('common').table('ship').get(ship_name_merge('ship_id')).pluck('ship_name')
-                                                    })
-                                                .map(function (ship_name_merge) {
-                                                        return ship_name_merge('ship_name').add(' V.', ship_name_merge('ship_voy_no'))
-                                                    })
-                                                    .reduce(function (left, right) {
-                                                        return left.add(' / ', right)
-                                                    }),
-                                              port_name: r.db('common').table('port').get(ship_merge('dest_port_id')).getField('port_name'),
-                                                  //   country_name: r.db('g2g2').table('contract').get(ship_merge('contract_id'))//.getField('buyer_id')
-
-                                            }
-                                       })
-                                      .merge(function (rate_merge) {
-                                            return {
-                                                rate_bank: (invoice_merge('rate_bank')),
-                                                fee_id: (invoice_merge('fee_id'))
-                                            }
-                                        })
-                                       .merge(function (type_rice_merge) {
-                                            return {
-                                                type_rice_name: r.db('common').table('type_rice').get(type_rice_merge('type_rice_id')).getField('type_rice_name_th'),
-                                                amount_of_rice: (type_rice_merge('shm_det_quantity')).mul(type_rice_merge('price_per_ton')),
-                                                seller_name: r.db('external').table('exporter').get(type_rice_merge('exporter_id')).getField('seller_id')
-                                                    .do(function (seller) {
-                                                        return r.db('external').table('seller').get(seller).getField('seller_name_th')
-                                                    })
-                                            }
-                                        })
-                          })
-                        }
+                ship: ship_merge('ship')
+                    .merge(function (ship_name_merge) {
+                        return r.db('common').table('ship').get(ship_name_merge('ship_id')).pluck('ship_name')//.without('id', 'surveyor')
                     })
-            .map(function (invoice_detail_merge) {
-                        return invoice_detail_merge.getField('invoice_detail')
+                    .map(function (ship_name_merge) {
+                        return ship_name_merge('ship_name').add(' V.', ship_name_merge('ship_voy_no'))
+                    })
+                    .reduce(function (left, right) {
+                        return left.add(' / ', right)
+                    }),
+                port_name: r.db('common').table('port').get(ship_merge('dest_port_id')).getField('port_name')
+            }
+        })//.without('book_id')
+        .merge(function (book_merge) {
+            return {
+                inv_id: r.db('g2g2').table('invoice')
+                    .getAll(book_merge('book_id'), { index: 'book_id' })
+                    .merge(function (inv_merge) {
+                        return { invoice_id: inv_merge('id') }
+                    })
+                    .pluck('invoice_id')
+                    .coerceTo('array')
+                    .merge(function (inv_merge) {
+                        return r.db('g2g2').table('fee_detail').filter(function (fee_det_filter) {
+                            return fee_det_filter('invoice').contains(function (inv_contain) {
+                                return inv_contain('invoice_id').eq(inv_merge('invoice_id'))
+                            })
+                        }).pluck('invoice', 'fee_foreign', 'fee_internal', 'fee_other', 'rate_bank', 'fee_id')(0)
                     })(0)
             }
         })
-   .map(function (invoice_merge) {
-       return invoice_merge.getField('invoice')
+        .merge(function(inv_merge){
+            return inv_merge('inv_id')
         })
-        .reduce(function (left, right) {
-            return left.add(right)
+        .without('inv_id')
+        .merge(function(inv_fee){
+            return {
+                invoice_fee:inv_fee('invoice')
+                .filter(function(f){
+                    return f('invoice_id').eq(inv_fee('invoice_id'))
+                })(0)
+                ('invoice_detail').filter(function(f){
+                    return f('shm_det_id').eq(inv_fee('shm_det_id'))
+                })(0)
+                ('invoice_fee')
+            }
+        })
+        .without('invoice','surveyor','tags')
+        .merge(function (type_rice_merge) {
+            return {
+                type_rice_name: r.db('common').table('type_rice').get(type_rice_merge('type_rice_id')).getField('type_rice_name_th'),
+                amount_of_rice: (type_rice_merge('shm_det_quantity')).mul(type_rice_merge('price_per_ton')),
+                seller_name: r.db('external').table('exporter').get(type_rice_merge('exporter_id')).getField('seller_id')
+                .do(function (seller) {
+                    return r.db('external').table('seller').get(seller).getField('seller_name_th')
+                })
+            }
         })
         .eqJoin('fee_id', r.db('g2g2').table('fee')).pluck('left', { right: 'fee_no' }).zip()
-   //.eqJoin('shm_id', r.db('g2g2').table('confirm_letter'))//.pluck('left', { right: ['cl_id', 'contract_id'] }).zip()
- .merge(function (m) {
-            return r.db('g2g2').table('book')
-                .get(m('book_id')).pluck('cl_id')
- })
-   .merge(function (m1) {
-                    return r.db('g2g2').table("confirm_letter").get(m1('cl_id')).pluck("contract_id")
-                })
+        .merge(function (m1) {
+            return r.db('g2g2').table("confirm_letter").get(m1('cl_id')).pluck("contract_id")
+        })
         .merge(function (buyer_merge) {
             return {
                 country_name: r.db('g2g2').table('contract').get(buyer_merge('contract_id')).getField('buyer_id')
-                    .do(function (buyer) {
-                        return r.db('common').table('buyer').get(buyer).getField('country_id')
-                            .do(function (country) {
-                                return r.db('common').table('country').get(country).getField('country_fullname_th')
-                            })
-                    }),
-              buyer_name: r.db('g2g2').table('contract').get(buyer_merge('contract_id')).getField('buyer_id')
-                    .do(function (buyer_name) {
-                        return r.db('common').table('buyer').get(buyer_name).getField('buyer_name')
+                .do(function (buyer) {
+                    return r.db('common').table('buyer').get(buyer).getField('country_id')
+                    .do(function (country) {
+                        return r.db('common').table('country').get(country).getField('country_fullname_th')
                     })
+                }),
+                buyer_name: r.db('g2g2').table('contract').get(buyer_merge('contract_id')).getField('buyer_id')
+                .do(function (buyer_name) {
+                    return r.db('common').table('buyer').get(buyer_name).getField('buyer_name')
+                })
             }
         })
-   .merge(function (sum_merge) {
+        .merge(function (sum_merge) {
             return {
                 sum_rate_bank: ((sum_merge('rate_bank')).mul(sum_merge('amount_of_rice'))).sub(sum_merge('invoice_fee'))
             }
         })
         .merge(function (sum_merge) {
             return {
-                sum_bath: ((sum_merge('rate_bank')).mul(sum_merge('amount_of_rice'))).sub(sum_merge('invoice_fee'))
+                sum_bath: ((sum_merge('rate_bank')).mul(sum_merge('amount_of_rice')))
             }
         })
         .merge(function (mul_merge) {
@@ -479,102 +480,102 @@ exports.report3_1 = function (req, res, next) {
                 balance: sub_merge('sum_rate_bank').sub(sub_merge('sum_tax'))
             }
         })
-            
-
         .run()
         .then(function (result) {
             // res.json(result);
-            res._ireport("payment/report3_1.jasper", req.query.export || "pdf", result, parameters);
+            res.ireport("payment/report3_1.jasper", req.query.export || "pdf", result, parameters);
         });
 
 }
 exports.report3_2 = function (req, res, next) {
-    var r = req._r;
+    var r = req.r;
     var parameters = {
         CURRENT_DATE: new Date().toISOString().slice(0, 10),
         SUBREPORT_DIR: __dirname.replace('controller', 'report') + '\\' + req.baseUrl.replace("/api/", "") + '\\'
     };
-    r.db('g2g2').table('fee_detail')
-        .merge(function (invoice_merge) {
+    r.db('g2g2').table('shipment_detail').getAll(('2e49a709-6c78-431d-bf0b-704a9d6a9b83'), { index: 'book_id' })
+      //.get(req.params.id)
+        .merge({ shm_det_id: r.row('id') }).without('id')
+        .merge(function (m) {
+            return r.db('g2g2').table('book').get(m('book_id')).without('id')
+        })
+        .merge(function (ship_merge) {
             return {
-                invoice: invoice_merge('invoice')
-                    .merge(function (invoice_detail_merge) {
-                        return {
-                            invoice_detail: invoice_detail_merge('invoice_detail')
-                                .merge(function (ship_det_merge) {
-                                    return r.db('g2g2').table('shipment_detail').get(ship_det_merge('shm_det_id')).without('tags')
-                                        .merge(function (m) {
-                                            return r.db('g2g2').table('book').get(m('book_id')).pluck('ship', 'ship_lot_no', 'dest_port_id')
-                                        })
-                                        .merge(function (ship_merge) {
-                                            return {
-                                                ship: ship_merge('ship')
-                                                    .merge(function (ship_name_merge) {
-                                                        return r.db('common').table('ship').get(ship_name_merge('ship_id')).pluck('ship_name')
-                                                    })
-                                                    .map(function (ship_name_merge) {
-                                                        return ship_name_merge('ship_name').add(' V.', ship_name_merge('ship_voy_no'))
-                                                    })
-                                                    .reduce(function (left, right) {
-                                                        return left.add(' / ', right)
-                                                    }),
-                                              port_name: r.db('common').table('port').get(ship_merge('dest_port_id')).getField('port_name'),
-                                                //      country_name: r.db('g2g2').table('contract').get(table_shipment('contract_id')).getField('buyer_id')
-
-                                            }
-                                        })
-                                        .merge(function (rate_merge) {
-                                            return {
-                                                rate_bank: (invoice_merge('rate_bank')),
-                                                fee_id: (invoice_merge('fee_id'))
-                                            }
-                                        })
-                                        .merge(function (type_rice_merge) {
-                                            return {
-                                                type_rice_name: r.db('common').table('type_rice').get(type_rice_merge('type_rice_id')).getField('type_rice_name_th'),
-                                                amount_of_rice: (type_rice_merge('shm_det_quantity')).mul(type_rice_merge('price_per_ton')),
-                                                seller_name: r.db('external').table('exporter').get(type_rice_merge('exporter_id')).getField('seller_id')
-                                                    .do(function (seller) {
-                                                        return r.db('external').table('seller').get(seller).getField('seller_name_th')
-                                                    })
-                                            }
-                                        })
-                                })
-                        }
+                ship: ship_merge('ship')
+                    .merge(function (ship_name_merge) {
+                        return r.db('common').table('ship').get(ship_name_merge('ship_id')).pluck('ship_name')//.without('id', 'surveyor')
                     })
-                    .map(function (invoice_merge) {
-                        return invoice_merge.getField('invoice_detail')
+                    .map(function (ship_name_merge) {
+                        return ship_name_merge('ship_name').add(' V.', ship_name_merge('ship_voy_no'))
+                    })
+                    .reduce(function (left, right) {
+                        return left.add(' / ', right)
+                    }),
+                port_name: r.db('common').table('port').get(ship_merge('dest_port_id')).getField('port_name')
+            }
+        })//.without('book_id')
+        .merge(function (book_merge) {
+            return {
+                inv_id: r.db('g2g2').table('invoice')
+                    .getAll(book_merge('book_id'), { index: 'book_id' })
+                    .merge(function (inv_merge) {
+                        return { invoice_id: inv_merge('id') }
+                    })
+                    .pluck('invoice_id')
+                    .coerceTo('array')
+                    .merge(function (inv_merge) {
+                        return r.db('g2g2').table('fee_detail').filter(function (fee_det_filter) {
+                            return fee_det_filter('invoice').contains(function (inv_contain) {
+                                return inv_contain('invoice_id').eq(inv_merge('invoice_id'))
+                            })
+                        }).pluck('invoice', 'fee_foreign', 'fee_internal', 'fee_other', 'rate_bank', 'fee_id')(0)
                     })(0)
             }
         })
-        .map(function (invoice_merge) {
-            return invoice_merge.getField('invoice')
+        .merge(function(inv_merge){
+            return inv_merge('inv_id')
         })
-        .reduce(function (left, right) {
-            return left.add(right)
+        .without('inv_id')
+        .merge(function(inv_fee){
+            return {
+                invoice_fee:inv_fee('invoice')
+                .filter(function(f){
+                    return f('invoice_id').eq(inv_fee('invoice_id'))
+                })(0)
+                ('invoice_detail').filter(function(f){
+                    return f('shm_det_id').eq(inv_fee('shm_det_id'))
+                })(0)
+                ('invoice_fee')
+            }
+        })
+        .without('invoice','surveyor','tags')
+        .merge(function (type_rice_merge) {
+            return {
+                type_rice_name: r.db('common').table('type_rice').get(type_rice_merge('type_rice_id')).getField('type_rice_name_th'),
+                amount_of_rice: (type_rice_merge('shm_det_quantity')).mul(type_rice_merge('price_per_ton')),
+                seller_name: r.db('external').table('exporter').get(type_rice_merge('exporter_id')).getField('seller_id')
+                .do(function (seller) {
+                    return r.db('external').table('seller').get(seller).getField('seller_name_th')
+                })
+            }
         })
         .eqJoin('fee_id', r.db('g2g2').table('fee')).pluck('left', { right: 'fee_no' }).zip()
-       // .eqJoin('shm_id', r.db('g2g2').table('shipment')).pluck('left', { right: ['cl_id', 'contract_id'] }).zip()
-   .merge(function (m) {
-            return r.db('g2g2').table('book')
-                .get(m('book_id')).pluck('cl_id')
- })
-   .merge(function (m1) {
-                    return r.db('g2g2').table("confirm_letter").get(m1('cl_id')).pluck("contract_id")
-                })
+        .merge(function (m1) {
+            return r.db('g2g2').table("confirm_letter").get(m1('cl_id')).pluck("contract_id")
+        })
         .merge(function (buyer_merge) {
             return {
                 country_name: r.db('g2g2').table('contract').get(buyer_merge('contract_id')).getField('buyer_id')
-                    .do(function (buyer) {
-                        return r.db('common').table('buyer').get(buyer).getField('country_id')
-                            .do(function (country) {
-                                return r.db('common').table('country').get(country).getField('country_fullname_th')
-                            })
-                    }),
-                buyer_name: r.db('g2g2').table('contract').get(buyer_merge('contract_id')).getField('buyer_id')
-                    .do(function (buyer_name) {
-                        return r.db('common').table('buyer').get(buyer_name).getField('buyer_name')
+                .do(function (buyer) {
+                    return r.db('common').table('buyer').get(buyer).getField('country_id')
+                    .do(function (country) {
+                        return r.db('common').table('country').get(country).getField('country_fullname_th')
                     })
+                }),
+                buyer_name: r.db('g2g2').table('contract').get(buyer_merge('contract_id')).getField('buyer_id')
+                .do(function (buyer_name) {
+                    return r.db('common').table('buyer').get(buyer_name).getField('buyer_name')
+                })
             }
         })
         .merge(function (sum_merge) {
@@ -584,7 +585,7 @@ exports.report3_2 = function (req, res, next) {
         })
         .merge(function (sum_merge) {
             return {
-                sum_bath: ((sum_merge('rate_bank')).mul(sum_merge('amount_of_rice'))).sub(sum_merge('invoice_fee'))
+                sum_bath: ((sum_merge('rate_bank')).mul(sum_merge('amount_of_rice')))
             }
         })
         .merge(function (mul_merge) {
@@ -597,39 +598,38 @@ exports.report3_2 = function (req, res, next) {
                 balance: sub_merge('sum_rate_bank').sub(sub_merge('sum_tax'))
             }
         })
-
         .run()
         .then(function (result) {
             // res.json(result);
-            res._ireport("payment/report3_2.jasper", req.query.export || "pdf", result, parameters);
+            res.ireport("payment/report3_2.jasper", req.query.export || "pdf", result, parameters);
         });
 
 }
 exports.report4 = function (req, res, next) {
-    var r = req._r;
+    var r = req.r;
     var parameters = {
         CURRENT_DATE: new Date().toISOString().slice(0, 10),
         SUBREPORT_DIR: __dirname.replace('controller', 'report') + '\\' + req.baseUrl.replace("/api/", "") + '\\'
     };
-   r.db('g2g2').table('fee_detail')
-  .merge(function (fee_merge) {
-    return {
-      fee_det_id:fee_merge('id')
-    }
-  })
+    r.db('g2g2').table('fee_detail')
+        .merge(function (fee_merge) {
+            return {
+                fee_det_id: fee_merge('id')
+            }
+        })
         .merge(function (invoice_merge) {
-          return {
-            invoice: invoice_merge('invoice')
-            .merge(function (invoice_detail_merge) {
-              return {
-                invoice_detail: invoice_detail_merge('invoice_detail')
-               .merge(function (table_shipment) {
-                  return r.db('g2g2').table('shipment_detail').get(table_shipment('shm_det_id'))
-                  //  .pluck('price_per_ton','shm_det_id','shm_det_quantity','type_rice_id','invoice_fee','book_id')
-                     .merge(function (m) {
+            return {
+                invoice: invoice_merge('invoice')
+                    .merge(function (invoice_detail_merge) {
+                        return {
+                            invoice_detail: invoice_detail_merge('invoice_detail')
+                                .merge(function (table_shipment) {
+                                    return r.db('g2g2').table('shipment_detail').get(table_shipment('shm_det_id'))
+                                        //  .pluck('price_per_ton','shm_det_id','shm_det_quantity','type_rice_id','invoice_fee','book_id')
+                                        .merge(function (m) {
                                             return r.db('g2g2').table('book').get(m('book_id')).pluck('ship', 'ship_lot_no')
                                         })
-                     .merge(function (ship_merge) {
+                                        .merge(function (ship_merge) {
                                             return {
                                                 ship: ship_merge('ship').merge(function (shipname_merge) {
                                                     return r.db('common').table('ship').get(shipname_merge('ship_id')).pluck('ship_name')
@@ -642,9 +642,9 @@ exports.report4 = function (req, res, next) {
                                                     })
                                             }
                                         })
-                    .merge(function (rate_merge) {
+                                        .merge(function (rate_merge) {
                                             return {
-                                               fee_det_id:(invoice_merge('fee_det_id')),
+                                                fee_det_id: (invoice_merge('fee_det_id')),
                                                 rate_bank: (invoice_merge('rate_bank')),
                                                 fee_id: (invoice_merge('fee_id')),
                                                 fee_internal: (invoice_merge('fee_internal')),
@@ -654,7 +654,7 @@ exports.report4 = function (req, res, next) {
                                                 amount_usd: (rate_merge('shm_det_quantity')).mul(rate_merge('price_per_ton'))
                                             }
                                         })
-                        .merge(function (amount_merge) {
+                                        .merge(function (amount_merge) {
                                             return {
                                                 amount_bath: (amount_merge('rate_bank')).mul(amount_merge('amount_usd')),
                                                 fee_bank: (amount_merge('rate_bank')).mul(amount_merge('fee_foreign'))
@@ -676,37 +676,37 @@ exports.report4 = function (req, res, next) {
                                                 balance_2: (balance_2_merge('balance')).sub(balance_2_merge('tax'))
                                             }
                                         })
-               })
-              }
-            })
-             .map(function (invoice_detail_merge) {
+                                })
+                        }
+                    })
+                    .map(function (invoice_detail_merge) {
                         return invoice_detail_merge.getField('invoice_detail')
                     })(0)
-          }
-        }) .map(function (invoice_merge) {
+            }
+        }).map(function (invoice_merge) {
             return invoice_merge.getField('invoice')
         })
         .reduce(function (left, right) {
             return left.add(right)
         })
-  
-  
-  
- // .without('shm_det_id')
+
+
+
+        // .without('shm_det_id')
         .eqJoin('exporter_id', r.db('external').table('exporter')).pluck('left', { right: 'seller_id' }).zip()
         .eqJoin('seller_id', r.db('external_f3').table('seller')).pluck('left', { right: 'seller_name_th' }).zip()
         .without('id')
         .eqJoin('fee_id', r.db('g2g2').table('fee')).pluck('left', { right: 'fee_no' }).zip()
-  
+
         .run()
         .then(function (result) {
             // res.json(result);
-            res._ireport("payment/report4.jasper", req.query.export || "pdf", result, parameters);
+            res.ireport("payment/report4.jasper", req.query.export || "pdf", result, parameters);
         });
 
 }
 exports.report5 = function (req, res, next) {
-    var r = req._r;
+    var r = req.r;
     var parameters = {
         CURRENT_DATE: new Date().toISOString().slice(0, 10),
         SUBREPORT_DIR: __dirname.replace('controller', 'report') + '\\' + req.baseUrl.replace("/api/", "") + '\\'
@@ -727,12 +727,12 @@ exports.report5 = function (req, res, next) {
         .run()
         .then(function (result) {
             // res.json([result]);
-            res._ireport("payment/report5.jasper", req.query.export || "pdf", [result], parameters);
+            res.ireport("payment/report5.jasper", req.query.export || "pdf", [result], parameters);
         });
 
 }
 exports.report7 = function (req, res, next) {
-    var r = req._r;
+    var r = req.r;
     var parameters = {
         CURRENT_DATE: new Date().toISOString().slice(0, 10),
         SUBREPORT_DIR: __dirname.replace('controller', 'report') + '\\' + req.baseUrl.replace("/api/", "") + '\\'
@@ -752,7 +752,7 @@ exports.report7 = function (req, res, next) {
         // .merge(r.db('external_f3').table('trader').get(r.row('trader_id')).pluck('seller_id'))
         .merge(r.db('external').table('seller').get(r.row('seller_id')).pluck('seller_tax_id', 'seller_name_th', 'seller_address_th'))
         .without('payment_detail', 'tags')
-        .pluck('TOTAL', 'pay_amount', 'pay_date')
+        // .pluck('TOTAL', 'pay_amount', 'pay_date')
         .merge(function (r1) {
             return {
                 count_exporter: r.db('g2g2').table('payment').between(date_start, date_end, { index: 'pay_date' })
@@ -768,12 +768,12 @@ exports.report7 = function (req, res, next) {
         .run()
         .then(function (result) {
             // res.json(result);
-            res._ireport("payment/report7.jasper", req.query.export || "pdf", result, parameters);
+            res.ireport("payment/report7.jasper", req.query.export || "pdf", result, parameters);
         });
 
 }
 exports.report8 = function (req, res, next) {
-    var r = req._r;
+    var r = req.r;
     var parameters = {
         PAGE: '',
         CURRENT_DATE: new Date().toISOString().slice(0, 10),
@@ -809,7 +809,59 @@ exports.report8 = function (req, res, next) {
             // console.log(result.length/6)
             parameters["PAGE"] = result.length / 6;
             // res.json(result);
-            res._ireport("payment/report8.jasper", req.query.export || "pdf", result, parameters);
+            res.ireport("payment/report8.jasper", req.query.export || "pdf", result, parameters);
         });
 
+}
+
+exports.test = function (req, res) {
+    var r = req.r;
+    r.db('g2g2').table('shipment_detail').getAll(('2e49a709-6c78-431d-bf0b-704a9d6a9b83'), { index: 'book_id' })
+        .merge({ shm_det_id: r.row('id') }).without('id')
+        .merge(function (m) {
+            return r.db('g2g2').table('book').get(m('book_id')).without('id')
+        })
+        .merge(function (ship_merge) {
+            return {
+                ship: ship_merge('ship')
+                    .merge(function (ship_name_merge) {
+                        return r.db('common').table('ship').get(ship_name_merge('ship_id')).pluck('ship_name')//.without('id', 'surveyor')
+                    })
+                    .map(function (ship_name_merge) {
+                        return ship_name_merge('ship_name').add(' V.', ship_name_merge('ship_voy_no'))
+                    })
+                    .reduce(function (left, right) {
+                        return left.add(' / ', right)
+                    }),
+                port_name: r.db('common').table('port').get(ship_merge('dest_port_id')).getField('port_name')
+            }
+        })//.without('book_id')
+        .merge(function (book_merge) {
+            return {
+                inv_id: r.db('g2g2').table('invoice')
+                    .getAll(book_merge('book_id'), { index: 'book_id' })
+                    .merge(function (inv_merge) {
+                        return { invoice_id: inv_merge('id') }
+                    })
+                    .pluck('invoice_id')
+                    .coerceTo('array')
+                    .merge(function (inv_merge) {
+                        return r.db('g2g2').table('fee_detail').filter(function (fee_det_filter) {
+                            return fee_det_filter('invoice').contains(function (inv_contain) {
+                                return inv_contain('invoice_id').eq(inv_merge('invoice_id'))
+                            })
+                        }).pluck('invoice', 'fee_foreign', 'fee_internal', 'fee_other', 'rate_bank', 'fee_id')(0)
+                    })
+                    .merge(function(inv_merge){
+                        return {
+                            invoice_fee:''
+                        }
+                    })
+
+            }
+        })
+        .run()
+        .then(function (data) {
+            res.json(data);
+        })
 }

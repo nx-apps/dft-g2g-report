@@ -173,7 +173,7 @@ USD
 				</textElement>
 				<text><![CDATA[คงเหลือ
 (บาท)
-(6) =(4) - (5)]]></text>
+(6) = (4) - (5)]]></text>
 			</staticText>
 			<staticText>
 				<reportElement x="726" y="0" width="76" height="62" uuid="8cf0491f-dce8-46ed-9412-adabc0f3598e"/>
@@ -189,7 +189,7 @@ USD
 				</textElement>
 				<text><![CDATA[คงเหลือ
 (บาท)
-(8) =(6) - (7)]]></text>
+(8) = (6) - (7)]]></text>
 			</staticText>
 			<staticText>
 				<reportElement x="624" y="0" width="102" height="62" uuid="100ce93e-a002-4be0-8352-0219d61e6eb0"/>
@@ -205,7 +205,7 @@ USD
 				</textElement>
 				<text><![CDATA[หักภาษีรายได้ 1%
 (บาท)
-(7)=(6) x 1%]]></text>
+(7) = (6) x 1%]]></text>
 			</staticText>
 		</band>
 	</pageHeader>
