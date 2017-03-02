@@ -7,7 +7,7 @@ var config = {
     },
     database: {
       servers: [
-        { host: 'rdb.codeunbug.com', port: 28015 }
+        {host: 'rdb.codeunbug.com', port: 28015,user:'admin',password:'next@2017'}
       ],
       db: 'g2g'
     },

@@ -75,7 +75,7 @@
 				<textElement textAlignment="Justified" verticalAlignment="Middle">
 					<font fontName="TH SarabunPSK" size="16" pdfFontName="THSarabun.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
 				</textElement>
-				<textFieldExpression><![CDATA["เรื่อง    การจ่ายเงินค่าข้าวส่งมอบ "+$F{buyer_name}+" Lot "+" ลำที่ "+new nylon.utility.NumberFormat().toThaiNumber($F{ship_lot_no})]]></textFieldExpression>
+				<textFieldExpression><![CDATA["เรื่อง    การจ่ายเงินค่าข้าวส่งมอบ "+$F{buyer_name}+" Lot "+$F{cl_no}+" ลำที่ "+new nylon.utility.NumberFormat().toThaiNumber($F{ship_lot_no})]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement x="74" y="29" width="323" height="20" uuid="a13ec6a3-8a08-457a-8b8f-7c04b64f7549"/>
@@ -110,7 +110,7 @@
 				<textElement textAlignment="Justified" verticalAlignment="Middle">
 					<font fontName="TH SarabunPSK" size="16" pdfFontName="THSarabun.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
 				</textElement>
-				<textFieldExpression><![CDATA["Lot ที่ "+new nylon.utility.NumberFormat().toThaiNumber($F{ship_lot_no})]]></textFieldExpression>
+				<textFieldExpression><![CDATA["Lot ที่ "+new nylon.utility.NumberFormat().toThaiNumber($F{cl_no})]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement x="479" y="87" width="50" height="20" uuid="f3840ab3-5b2f-4951-9f57-b5be71186277"/>

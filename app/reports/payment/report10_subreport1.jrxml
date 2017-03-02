@@ -1,31 +1,75 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="report10_subreport1" language="groovy" pageWidth="555" pageHeight="802" columnWidth="555" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" uuid="e4503732-16af-4e60-ad1a-5461de2c3c7b">
-	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.zoom" value="1.5"/>
 	<property name="ireport.x" value="0"/>
 	<property name="ireport.y" value="0"/>
+	<import value="nylon.report.*"/>
+	<parameter name="SUBREPORT_DIR" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA["E:\\lookpad\\report_g2g\\dft-g2g-report\\app\\reports\\payment\\"]]></defaultValueExpression>
+	</parameter>
 	<field name="price_per_ton" class="java.lang.String"/>
-	<field name="sum_quantity" class="java.lang.String"/>
+	<field name="sum_quantity" class="java.lang.Integer"/>
+	<field name="invoice_date" class="java.lang.String"/>
+	<field name="invoice_no" class="java.lang.String"/>
+	<field name="invoice_detail" class="java.lang.Object"/>
+	<field name="sum_price" class="java.lang.Integer"/>
+	<field name="sum_value" class="java.lang.Integer"/>
 	<background>
 		<band splitType="Stretch"/>
 	</background>
 	<detail>
 		<band height="20" splitType="Stretch">
 			<textField>
-				<reportElement x="79" y="0" width="103" height="20" uuid="6fcc5236-0673-4d8e-bfd5-712816c3a4c7"/>
-				<box leftPadding="5" rightPadding="5">
+				<reportElement stretchType="RelativeToBandHeight" x="168" y="0" width="86" height="20" uuid="d2b97565-3a62-4cb9-9b44-3494120285cb"/>
+				<box>
 					<pen lineWidth="1.0"/>
 					<topPen lineWidth="1.0"/>
 					<leftPen lineWidth="1.0"/>
 					<bottomPen lineWidth="1.0"/>
 					<rightPen lineWidth="1.0"/>
 				</box>
-				<textElement textAlignment="Right" verticalAlignment="Middle">
-					<font fontName="TH SarabunPSK" size="16" isBold="true" pdfFontName="THSarabun.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+				<textElement textAlignment="Center" verticalAlignment="Top">
+					<font fontName="TH SarabunPSK" size="16" isBold="false" pdfFontName="THSarabun.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$F{price_per_ton}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[new nylon.utility.NumberFormat().toThaiDateShort ($F{invoice_date})]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="0" y="0" width="79" height="20" uuid="4ecf9d8a-f229-4811-95b4-22cd65aa18c8"/>
+				<reportElement stretchType="RelativeToBandHeight" x="64" y="0" width="104" height="20" uuid="da096c93-881c-4e32-8264-724d39d84d4f"/>
+				<box>
+					<pen lineWidth="1.0"/>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Top">
+					<font fontName="TH SarabunPSK" size="16" isBold="false" pdfFontName="THSarabun.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{invoice_no}]]></textFieldExpression>
+			</textField>
+			<subreport>
+				<reportElement x="254" y="0" width="301" height="20" uuid="cf8925cd-840d-4723-8b5d-ebe1fbac3b4c"/>
+				<dataSourceExpression><![CDATA[new iJsonDS($F{invoice_detail})]]></dataSourceExpression>
+				<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "report10_subreport1_subreport1.jasper"]]></subreportExpression>
+			</subreport>
+			<textField>
+				<reportElement stretchType="RelativeToBandHeight" x="0" y="0" width="64" height="20" uuid="54f99a80-7954-48b4-a8e4-7ae4189aa210"/>
+				<box>
+					<pen lineWidth="1.0"/>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Top">
+					<font fontName="TH SarabunPSK" size="16" isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{COLUMN_COUNT}]]></textFieldExpression>
+			</textField>
+		</band>
+		<band height="20">
+			<textField>
+				<reportElement x="333" y="0" width="103" height="20" uuid="273a84a8-abe6-46c5-af8d-8b5f19e9fd7d"/>
 				<box leftPadding="5" rightPadding="5">
 					<pen lineWidth="1.0"/>
 					<topPen lineWidth="1.0"/>
@@ -36,7 +80,49 @@
 				<textElement textAlignment="Right" verticalAlignment="Middle">
 					<font fontName="TH SarabunPSK" size="16" isBold="true" pdfFontName="THSarabun.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$F{sum_quantity}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[new nylon.utility.NumberFormat().toFormat($F{sum_price},"#,###.00")]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="254" y="0" width="79" height="20" uuid="c76a11d5-22b8-427c-b659-f75758ccdaac"/>
+				<box leftPadding="5" rightPadding="5">
+					<pen lineWidth="1.0"/>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font fontName="TH SarabunPSK" size="16" isBold="true" pdfFontName="THSarabun.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[new nylon.utility.NumberFormat().toFormat($F{sum_quantity},"#,###.00")]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="436" y="0" width="119" height="20" uuid="dd941257-3a37-46e0-a51c-799cb7e68e73"/>
+				<box leftPadding="5" rightPadding="5">
+					<pen lineWidth="1.0"/>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font fontName="TH SarabunPSK" size="16" isBold="true" pdfFontName="THSarabun.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[new nylon.utility.NumberFormat().toFormat($F{sum_value},"#,###.00")]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="0" y="0" width="254" height="20" uuid="a0e80e84-659e-4e05-9ba0-ce09cdf56a38"/>
+				<box>
+					<pen lineWidth="1.0"/>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="TH SarabunPSK" size="16" isBold="true" pdfFontName="THSarabun.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA["รวม"]]></textFieldExpression>
 			</textField>
 		</band>
 	</detail>

@@ -3,6 +3,7 @@
 	<property name="ireport.zoom" value="1.0"/>
 	<property name="ireport.x" value="0"/>
 	<property name="ireport.y" value="0"/>
+	<import value="nylon.report.*"/>
 	<parameter name="SUBREPORT_DIR" class="java.lang.String" isForPrompting="false">
 		<defaultValueExpression><![CDATA["C:\\Users\\tawatchai.w\\My Projects\\dft.go.th\\report\\app\\reports\\"]]></defaultValueExpression>
 	</parameter>
@@ -24,7 +25,7 @@
 	<field name="buyer_address" class="java.lang.String"/>
 	<field name="made_out_to" class="java.lang.String"/>
 	<field name="bl_no" class="java.lang.String"/>
-	<field name="bl_detail" class="java.util.Collection"/>
+	<field name="bl_detail" class="java.lang.Object"/>
 	<variable name="CURRENT_PAGE" class="java.lang.Integer" resetType="Page">
 		<variableExpression><![CDATA[1]]></variableExpression>
 		<initialValueExpression><![CDATA[$V{PAGE_NUMBER}]]></initialValueExpression>
@@ -270,8 +271,8 @@ MINISTRY OF COMMERCE, THAILAND
 		<band height="100" splitType="Stretch">
 			<subreport>
 				<reportElement stretchType="RelativeToBandHeight" x="0" y="0" width="555" height="100" uuid="28f94043-e20a-457e-92b4-980ca0614ed6"/>
-				<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRMapCollectionDataSource($F{bl_detail})]]></dataSourceExpression>
-				<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "report1_subreport1.jasper"]]></subreportExpression>
+				<dataSourceExpression><![CDATA[new iJsonDS($F{bl_detail})]]></dataSourceExpression>
+				<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "/payment/report1_subreport1.jasper"]]></subreportExpression>
 			</subreport>
 		</band>
 	</detail>
