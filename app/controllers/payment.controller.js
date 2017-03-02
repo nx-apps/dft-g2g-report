@@ -484,7 +484,7 @@ exports.report3_1 = function (req, res, next) {
         .eqJoin('cl_id', r.db('g2g2').table('confirm_letter')).pluck('left', { right: 'cl_no' }).zip()
         .run()
         .then(function (result) {
-            res.json(result);
+            // res.json(result);
             res.ireport("payment/report3_1.jasper", req.query.export || "pdf", result, parameters);
         });
 
@@ -822,68 +822,85 @@ exports.report10 = function (req, res, next) {
         SUBREPORT_DIR: __dirname.replace('controller', 'report') + '\\' + req.baseUrl.replace("/api/", "") + '\\'
     };
      r.db('g2g2').table('fee_detail').getAll(('a557f317-e295-46d6-9d3a-45a0b4525f51'), { index: 'fee_id' })
-   .merge({fee_det_id:r.row('id')}).without('id')
-     .eqJoin('fee_id',r.db('g2g2').table('fee')).pluck('left', { right: 'fee_no' }).zip()
-   .merge(function(inv_m){
-     return{
-       invoice:inv_m('invoice')
-       .merge(function(inv_det_m){
-         return {
-           invoice_detail:inv_det_m('invoice_detail')
-           .merge(function (shm_merge){
-     return r.db('g2g2').table('shipment_detail').get(shm_merge('shm_det_id')).pluck('price_per_ton','shm_det_quantity','type_rice_id','package_id')
-   })
-           .group(function(g){
-             return g.pluck('type_rice_id','package_id','price_per_ton')
-           })
-           .sum('shm_det_quantity')
-           .ungroup()
-           .merge(function(inv_det_merge){
-             return {
-               package_id:inv_det_merge('group')('package_id'),
-               price_per_ton:inv_det_merge('group')('price_per_ton'),
-               type_rice_id:inv_det_merge('group')('type_rice_id'),
-               quantity:inv_det_merge('reduction')
-             }
-           })
-           .without('group','reduction')
-           .merge(function(inv_det_merge){
-             return {
-               amount:inv_det_merge('price_per_ton').mul(inv_det_merge('quantity'))
-             }
-           })
-         }
-       })
-       .merge (function(m){
-         return {
-           sum_value:m('invoice_detail').sum('amount'),
-           sum_price:m('invoice_detail').sum('price_per_ton'),
-           sum_quantity:m('invoice_detail').sum('quantity')
-         }
-       })
-        .merge(function (invoice_merge){
-     return r.db('g2g2').table('invoice').get(invoice_merge('invoice_id')).pluck('invoice_no','invoice_date')
-   })
-         .merge(function(m){
-     return {
-       sum_value:m('invoice_detail').sum('amount')
-     }
-   })
-     }
-   })
+        .merge({ fee_det_id: r.row('id') }).without('id')
+        .eqJoin('fee_id', r.db('g2g2').table('fee')).pluck('left', { right: 'fee_no' }).zip()
+        .merge(function (inv_m) {
+            return {
+                invoice: inv_m('invoice')
+                    .merge(function (inv_det_m) {
+                        return {
+                            invoice_detail: inv_det_m('invoice_detail')
+                                .merge(function (shm_merge) {
+                                    return r.db('g2g2').table('shipment_detail').get(shm_merge('shm_det_id')).pluck('price_per_ton', 'shm_det_quantity', 'type_rice_id', 'package_id')
+                                })
+                                .group(function (g) {
+                                    return g.pluck('type_rice_id', 'package_id', 'price_per_ton')
+                                })
+                                .sum('shm_det_quantity')
+                                .ungroup()
+                                .merge(function (inv_det_merge) {
+                                    return {
+                                        package_id: inv_det_merge('group')('package_id'),
+                                        price_per_ton: inv_det_merge('group')('price_per_ton'),
+                                        type_rice_id: inv_det_merge('group')('type_rice_id'),
+                                        quantity: inv_det_merge('reduction')
+                                    }
+                                })
+                                .without('group', 'reduction')
+                                .merge(function (inv_det_merge) {
+                                    return {
+                                        amount: inv_det_merge('price_per_ton').mul(inv_det_merge('quantity'))
+                                    }
+                                })
+                        }
+                    })
+                    .merge(function (m) {
+                        return {
+                            sum_price: m('invoice_detail').sum('price_per_ton'),
+                            sum_quantity: m('invoice_detail').sum('quantity'),
+                          sum_amount: m('invoice_detail').sum('amount')
+                        }
+                    })
+                    .merge(function (invoice_merge) {
+                        return r.db('g2g2').table('invoice').get(invoice_merge('invoice_id')).pluck('invoice_no', 'invoice_date')
+                    })
+                    
+            }
+        })
+.merge(function (m) {
+                        return {
+                            sum_value: m('invoice').sum('sum_amount')
+                        }
+                    })
 
- 
-   .merge(function(m){
-     return  r.db('g2g2').table('confirm_letter')
-     .filter( function(f){
-       return r.expr( m('tags')).contains(f('id'))
-     })(0).pluck('cl_no','contract_id')
-   })
-   .eqJoin('contract_id',r.db('g2g2').table('contract')).pluck("left",{right:"buyer_id"}).zip()
- .eqJoin('buyer_id',r.db('common').table('buyer')).pluck("left",{right:["buyer_name","country_id"]}).zip()
-    .eqJoin('country_id',r.db('common').table('country')).pluck("left",{right:"country_name_th"}).zip()
+        .merge(function (m) {
+            return r.db('g2g2').table('confirm_letter')
+                .filter(function (f) {
+                    return r.expr(m('tags')).contains(f('id'))
+                })(0).pluck('cl_no', 'contract_id')
+        })
+        .eqJoin('contract_id', r.db('g2g2').table('contract')).pluck("left", { right: "buyer_id" }).zip()
+        .eqJoin('buyer_id', r.db('common').table('buyer')).pluck("left", { right: ["buyer_name", "country_id"] }).zip()
+        .eqJoin('country_id', r.db('common').table('country')).pluck("left", { right: "country_name_th" }).zip()
+         .merge(function (inv_m) {
+            return {
+                invoice: inv_m('invoice')
+                    
+                          .merge(function (shm_merge) {
+                            return{
+                              sum_value:inv_m('sum_value')
+                            }
+                          })
+                        }
+                    })
         .run()
         .then(function (result) {
+            var no = 1;
+            for (var x = 0; x < result.length; x++) {
+                for (var y = 0; y < result[x].invoice.length; y++) {
+                    result[x].invoice[y].counter = no++;
+                }
+            }
             // res.json(result);
             res.ireport("payment/report10.jasper", req.query.export || "pdf", result, parameters);
         });
