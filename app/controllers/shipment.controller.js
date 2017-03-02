@@ -24,7 +24,7 @@ exports.report1 = function (req, res, next) {
             return {
                 cl_no: row('cl_no').coerceTo('string'),
                 book_id: row('id'),
-                contract_year: row('contract_date').split('T')(0).split('-')(0).coerceTo('number').add(543.097),
+                contract_year: row('contract_date').split('T')(0).split('-')(0).coerceTo('number').add(543),
                 eta_date: row('eta_date').split('T')(0),
                 ship: row('ship')
                     .merge(function (m1) {
@@ -143,7 +143,7 @@ exports.report1 = function (req, res, next) {
         .without('shipline_id', 'surveyor', 'incoterms', 'tags')
         .run()
         .then(function (result) {
-            //res.json(result);
+            // res.json(result);
             res.ireport("shipment/report1.jasper", req.query.export || "pdf", [result], parameters);
         });
 }
