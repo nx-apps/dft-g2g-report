@@ -2,7 +2,8 @@
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="report1" language="groovy" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="4832cfc8-4c63-4219-927a-9e6bcdb30af6">
 	<property name="ireport.zoom" value="1.0245201830476058"/>
 	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="266"/>
+	<property name="ireport.y" value="0"/>
+	<import value="nylon.report.*"/>
 	<parameter name="SUBREPORT_DIR" class="java.lang.String" isForPrompting="false">
 		<defaultValueExpression><![CDATA["..\\"]]></defaultValueExpression>
 	</parameter>
@@ -10,8 +11,8 @@
 		<![CDATA[]]>
 	</queryString>
 	<field name="country_fullname_th" class="java.lang.String"/>
-	<field name="shm_no" class="java.lang.String"/>
-	<field name="contract_year" class="java.lang.Number"/>
+	<field name="cl_no" class="java.lang.String"/>
+	<field name="contract_year" class="java.lang.Double"/>
 	<field name="ship_lot_no" class="java.lang.String"/>
 	<field name="ship" class="java.lang.String"/>
 	<field name="cut_of_date" class="java.lang.String"/>
@@ -22,7 +23,7 @@
 	<field name="shipline_tel" class="java.lang.String"/>
 	<field name="surveyor_name" class="java.lang.String"/>
 	<field name="book_no" class="java.lang.String"/>
-	<field name="type_rice" class="java.util.Collection"/>
+	<field name="type_rice" class="java.lang.Object"/>
 	<field name="buyer_masks" class="java.lang.String"/>
 	<field name="buyer_name" class="java.lang.String"/>
 	<field name="buyer_address" class="java.lang.String"/>
@@ -48,9 +49,7 @@
 					<textElement textAlignment="Center" verticalAlignment="Middle">
 						<font fontName="TH SarabunPSK" size="18" isBold="true" pdfFontName="THSarabun.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
 					</textElement>
-					<textFieldExpression><![CDATA["รายละเอียดการส่งมอบข้าวให้รัฐบาล"+$F{country_fullname_th}+
-" งวดที่ "+$F{shm_no}+" ปี "+$F{contract_year}+
-" ("+$F{ship_lot_no}+") "+$F{book_remark}]]></textFieldExpression>
+					<textFieldExpression><![CDATA[$F{contract_year}+" fdfdf"]]></textFieldExpression>
 				</textField>
 			</band>
 		</groupHeader>
@@ -202,8 +201,8 @@ new nylon.utility.NumberFormat().toThaiDate($F{etd_date})]]></textFieldExpressio
 		<band height="104">
 			<subreport>
 				<reportElement stretchType="RelativeToBandHeight" x="0" y="2" width="555" height="102" uuid="586b3b6e-ac05-4563-b235-b86780d5b038"/>
-				<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRMapCollectionDataSource($F{type_rice})]]></dataSourceExpression>
-				<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "report1_subreport1.jasper"]]></subreportExpression>
+				<dataSourceExpression><![CDATA[new iJsonDS($F{type_rice})]]></dataSourceExpression>
+				<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "/shipment/report1_subreport1.jasper"]]></subreportExpression>
 			</subreport>
 		</band>
 		<band height="60">
