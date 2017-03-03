@@ -6,7 +6,7 @@
 	<parameter name="buyer_masks" class="java.lang.String"/>
 	<field name="quantity_bags" class="java.lang.Integer"/>
 	<field name="type_rice_name_en" class="java.lang.String"/>
-	<field name="project_en" class="java.lang.String"/>
+	<field name="project" class="java.lang.String"/>
 	<field name="season_en" class="java.lang.String"/>
 	<field name="description_en" class="java.lang.String"/>
 	<field name="weight_gross" class="java.lang.Double"/>
@@ -31,7 +31,7 @@
 					<font fontName="TH SarabunPSK" size="16" pdfFontName="THSarabun.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{type_rice_name_en}.toUpperCase()+", "
-+$F{project_en}.toUpperCase()+" CURRENT NEW CROP,"+
++$F{project}.toUpperCase()+" CURRENT NEW CROP,"+
 "\nDOUBLE-POLISHED AND SORTEXED QUALITY."]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true">

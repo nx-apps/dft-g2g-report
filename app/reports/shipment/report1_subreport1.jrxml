@@ -109,7 +109,7 @@
 				<text><![CDATA[:]]></text>
 			</staticText>
 			<subreport>
-				<reportElement x="185" y="40" width="370" height="20" uuid="3252c258-ae32-456f-8077-cde276d9fced"/>
+				<reportElement stretchType="RelativeToBandHeight" x="185" y="40" width="370" height="20" uuid="3252c258-ae32-456f-8077-cde276d9fced"/>
 				<dataSourceExpression><![CDATA[new iJsonDS($F{package})]]></dataSourceExpression>
 				<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "/report1_subreport1_subreport1.jasper"]]></subreportExpression>
 			</subreport>
