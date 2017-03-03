@@ -1,27 +1,67 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="report4_subreport1" language="groovy" pageWidth="555" pageHeight="802" columnWidth="555" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" uuid="a91bf02e-6d99-4aea-a7db-3c17e9e600e7">
-	<property name="ireport.zoom" value="1.5"/>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="report4_subreport1" language="groovy" pageWidth="195" pageHeight="20" orientation="Landscape" columnWidth="195" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" uuid="d3661ed0-e01e-4a36-8d3b-87b98f415696">
+	<property name="ireport.zoom" value="2.853116706110003"/>
 	<property name="ireport.x" value="0"/>
 	<property name="ireport.y" value="0"/>
-	<field name="ship" class="java.lang.String"/>
-	<field name="ship_voy_no" class="java.lang.String"/>
-	<field name="shm_det_quantity" class="java.lang.String"/>
-	<field name="dest_port_name" class="java.lang.String"/>
-	<background>
-		<band splitType="Stretch"/>
-	</background>
+	<field name="exporter_name" class="java.lang.String"/>
+	<field name="type_rice_name" class="java.lang.String"/>
+	<field name="package_name" class="java.lang.String"/>
+	<field name="shm_det_quantity" class="java.lang.Double"/>
+	<field name="num_of_container" class="java.lang.Integer"/>
 	<detail>
-		<band height="20" splitType="Stretch">
-			<textField>
-				<reportElement x="0" y="1" width="507" height="19" uuid="93da2b2a-0eb0-4cd1-84ad-a822c8ba1c4f"/>
+		<band height="10" splitType="Stretch">
+			<textField isStretchWithOverflow="true">
+				<reportElement stretchType="RelativeToBandHeight" x="0" y="0" width="85" height="10" uuid="dd43bfba-db3c-403a-8831-7b4b28f398e0"/>
+				<box leftPadding="2">
+					<topPen lineWidth="0.75"/>
+					<leftPen lineWidth="0.75"/>
+					<bottomPen lineWidth="0.75"/>
+					<rightPen lineWidth="0.75"/>
+				</box>
 				<textElement verticalAlignment="Middle">
-					<font fontName="TH SarabunPSK" size="16" pdfFontName="THSarabun.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+					<font fontName="TH SarabunPSK" size="6" isBold="false" pdfFontName="THSarabun.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
 				</textElement>
-				<textFieldExpression><![CDATA["\t\t" +new nylon.utility.NumberFormat().toThaiNumber ($V{COLUMN_COUNT})+". " + $F{ship}+
-" ปริมาณ "+new nylon.utility.NumberFormat().toThaiNumber($F{shm_det_quantity})
-+" ตัน "+" ส่งไปเมืองท่า "+
-new nylon.utility.NumberFormat().toThaiNumber($F{dest_port_name})
-]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{exporter_name}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement stretchType="RelativeToBandHeight" x="85" y="0" width="40" height="10" uuid="aac3ccdf-6ba3-4416-99c1-4fe452cf9297"/>
+				<box>
+					<topPen lineWidth="0.75"/>
+					<leftPen lineWidth="0.75"/>
+					<bottomPen lineWidth="0.75"/>
+					<rightPen lineWidth="0.75"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="TH SarabunPSK" size="6" isBold="false" pdfFontName="THSarabun.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[new nylon.utility.FindChar().findUpperChar($F{type_rice_name})
++"% "+$F{package_name}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement stretchType="RelativeToBandHeight" x="125" y="0" width="35" height="10" uuid="ef6d9bb2-adc9-4b43-ac31-e3d6ed9563cb"/>
+				<box>
+					<topPen lineWidth="0.75"/>
+					<leftPen lineWidth="0.75"/>
+					<bottomPen lineWidth="0.75"/>
+					<rightPen lineWidth="0.75"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="TH SarabunPSK" size="6" isBold="false" pdfFontName="THSarabun.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[new nylon.utility.NumberFormat().toFormat($F{shm_det_quantity},"#,###.##")]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement stretchType="RelativeToBandHeight" x="160" y="0" width="35" height="10" uuid="c0b25647-d8bc-4817-b6c9-db96e85a7d73"/>
+				<box>
+					<topPen lineWidth="0.75"/>
+					<leftPen lineWidth="0.75"/>
+					<bottomPen lineWidth="0.75"/>
+					<rightPen lineWidth="0.75"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="TH SarabunPSK" size="6" isBold="false" pdfFontName="THSarabun.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{num_of_container}]]></textFieldExpression>
 			</textField>
 		</band>
 	</detail>
