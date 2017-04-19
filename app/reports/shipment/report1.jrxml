@@ -2,7 +2,7 @@
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="report1" language="groovy" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="4832cfc8-4c63-4219-927a-9e6bcdb30af6">
 	<property name="ireport.zoom" value="1.0245201830476058"/>
 	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="267"/>
+	<property name="ireport.y" value="0"/>
 	<import value="nylon.report.*"/>
 	<parameter name="SUBREPORT_DIR" class="java.lang.String" isForPrompting="false">
 		<defaultValueExpression><![CDATA["..\\"]]></defaultValueExpression>
@@ -207,6 +207,9 @@ new nylon.utility.NumberFormat().toThaiDate($F{etd_date})]]></textFieldExpressio
 		<band height="104">
 			<subreport>
 				<reportElement stretchType="RelativeToBandHeight" x="0" y="2" width="555" height="102" uuid="586b3b6e-ac05-4563-b235-b86780d5b038"/>
+				<subreportParameter name="SUBREPORT_DIR">
+					<subreportParameterExpression><![CDATA[$P{SUBREPORT_DIR}]]></subreportParameterExpression>
+				</subreportParameter>
 				<dataSourceExpression><![CDATA[new iJsonDS($F{type_rice})]]></dataSourceExpression>
 				<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "/shipment/report1_subreport1.jasper"]]></subreportExpression>
 			</subreport>
