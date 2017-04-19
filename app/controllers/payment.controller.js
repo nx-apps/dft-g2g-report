@@ -272,7 +272,7 @@ exports.report2 = function (req, res, next) {
                         //             .eqJoin("package_id", r.db('common').table("package")).without({ right: ["id", "date_created", "date_updated", "creater", "updater"] }).zip()
                         //             .eqJoin("exporter_id", r.db('external').table("exporter")).without({ right: ["id", "date_created", "date_updated", "creater", "updater"] }).zip()
                         //             // .eqJoin("trader_id", r.db('external').table("trader")).without({ right: ["id", "date_created", "date_updated", "creater", "updater"] }).zip()
-                        //             .eqJoin("seller_id", r.db('external').table("seller")).without({ right: ['id', 'date_created', 'date_updated', 'creater', 'updater', "country_id"] }).zip()
+                        //             .eqJoin("company_id", r.db('external').table("company")).without({ right: ['id', 'date_created', 'date_updated', 'creater', 'updater', "country_id"] }).zip()
                         //             .merge(function (m1) {
                         //                 return {
                         //                     shm_det_id: m1('id'),
@@ -438,9 +438,9 @@ exports.report3_1 = function (req, res, next) {
             return {
                 type_rice_name: r.db('common').table('type_rice').get(type_rice_merge('type_rice_id')).getField('type_rice_name_th'),
                 amount_of_rice: (type_rice_merge('shm_det_quantity')).mul(type_rice_merge('price_per_ton')),
-                seller_name: r.db('external').table('exporter').get(type_rice_merge('exporter_id')).getField('seller_id')
-                    .do(function (seller) {
-                        return r.db('external').table('seller').get(seller).getField('seller_name_th')
+                company_name: r.db('external').table('exporter').get(type_rice_merge('exporter_id')).getField('company_id')
+                    .do(function (company) {
+                        return r.db('external').table('company').get(company).getField('company_name_th')
                     })
             }
         })
@@ -557,9 +557,9 @@ exports.report3_2 = function (req, res, next) {
             return {
                 type_rice_name: r.db('common').table('type_rice').get(type_rice_merge('type_rice_id')).getField('type_rice_name_th'),
                 amount_of_rice: (type_rice_merge('shm_det_quantity')).mul(type_rice_merge('price_per_ton')),
-                seller_name: r.db('external').table('exporter').get(type_rice_merge('exporter_id')).getField('seller_id')
-                    .do(function (seller) {
-                        return r.db('external').table('seller').get(seller).getField('seller_name_th')
+                company_name: r.db('external').table('exporter').get(type_rice_merge('exporter_id')).getField('company_id')
+                    .do(function (company) {
+                        return r.db('external').table('company').get(company).getField('company_name_th')
                     })
             }
         })
@@ -698,8 +698,8 @@ exports.report4 = function (req, res, next) {
 
 
         // .without('shm_det_id')
-        .eqJoin('exporter_id', r.db('external').table('exporter')).pluck('left', { right: 'seller_id' }).zip()
-        .eqJoin('seller_id', r.db('external_f3').table('seller')).pluck('left', { right: 'seller_name_th' }).zip()
+        .eqJoin('exporter_id', r.db('external').table('exporter')).pluck('left', { right: 'company_id' }).zip()
+        .eqJoin('company_id', r.db('external_f3').table('company')).pluck('left', { right: 'company_name_th' }).zip()
         .without('id')
         .eqJoin('fee_id', r.db('g2g2').table('fee')).pluck('left', { right: 'fee_no' }).zip()
         .run()
@@ -721,13 +721,13 @@ exports.report6 = function (req, res, next) {
                 TOTAL: m('pay_amount').mul(0.01)
             }
         })
-        .merge(r.db('external').table('exporter').get(r.row('exporter_id')).pluck('seller_id'))
-        // .merge(r.db('external').table('trader').get(r.row('trader_id')).pluck('seller_id'))
-        .merge(r.db('external').table('seller').get(r.row('seller_id')).pluck('seller_tax_id', 'seller_name_th', 'seller_address_th'))
+        .merge(r.db('external').table('exporter').get(r.row('exporter_id')).pluck('company_id'))
+        // .merge(r.db('external').table('trader').get(r.row('trader_id')).pluck('company_id'))
+        .merge(r.db('external').table('company').get(r.row('company_id')).pluck('company_taxno', 'company_name_th', 'company_address_th'))
         .without('payment_detail', 'tags')
         //   .eqJoin('exporter_id',r.db('external').table('exporter')).pluck('left',{right:'trader_id'}).zip()
-        //   .eqJoin('trader_id',r.db('external').table('trader')).pluck('left',{right:'seller_id'}).zip()
-        //   .eqJoin('seller_id',r.db('external').table('seller')).pluck('left',{right:['seller_tax_id','seller_name_th','seller_address_th','']}).zip()
+        //   .eqJoin('trader_id',r.db('external').table('trader')).pluck('left',{right:'company_id'}).zip()
+        //   .eqJoin('company_id',r.db('external').table('company')).pluck('left',{right:['company_taxno','company_name_th','company_address_th','']}).zip()
         .run()
         .then(function (result) {
             // res.json([result]);
@@ -751,10 +751,10 @@ exports.report7 = function (req, res, next) {
             }
         })
         .merge(function (m) {
-            return r.db('external').table('exporter').get(m('exporter_id')).pluck('seller_id')
+            return r.db('external').table('exporter').get(m('exporter_id')).pluck('company_id')
         })
-        // .merge(r.db('external_f3').table('trader').get(r.row('trader_id')).pluck('seller_id'))
-        .merge(r.db('external').table('seller').get(r.row('seller_id')).pluck('seller_tax_id', 'seller_name_th', 'seller_address_th'))
+        // .merge(r.db('external_f3').table('trader').get(r.row('trader_id')).pluck('company_id'))
+        .merge(r.db('external').table('company').get(r.row('company_id')).pluck('company_taxno', 'company_name_th', 'company_address_th'))
         .without('payment_detail', 'tags')
         // .pluck('TOTAL', 'pay_amount', 'pay_date')
         .merge(function (r1) {
@@ -792,9 +792,9 @@ exports.report8 = function (req, res, next) {
             }
         })
         .merge(function (m) {
-            return r.db('external').table('exporter').get(m('exporter_id')).pluck('seller_id')
+            return r.db('external').table('exporter').get(m('exporter_id')).pluck('company_id')
         })
-        .merge(r.db('external').table('seller').get(r.row('seller_id')).pluck('seller_tax_id', 'seller_name_th', 'seller_address_th'))
+        .merge(r.db('external').table('company').get(r.row('company_id')).pluck('company_taxno', 'company_name_th', 'company_address_th'))
         .without('payment_detail', 'tags')
         .merge(function (row) {
             return {
