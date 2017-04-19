@@ -105,9 +105,9 @@ exports.report1 = function (req, res, next) {
                     .ungroup()
                     .map(function (m1) {
                         return {
-                            exporter_name: r.db('external').table('exporter').get(m1('group')).getField('seller_id')
+                            exporter_name: r.db('external').table('exporter').get(m1('group')).getField('company_id')
                                 .do(function (d1) {
-                                    return r.db('external').table('seller').get(d1).getField('seller_name_th')
+                                    return r.db('external').table('company').get(d1).getField('company_name_th')
                                 }),
                             weight: m1('reduction')
                         }
@@ -258,11 +258,11 @@ exports.report2 = function (req, res, next) {
                 //     .pluck('exporter_id')
                 //     .getField('exporter_id')
                 //     .map(function (m1) {
-                //         return r.db('external').table('exporter').get(m1).getField('seller_id')
+                //         return r.db('external').table('exporter').get(m1).getField('company_id')
                 //             .do(function (d1) {
-                //                 // return r.db('external').table('trader').get(d1).getField('seller_id')
+                //                 // return r.db('external').table('trader').get(d1).getField('company_id')
                 //                 //     .do(function (d2) {
-                //                 return r.db('external').table('seller').get(d1).getField('seller_name_th')
+                //                 return r.db('external').table('company').get(d1).getField('company_name_th')
                 //                 // })
                 //             })
                 //     })
@@ -333,9 +333,9 @@ exports.report3 = function (req, res, next) {
         .ungroup()
         .map(function (expt_map) {
             return {
-                exporter: r.db('external').table('exporter').get(expt_map('group')).getField('seller_id')
+                exporter: r.db('external').table('exporter').get(expt_map('group')).getField('company_id')
                     .do(function (d1) {
-                        return r.db('external').table('seller').get(d1).getField('seller_name_th')
+                        return r.db('external').table('company').get(d1).getField('company_name_th')
                     }),
                 ship: expt_map('reduction')
                     .group('book_id')
@@ -401,11 +401,11 @@ exports.report4 = function (req, res, next) {
                 shipment_detail: r.db('g2g2').table('shipment_detail').getAll(m('id'), { index: 'book_id' }).coerceTo('array')
                     .merge(function (m1) {
                         return {
-                            exporter_name: r.db('external').table('exporter').get(m1('exporter_id')).getField('seller_id')
+                            exporter_name: r.db('external').table('exporter').get(m1('exporter_id')).getField('company_id')
                                 .do(function (d1) {
-                                    // return r.db('external').table('trader').get(d1).getField('seller_id')
+                                    // return r.db('external').table('trader').get(d1).getField('company_id')
                                     //     .do(function (d2) {
-                                    return r.db('external').table('seller').get(d1).getField('seller_name_en')
+                                    return r.db('external').table('company').get(d1).getField('company_name_en')
                                     // })
                                 }),
                             type_rice_name: r.db('common').table('type_rice').get(m1('type_rice_id')).getField('type_rice_name_en'),

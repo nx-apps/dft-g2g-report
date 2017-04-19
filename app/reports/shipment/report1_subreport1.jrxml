@@ -5,7 +5,7 @@
 	<property name="ireport.y" value="0"/>
 	<import value="nylon.report.*"/>
 	<parameter name="SUBREPORT_DIR" class="java.lang.String" isForPrompting="false">
-		<defaultValueExpression><![CDATA["C:\\Users\\tawatchai.w\\My Projects\\dft.go.th\\dft-g2g-report\\app\\reports\\shipment\\"]]></defaultValueExpression>
+		<defaultValueExpression><![CDATA["..\\"]]></defaultValueExpression>
 	</parameter>
 	<field name="type_rice_name_th" class="java.lang.String"/>
 	<field name="project" class="java.lang.String"/>
@@ -111,7 +111,7 @@
 			<subreport>
 				<reportElement stretchType="RelativeToBandHeight" x="185" y="40" width="370" height="20" uuid="3252c258-ae32-456f-8077-cde276d9fced"/>
 				<dataSourceExpression><![CDATA[new iJsonDS($F{package})]]></dataSourceExpression>
-				<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "/report1_subreport1_subreport1.jasper"]]></subreportExpression>
+				<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "/shipment/report1_subreport1_subreport1.jasper"]]></subreportExpression>
 			</subreport>
 		</band>
 		<band height="20">
