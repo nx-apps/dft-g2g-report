@@ -1,0 +1,23 @@
+{
+  "name": "dft-g2g",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "nylon-cli serve",
+    "bower": "cd ./public && bower install"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/nx-apps/dft-g2g.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/nx-apps/dft-g2g/issues"
+  },
+  "homepage": "https://github.com/nx-apps/dft-g2g#readme",
+  "dependencies": {
+    "async": "^2.4.0"
+  }
+}
