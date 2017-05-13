@@ -6,7 +6,7 @@ module.exports = function (app) {
     app.route('/report3_2/:id').get(payment.report3_2);
     app.route('/report4/:id').get(payment.report4);
     app.route('/report6/:id').get(payment.report6);
-    app.route('/report7').get(payment.report7);
-    app.route('/report8').get(payment.report8); 
+    app.route('/report7').get(payment.report7); //ok
+    app.route('/report8').get(payment.report8); //ok
     app.route('/report10/:id').get(payment.report10); //ok
 }

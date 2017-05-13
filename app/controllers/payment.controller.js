@@ -747,7 +747,7 @@ exports.report7 = function (req, res, next) {
     r.db('g2g2').table('payment').between(date_start, date_end, { index: 'pay_date' })
         .merge(function (m) {
             return {
-                TOTAL: m('pay_amount').mul(0.01).div(100)
+                TOTAL: m('pay_amount').mul(0.01)//.div(100)
             }
         })
         .merge(function (m) {
@@ -788,7 +788,7 @@ exports.report8 = function (req, res, next) {
     r.db('g2g2').table('payment').between(date_start, date_end, { index: 'pay_date' })
         .merge(function (m) {
             return {
-                TOTAL: m('pay_amount').mul(0.01).div(100)
+                TOTAL: m('pay_amount').mul(0.01)//.div(100)
             }
         })
         .merge(function (m) {
