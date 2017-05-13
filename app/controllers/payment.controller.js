@@ -670,6 +670,36 @@ exports.report10 = function (req, res, next) {
         });
 
 }
+exports.report11 = function (req, res, next) {
+    var r = req.r;
+    var parameters = {
+        CURRENT_DATE: new Date().toISOString().slice(0, 10),
+        SUBREPORT_DIR: __dirname.replace('controller', 'report') + '\\' + req.baseUrl.replace("/api/", "") + '\\'
+    };
+
+    var year = parseInt(req.query.year);
+    var month = parseInt(req.query.month);
+
+    r.db('g2g2').table('payment').getAll(req.query.contract_id, { index: 'tags' })
+        .filter(function (f) {
+            return f('pay_date').year().eq(year).and(
+                f('pay_date').month().eq(month)
+            )
+        })
+        .merge({
+            pay_date: r.row('pay_date').inTimezone('+07').toISO8601(),
+            pay_year: r.row('pay_date').inTimezone('+07').year()
+        })
+        .eqJoin('exporter_id', r.db('external').table('exporter')).pluck("left", { right: 'company_id' }).zip()
+        .eqJoin('company_id', r.db('external').table('company')).pluck("left", { right: 'company_name_th' }).zip()
+        .pluck('company_name_th', 'runing_no', 'pay_year', 'pay_date', 'pay_full', 'pay_tax', 'pay_times')
+        .run()
+        .then(function (result) {
+            // res.json(result)
+            res.ireport("payment/report11.jasper", req.query.export || "pdf", result, parameters);
+        })
+
+}
 exports.test = function (req, res) {
     var r = req.r;
     r.db('g2g2').table('shipment_detail').getAll(('2e49a709-6c78-431d-bf0b-704a9d6a9b83'), { index: 'book_id' })
