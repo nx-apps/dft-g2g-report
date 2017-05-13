@@ -823,7 +823,7 @@ exports.report10 = function (req, res, next) {
         CURRENT_DATE: new Date().toISOString().slice(0, 10),
         SUBREPORT_DIR: __dirname.replace('controller', 'report') + '\\' + req.baseUrl.replace("/api/", "") + '\\'
     };
-    r.db('g2g2').table('fee_detail').getAll(('a557f317-e295-46d6-9d3a-45a0b4525f51'), { index: 'fee_id' })
+    r.db('g2g2').table('fee_detail').getAll(req.params.id, { index: 'fee_id' }) //a557f317-e295-46d6-9d3a-45a0b4525f51
         .merge({ fee_det_id: r.row('id') }).without('id')
         .eqJoin('fee_id', r.db('g2g2').table('fee')).pluck('left', { right: 'fee_no' }).zip()
         .merge(function (inv_m) {

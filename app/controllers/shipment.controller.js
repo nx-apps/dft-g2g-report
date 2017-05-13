@@ -405,7 +405,7 @@ exports.report4 = function (req, res, next) {
                                 .do(function (d1) {
                                     // return r.db('external').table('trader').get(d1).getField('company_id')
                                     //     .do(function (d2) {
-                                    return r.db('external').table('company').get(d1).getField('company_name_en')
+                                    return r.db('external').table('company').get(d1).getField('company_name_th')
                                     // })
                                 }),
                             type_rice_name: r.db('common').table('type_rice').get(m1('type_rice_id')).getField('type_rice_name_en'),

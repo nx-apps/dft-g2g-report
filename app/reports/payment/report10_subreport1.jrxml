@@ -52,7 +52,7 @@
 			<subreport>
 				<reportElement x="254" y="0" width="182" height="20" uuid="cf8925cd-840d-4723-8b5d-ebe1fbac3b4c"/>
 				<dataSourceExpression><![CDATA[new iJsonDS($F{invoice_detail})]]></dataSourceExpression>
-				<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "report10_subreport1_subreport1.jasper"]]></subreportExpression>
+				<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "/payment/report10_subreport1_subreport1.jasper"]]></subreportExpression>
 			</subreport>
 			<textField>
 				<reportElement stretchType="RelativeToBandHeight" x="0" y="0" width="64" height="20" uuid="54f99a80-7954-48b4-a8e4-7ae4189aa210"/>

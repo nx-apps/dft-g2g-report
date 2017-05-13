@@ -148,6 +148,9 @@
 		<band height="20" splitType="Stretch">
 			<subreport>
 				<reportElement x="0" y="0" width="555" height="20" uuid="9a1486b4-c643-4415-8301-0384b1043016"/>
+				<subreportParameter name="SUBREPORT_DIR">
+					<subreportParameterExpression><![CDATA[$P{SUBREPORT_DIR}]]></subreportParameterExpression>
+				</subreportParameter>
 				<dataSourceExpression><![CDATA[new iJsonDS($F{invoice})]]></dataSourceExpression>
 				<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "/payment/report10_subreport1.jasper"]]></subreportExpression>
 			</subreport>
