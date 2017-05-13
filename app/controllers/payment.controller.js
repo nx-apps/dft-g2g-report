@@ -672,32 +672,65 @@ exports.report10 = function (req, res, next) {
 }
 exports.report11 = function (req, res, next) {
     var r = req.r;
-    var parameters = {
-        CURRENT_DATE: new Date().toISOString().slice(0, 10),
-        SUBREPORT_DIR: __dirname.replace('controller', 'report') + '\\' + req.baseUrl.replace("/api/", "") + '\\'
-    };
-
+    var async = require('async');
     var year = parseInt(req.query.year);
     var month = parseInt(req.query.month);
 
-    r.db('g2g2').table('payment').getAll(req.query.contract_id, { index: 'tags' })
-        .filter(function (f) {
-            return f('pay_date').year().eq(year).and(
-                f('pay_date').month().eq(month)
-            )
-        })
-        .merge({
-            pay_date: r.row('pay_date').inTimezone('+07').toISO8601(),
-            pay_year: r.row('pay_date').inTimezone('+07').year()
-        })
-        .eqJoin('exporter_id', r.db('external').table('exporter')).pluck("left", { right: 'company_id' }).zip()
-        .eqJoin('company_id', r.db('external').table('company')).pluck("left", { right: 'company_name_th' }).zip()
-        .pluck('company_name_th', 'runing_no', 'pay_year', 'pay_date', 'pay_full', 'pay_tax', 'pay_times')
-        .run()
-        .then(function (result) {
-            // res.json(result)
-            res.ireport("payment/report11.jasper", req.query.export || "pdf", result, parameters);
-        })
+    var arrMonths = ["","มกราคม",'กุมภาพันธ์','มีนาคม','เมษายน','พฤษภาคม','มิถุนายน','กรกฎาคม','สิงหาคม','กันยายน','ตุลาคม','พฤศจิกายน','ธันวาคม'];
+    async.waterfall([
+        function (callback) {
+            r.db('g2g2').table('payment').getAll(req.query.contract_id, { index: 'tags' })
+                .filter(function (f) {
+                    return f('pay_date').year().eq(year).and(
+                        f('pay_date').month().eq(month)
+                    )
+                })
+                .merge({
+                    pay_date: r.row('pay_date').inTimezone('+07').toISO8601(),
+                    pay_year: r.row('pay_date').inTimezone('+07').year()
+                })
+                .eqJoin('exporter_id', r.db('external').table('exporter')).pluck("left", { right: 'company_id' }).zip()
+                .eqJoin('company_id', r.db('external').table('company')).pluck("left", { right: 'company_name_th' }).zip()
+                .pluck('company_name_th', 'runing_no', 'pay_year', 'pay_date', 'pay_full', 'pay_tax', 'pay_times')
+                .orderBy('pay_times')
+                .run()
+                .then(function (result) {
+                    callback(null, result);
+                })
+
+        },
+        function (data, callback) {
+            r.db('g2g2').table('contract').get(req.query.contract_id)
+                .merge(function (m) {
+                    return {
+                        contract_year: m('contract_date').split('-')(0)
+                    }
+                })
+                .merge(function (m) {
+                    return r.db('common').table('buyer').get(m('buyer_id')).pluck('buyer_name')
+                })
+                .merge(function (m) {
+                    return r.db('common').table('country').get(m('tags')(0)).pluck('country_name_th')
+                })
+                .run()
+                .then(function (contract) {
+                    callback(null, data, contract);
+                })
+
+        }
+    ], function (err, data, contract) {
+        var parameters = {
+            CURRENT_DATE: new Date().toISOString().slice(0, 10),
+            SUBREPORT_DIR: __dirname.replace('controller', 'report') + '\\' + req.baseUrl.replace("/api/", "") + '\\',
+            TITLE_MONTH: arrMonths[month],
+            TITLE_YEAR: parseInt(year) + 543,
+            COUNTRY_NAME: contract.country_name_th,
+            CONTRACT_YEAR: parseInt(contract.contract_year) + 543,
+            BUYER_NAME: contract.buyer_name
+        };
+        // res.json(parameters);
+         res.ireport("payment/report11.jasper", req.query.export || "pdf", data, parameters);
+    });
 
 }
 exports.test = function (req, res) {
