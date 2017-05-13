@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="report3" language="groovy" pageWidth="842" pageHeight="595" orientation="Landscape" columnWidth="802" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="21e4768f-8fbb-4fce-9813-47b6e6ce7f2f">
 	<property name="ireport.zoom" value="1.5"/>
-	<property name="ireport.x" value="60"/>
+	<property name="ireport.x" value="397"/>
 	<property name="ireport.y" value="0"/>
 	<field name="ship_lot_no" class="java.lang.String"/>
 	<field name="ship" class="java.lang.String"/>
@@ -46,7 +46,7 @@
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font fontName="TH SarabunPSK" size="16" isBold="true" pdfFontName="THSarabun.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
 				</textElement>
-				<textFieldExpression><![CDATA["รายละเอียดค่าข้าวและค่าใช้จ่ายส่งมอบ COFCO"+ "Lot  ที่ "+$F{cl_no}+" ครั้งที่ "+$F{fee_no}]]></textFieldExpression>
+				<textFieldExpression><![CDATA["รายละเอียดค่าข้าวและค่าใช้จ่ายส่งมอบ COFCO "+ "Lot  ที่ "+$F{cl_no}+" ครั้งที่ "+$F{fee_no}]]></textFieldExpression>
 			</textField>
 		</band>
 	</title>
