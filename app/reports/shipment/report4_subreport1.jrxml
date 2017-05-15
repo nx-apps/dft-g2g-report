@@ -3,9 +3,9 @@
 	<property name="ireport.zoom" value="2.853116706110003"/>
 	<property name="ireport.x" value="0"/>
 	<property name="ireport.y" value="0"/>
-	<field name="exporter_name" class="java.lang.String"/>
-	<field name="type_rice_name" class="java.lang.String"/>
-	<field name="package_name" class="java.lang.String"/>
+	<field name="company_name_th" class="java.lang.String"/>
+	<field name="type_rice_sub_en" class="java.lang.String"/>
+	<field name="package_kg_per_bag" class="java.lang.String"/>
 	<field name="shm_det_quantity" class="java.lang.Double"/>
 	<field name="num_of_container" class="java.lang.Integer"/>
 	<detail>
@@ -21,7 +21,7 @@
 				<textElement verticalAlignment="Middle">
 					<font fontName="TH SarabunPSK" size="6" isBold="false" pdfFontName="THSarabun.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$F{exporter_name}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{company_name_th}]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true">
 				<reportElement stretchType="RelativeToBandHeight" x="85" y="0" width="40" height="10" uuid="aac3ccdf-6ba3-4416-99c1-4fe452cf9297"/>
@@ -34,8 +34,7 @@
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font fontName="TH SarabunPSK" size="6" isBold="false" pdfFontName="THSarabun.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
 				</textElement>
-				<textFieldExpression><![CDATA[new nylon.utility.FindChar().findUpperChar($F{type_rice_name})
-+"% "+$F{package_name}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{type_rice_sub_en}+" "+$F{package_kg_per_bag}+" KG"]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true">
 				<reportElement stretchType="RelativeToBandHeight" x="125" y="0" width="35" height="10" uuid="ef6d9bb2-adc9-4b43-ac31-e3d6ed9563cb"/>
