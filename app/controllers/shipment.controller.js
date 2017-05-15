@@ -59,6 +59,7 @@ exports.report1 = function (req, res, next) {
                         return {
                             type_rice_id: m1('group'),
                             type_rice_name_th: r.db('common').table('type_rice').get(m1('group')).getField('type_rice_name_th'),
+                            type_rice_name_en: r.db('common').table('type_rice').get(m1('group')).getField('type_rice_name_en'),
                             weight_all: m1('reduction'),
                             weight_per_container: row('weight_per_container'),
                             num_of_container: r.db('g2g2').table('shipment_detail')
