@@ -8,6 +8,7 @@
 		<defaultValueExpression><![CDATA["..\\"]]></defaultValueExpression>
 	</parameter>
 	<field name="type_rice_name_th" class="java.lang.String"/>
+	<field name="type_rice_name_en" class="java.lang.String"/>
 	<field name="project" class="java.lang.String"/>
 	<field name="weight_all" class="java.lang.Double"/>
 	<field name="num_of_container" class="java.lang.Integer"/>
@@ -29,7 +30,9 @@
 					<font fontName="TH SarabunPSK" size="16" pdfFontName="THSarabun.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{type_rice_name_th}+" ปีการผลิต "+$F{project}+" ฤดูใหม่"+
-"\n(ขัดสี 2 ครั้ง และคัดแยกเมล็ดข้าว)"]]></textFieldExpression>
+"\n(ขัดสี 2 ครั้ง และคัดแยกเมล็ดข้าว)"+
+"\n"+$F{type_rice_name_en}+", "+$F{project}+" CURRENT NEW CROP,"+
+"\nDOUBLE POLISHED AND SORTEXED QUALITY"]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement stretchType="RelativeToBandHeight" x="20" y="0" width="130" height="20" uuid="b79fee82-e860-485c-8567-8acc8f18d91a"/>

@@ -59,6 +59,7 @@ exports.report1 = function (req, res, next) {
                         return {
                             type_rice_id: m1('group'),
                             type_rice_name_th: r.db('common').table('type_rice').get(m1('group')).getField('type_rice_name_th'),
+                            type_rice_name_en: r.db('common').table('type_rice').get(m1('group')).getField('type_rice_name_en'),
                             weight_all: m1('reduction'),
                             weight_per_container: row('weight_per_container'),
                             num_of_container: r.db('g2g2').table('shipment_detail')
@@ -639,28 +640,23 @@ exports.report4 = function (req, res, next) {
             return {
                 book_id: m('id'),
                 shipment_detail: r.db('g2g2').table('shipment_detail').getAll(m('id'), { index: 'book_id' }).coerceTo('array')
-                    .merge(function (m1) {
-                        return {
-                            exporter_name: r.db('external').table('exporter').get(m1('exporter_id')).getField('company_id')
-                                .do(function (d1) {
-                                    // return r.db('external').table('trader').get(d1).getField('company_id')
-                                    //     .do(function (d2) {
-                                    return r.db('external').table('company').get(d1).getField('company_name_th')
-                                    // })
-                                }),
-                            type_rice_name: r.db('common').table('type_rice').get(m1('type_rice_id')).getField('type_rice_name_en'),
-                            package_name: r.db('common').table('package').get(m1('package_id')).getField('package_kg_per_bag').coerceTo('string').add('KG'),
-                            // price_per_ton: m('cl_type_rice')
-                            //     .filter(function (tb) {
-                            //         return tb('type_rice_id').eq(m1('type_rice_id'))
-                            //     }).getField("package")(0)
-                            //     .filter(function (f) {
-                            //         return f('package_id').eq(m1('package_id'))
-                            //     })(0)
-                            //     .pluck('price_per_ton')
-                            //     .values()(0)
-                        }
-                    })
+                    .eqJoin('exporter_id', r.db('external').table('exporter')).pluck("left", { right: "company_id" }).zip()
+                    .eqJoin('company_id', r.db('external').table('company')).pluck("left", { right: "company_name_th" }).zip()
+                    .eqJoin('type_rice_id', r.db('common').table('type_rice')).pluck("left", { right: "type_rice_sub_en" }).zip()
+                    .eqJoin('package_id', r.db('common').table('package')).pluck("left", { right: "package_kg_per_bag" }).zip()
+                    // .merge(function (m1) {
+                    //     return {
+                    //         exporter_name: r.db('external').table('exporter').get(m1('exporter_id')).getField('company_id')
+                    //             .do(function (d1) {
+                    //                 // return r.db('external').table('trader').get(d1).getField('company_id')
+                    //                 //     .do(function (d2) {
+                    //                 return r.db('external').table('company').get(d1).getField('company_name_th')
+                    //                 // })
+                    //             }),
+                    //         type_rice_name: r.db('common').table('type_rice').get(m1('type_rice_id')).getField('type_rice_name_en'),
+                    //         package_name: r.db('common').table('package').get(m1('package_id')).getField('package_kg_per_bag').coerceTo('string').add('KG')
+                    //     }
+                    // })
                     .merge(function (m1) {
                         return {
                             values_usd: m1('price_per_ton').mul(m1('shm_det_quantity'))
@@ -677,7 +673,7 @@ exports.report4 = function (req, res, next) {
                     .reduce(function (l, r) {
                         return r.add("/ ").add(l)
                     }),
-                shipline_name: r.db('common').table('shipline').get(m('shipline_id')).getField('shipline_name'),
+                // shipline_name: r.db('common').table('shipline').get(m('shipline_id')).getField('shipline_name'),
                 dest_port_name: r.db('common').table('port').get(m('dest_port_id')).getField('port_name'),
                 dest_country_id: r.db('common').table('port').get(m('dest_port_id')).getField('country_id'),
                 load_port_name: r.db('common').table('port').get(m('load_port_id')).getField('port_name'),
@@ -692,6 +688,7 @@ exports.report4 = function (req, res, next) {
                 type_rice_quantity: m('cl_type_rice').sum('type_rice_quantity')
             }
         })
+        .eqJoin('shipline_id', r.db('common').table('shipline')).pluck("left", { right: 'shipline_name' }).zip()
         .eqJoin('contract_id', r.db('g2g2').table('contract')).pluck({ right: "buyer_id" }, "left").zip()
         .eqJoin('buyer_id', r.db('common').table('buyer')).pluck({ right: "buyer_masks" }, "left").zip()
         .merge({ invoice_no: r.db('g2g2').table('invoice').getAll(r.row('book_id'), { index: 'book_id' })(0)('invoice_no') })
@@ -699,8 +696,8 @@ exports.report4 = function (req, res, next) {
         .orderBy([r.row('ship_lot_no').coerceTo('number'), r.row('invoice_no')])
         .run()
         .then(function (result) {
-            // res.json(result)
-            res.ireport("shipment/report4.jasper", req.query.export || "pdf", result, parameters);
+            res.json(result)
+            // res.ireport("shipment/report4.jasper", req.query.export || "pdf", result, parameters);
         })
         .error(function (err) {
             res.json(err)
