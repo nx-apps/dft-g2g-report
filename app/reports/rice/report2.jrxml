@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="report2" language="groovy" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="92461609-dacb-48cf-a14e-0f293e2c4029">
-	<property name="ireport.zoom" value="1.0245201830476058"/>
+	<property name="ireport.zoom" value="1.0"/>
 	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="141"/>
+	<property name="ireport.y" value="0"/>
 	<import value="nylon.report.*"/>
 	<parameter name="SUBREPORT_DIR" class="java.lang.String" isForPrompting="false">
 		<defaultValueExpression><![CDATA["..\\"]]></defaultValueExpression>
@@ -23,12 +23,12 @@
 	<field name="ship" class="java.lang.String"/>
 	<field name="cut_of_date" class="java.lang.String"/>
 	<field name="cut_of_time" class="java.lang.String"/>
-	<field name="load_port_name" class="java.lang.String"/>
+	<field name="load_port" class="java.lang.Object"/>
 	<field name="shipline_name" class="java.lang.String"/>
 	<field name="shipline_tel" class="java.lang.String"/>
 	<field name="surveyor_name" class="java.lang.String"/>
 	<field name="book_no" class="java.lang.String"/>
-	<field name="type_rice" class="java.lang.Object"/>
+	<field name="hamonize" class="java.lang.Object"/>
 	<field name="buyer_masks" class="java.lang.String"/>
 	<field name="buyer_name" class="java.lang.String"/>
 	<field name="buyer_address" class="java.lang.String"/>
@@ -38,14 +38,26 @@
 	<field name="notify_address" class="java.lang.String"/>
 	<field name="notify_tel" class="java.lang.String"/>
 	<field name="notify_fax" class="java.lang.String"/>
-	<field name="deli_port_name" class="java.lang.String"/>
-	<field name="deli_country_fullname" class="java.lang.String"/>
-	<field name="dest_port_name" class="java.lang.String"/>
-	<field name="dest_country_fullname" class="java.lang.String"/>
+	<field name="deli_port" class="java.lang.Object"/>
 	<field name="product_date" class="java.lang.String"/>
 	<field name="exporter" class="java.lang.String"/>
 	<field name="origin_page" class="java.lang.String"/>
 	<field name="nn_page" class="java.lang.String"/>
+	<field name="buyer" class="java.lang.Object"/>
+	<field name="notify_party" class="java.lang.Object"/>
+	<field name="dest_port" class="java.lang.Object"/>
+	<variable name="obj_buyer" class="java.lang.Object">
+		<variableExpression><![CDATA[new iJson2Object($F{buyer})]]></variableExpression>
+	</variable>
+	<variable name="obj_notify" class="java.lang.Object">
+		<variableExpression><![CDATA[new iJson2Object($F{notify_party})]]></variableExpression>
+	</variable>
+	<variable name="obj_dest_port" class="java.lang.Object">
+		<variableExpression><![CDATA[new iJson2Object($F{dest_port})]]></variableExpression>
+	</variable>
+	<variable name="obj_deli_port" class="java.lang.Object">
+		<variableExpression><![CDATA[new iJson2Object($F{deli_port})]]></variableExpression>
+	</variable>
 	<group name="Group" isStartNewPage="true">
 		<groupExpression><![CDATA[$F{ship_lot_no}]]></groupExpression>
 		<groupHeader>
@@ -67,7 +79,7 @@
 				<textElement>
 					<font fontName="TH SarabunPSK" size="16" pdfFontName="THSarabun.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$F{buyer_name}+" "+$F{buyer_address}+" FAX:"+$F{buyer_fax}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$V{obj_buyer}.getValue("buyer_name")+" "+$V{obj_buyer}.getValue("buyer_address")+" FAX:"+$V{obj_buyer}.getValue("buyer_fax")]]></textFieldExpression>
 			</textField>
 			<staticText>
 				<reportElement x="0" y="0" width="75" height="20" uuid="6bf74d98-3e7d-4452-88f6-8b52f80ccac5"/>
@@ -114,7 +126,7 @@
 				<textElement>
 					<font fontName="TH SarabunPSK" size="16" pdfFontName="THSarabun.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$F{notify_name}+" "+$F{notify_address}+" FAX:"+$F{notify_fax}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$V{obj_notify}.getValue("notify_name")+" "+$V{obj_notify}.getValue("notify_address")+" FAX:"+$V{obj_notify}.getValue("notify_fax")]]></textFieldExpression>
 			</textField>
 			<staticText>
 				<reportElement x="75" y="0" width="60" height="20" uuid="610c1e54-8421-4a02-a634-67fa4a06d2b4"/>
@@ -161,8 +173,8 @@
 				<textElement>
 					<font fontName="TH SarabunPSK" size="16" pdfFontName="THSarabun.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$F{dest_port_name}.toUpperCase()+", "+
-$F{dest_country_fullname}.toUpperCase()]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$V{obj_dest_port}.getValue("port_name").toUpperCase()+", "+
+$V{obj_dest_port}.getValue("country_fullname_en").toUpperCase()]]></textFieldExpression>
 			</textField>
 			<staticText>
 				<reportElement x="0" y="60" width="111" height="20" uuid="8775380e-c7ad-4eec-8a65-3f67520340df"/>
@@ -177,8 +189,8 @@ $F{dest_country_fullname}.toUpperCase()]]></textFieldExpression>
 				<textElement>
 					<font fontName="TH SarabunPSK" size="16" pdfFontName="THSarabun.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$F{deli_port_name}.toUpperCase()+", "+
-$F{deli_country_fullname}.toUpperCase()]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$V{obj_deli_port}.getValue("port_name").toUpperCase()+", "+
+$V{obj_dest_port}.getValue("country_fullname_en").toUpperCase()]]></textFieldExpression>
 			</textField>
 			<staticText>
 				<reportElement x="0" y="100" width="75" height="20" uuid="05f387e1-567f-4d66-ad3c-9e568a414d78"/>
@@ -213,7 +225,7 @@ $F{deli_country_fullname}.toUpperCase()]]></textFieldExpression>
 				<textElement>
 					<font fontName="TH SarabunPSK" size="16" pdfFontName="THSarabun.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$F{load_port_name}.toUpperCase()+", THAILAND"]]></textFieldExpression>
+				<textFieldExpression><![CDATA[new iJson2Object($F{load_port}).getValue("port_name").toUpperCase()+", THAILAND"]]></textFieldExpression>
 			</textField>
 			<staticText>
 				<reportElement x="75" y="0" width="60" height="20" uuid="5df027e8-3424-46fa-b9b6-35941aee8dc6"/>
@@ -247,8 +259,11 @@ $F{deli_country_fullname}.toUpperCase()]]></textFieldExpression>
 		<band height="120">
 			<subreport>
 				<reportElement x="0" y="20" width="555" height="100" uuid="011d8aab-dae0-446f-ab20-e52656e39479"/>
-				<dataSourceExpression><![CDATA[new iJsonDS($F{type_rice})]]></dataSourceExpression>
-				<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "/shipment/report2_subreport1.jasper"]]></subreportExpression>
+				<subreportParameter name="SUBREPORT_DIR">
+					<subreportParameterExpression><![CDATA[$P{SUBREPORT_DIR}]]></subreportParameterExpression>
+				</subreportParameter>
+				<dataSourceExpression><![CDATA[new iJsonDS($F{hamonize})]]></dataSourceExpression>
+				<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "/rice/report2_subreport1.jasper"]]></subreportExpression>
 			</subreport>
 		</band>
 		<band height="155">

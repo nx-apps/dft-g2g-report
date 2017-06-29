@@ -3,44 +3,47 @@
 	<property name="ireport.zoom" value="1.0"/>
 	<property name="ireport.x" value="0"/>
 	<property name="ireport.y" value="0"/>
+	<import value="nylon.report.*"/>
 	<parameter name="buyer_masks" class="java.lang.String"/>
-	<field name="quantity_bags" class="java.lang.Integer"/>
-	<field name="type_rice_name_en" class="java.lang.String"/>
-	<field name="project" class="java.lang.String"/>
-	<field name="season_en" class="java.lang.String"/>
-	<field name="description_en" class="java.lang.String"/>
-	<field name="weight_gross" class="java.lang.Double"/>
-	<field name="weight_net" class="java.lang.Double"/>
-	<field name="package_name_en" class="java.lang.String"/>
-	<field name="package_weight_bag" class="java.lang.Integer"/>
+	<parameter name="SUBREPORT_DIR" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA["C:\\Users\\Accounting\\Documents\\Project\\report_g2g\\dft-g2g-report\\app\\reports\\rice\\"]]></defaultValueExpression>
+	</parameter>
+	<field name="hamonize_en" class="java.lang.String"/>
+	<field name="project_en" class="java.lang.String"/>
+	<field name="package" class="java.lang.Object"/>
+	<field name="package_amount" class="java.lang.Long"/>
+	<field name="gross_weight" class="java.lang.Double"/>
+	<field name="net_weight" class="java.lang.Double"/>
 	<field name="buyer_masks" class="java.lang.String"/>
+	<field name="package_weight_bag" class="java.lang.Integer"/>
+	<field name="package_name_en" class="java.lang.String"/>
 	<detail>
 		<band height="30" splitType="Stretch">
+			<textField isStretchWithOverflow="true">
+				<reportElement stretchType="RelativeToBandHeight" x="125" y="0" width="323" height="20" uuid="0d9c4f2a-6d8c-49c9-8d6e-b7e185df2e96"/>
+				<textElement textAlignment="Justified">
+					<font fontName="TH SarabunPSK" size="16" pdfFontName="THSarabun.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{hamonize_en}.toUpperCase()+", "
++$F{project_en}.toUpperCase()+" CURRENT NEW CROP,"+
+"\nDOUBLE-POLISHED AND SORTEXED QUALITY."]]></textFieldExpression>
+			</textField>
 			<textField pattern="">
 				<reportElement x="45" y="0" width="74" height="20" uuid="b7a6661c-9c4e-4d5d-a89a-6f59d93a5c27"/>
 				<textElement>
 					<font fontName="TH SarabunPSK" size="16" isUnderline="true" pdfFontName="THSarabun.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
 					<paragraph lineSpacing="Double"/>
 				</textElement>
-				<textFieldExpression><![CDATA[new nylon.utility.NumberFormat().toFormat($F{quantity_bags},"#,###")
+				<textFieldExpression><![CDATA[new nylon.utility.NumberFormat().toFormat($F{package_amount},"#,###")
 +" BAGS"]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true">
-				<reportElement stretchType="RelativeToBandHeight" x="125" y="0" width="300" height="20" uuid="0d9c4f2a-6d8c-49c9-8d6e-b7e185df2e96"/>
+				<reportElement stretchType="RelativeToBandHeight" x="460" y="0" width="121" height="20" uuid="68a162cd-bb48-44f8-af59-785250996117"/>
 				<textElement textAlignment="Justified">
 					<font fontName="TH SarabunPSK" size="16" pdfFontName="THSarabun.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$F{type_rice_name_en}.toUpperCase()+", "
-+$F{project}.toUpperCase()+" CURRENT NEW CROP,"+
-"\nDOUBLE-POLISHED AND SORTEXED QUALITY."]]></textFieldExpression>
-			</textField>
-			<textField isStretchWithOverflow="true">
-				<reportElement stretchType="RelativeToBandHeight" x="448" y="0" width="121" height="20" uuid="68a162cd-bb48-44f8-af59-785250996117"/>
-				<textElement textAlignment="Justified">
-					<font fontName="TH SarabunPSK" size="16" pdfFontName="THSarabun.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
-				</textElement>
-				<textFieldExpression><![CDATA["G.W. "+new nylon.utility.NumberFormat().toFormat($F{weight_gross},"#,###.000")+" M/T\n"+
-"N.W. "+new nylon.utility.NumberFormat().toFormat($F{weight_net},"#,###.000")+" M/T"]]></textFieldExpression>
+				<textFieldExpression><![CDATA["G.W. "+new nylon.utility.NumberFormat().toFormat($F{gross_weight},"#,###.000")+" M/T\n"+
+"N.W. "+new nylon.utility.NumberFormat().toFormat($F{net_weight},"#,###.000")+" M/T"]]></textFieldExpression>
 			</textField>
 		</band>
 		<band height="30">
@@ -54,7 +57,7 @@
 				<textFieldExpression><![CDATA[$F{buyer_masks}]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true">
-				<reportElement stretchType="RelativeToBandHeight" x="125" y="0" width="300" height="20" uuid="9e679039-af80-4f57-b68e-a53b1af57fef"/>
+				<reportElement stretchType="RelativeToBandHeight" x="125" y="0" width="323" height="20" uuid="ea00d767-2b61-497d-8ccb-9f1b15c66aeb"/>
 				<textElement textAlignment="Justified">
 					<font fontName="TH SarabunPSK" size="15" pdfFontName="THSarabun.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
 				</textElement>
@@ -67,11 +70,11 @@
 		</band>
 		<band height="20">
 			<textField isStretchWithOverflow="true">
-				<reportElement stretchType="RelativeToBandHeight" x="0" y="0" width="555" height="20" uuid="6dba3fc8-9099-41fd-8eb6-d1d05024f547"/>
+				<reportElement stretchType="RelativeToBandHeight" x="0" y="0" width="555" height="20" uuid="f6d5901c-b93d-45ec-88f1-ead93a765ce9"/>
 				<textElement textAlignment="Center">
 					<font fontName="TH SarabunPSK" size="16" pdfFontName="THSarabun.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
 				</textElement>
-				<textFieldExpression><![CDATA["("+new nylon.utility.NumberFormat().toEngString($F{quantity_bags}).toUpperCase()
+				<textFieldExpression><![CDATA["("+new nylon.utility.NumberFormat().toEngString($F{package_amount}).toUpperCase()
 +" BAGS ONLY)"]]></textFieldExpression>
 			</textField>
 		</band>

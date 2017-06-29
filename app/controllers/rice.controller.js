@@ -81,9 +81,9 @@ exports.report1 = function (req, res, next) {
                     company_name: mapExporter('reduction')(0)('company')('company_name_th')
                 }
             }),
-            cut_date:m('cut_date').inTimezone('+07').toISO8601(),
-            etd_date:m('etd_date').inTimezone('+07').toISO8601(),
-            product_date:m('product_date').inTimezone('+07').toISO8601().split('T')(0),
+            cut_date: m('cut_date').inTimezone('+07').toISO8601(),
+            etd_date: m('etd_date').inTimezone('+07').toISO8601(),
+            product_date: m('product_date').inTimezone('+07').toISO8601().split('T')(0),
         })
     })
         .run()
@@ -100,173 +100,53 @@ exports.report1 = function (req, res, next) {
 
 exports.report2 = function (req, res, next) {
     var r = req.r;
+    var query = req.query;
 
     var parameters = {
         origin_page: req.query.ori,
         nn_page: req.query.nn,
         CURRENT_DATE: new Date().toISOString().slice(0, 10)
-        // SUBREPORT_DIR: __dirname.replace('controller', 'report') + '\\' + req.baseUrl.replace("/api/", "") + '\\'
     };
 
-    r.db('g2g2').table('book')
-        .get(req.params.book_id)
-        .merge(function (row) {
-            return r.db('g2g2').table('confirm_letter').get(row('cl_id')).pluck('cl_no', 'cl_type_rice', 'incoterms', 'contract_id')
-        })
-        .merge(function (row) {
-            return r.db('g2g2').table('contract').get(row('contract_id')).pluck('buyer_id', 'contract_date', 'contract_name')
-        })
-        .merge(function (row) {
-            return r.db('common').table('buyer').get(row('buyer_id')).without('id', 'date_created', 'date_updated', 'creater', 'updater')
-        })
-        // .merge(function (row) {
-        //     return r.db('common').table('country').get(row('country_id')).pluck('country_fullname_en', 'country_fullname_th', 'country_name_en', 'country_name_th')
-        // })
-        .merge(function (row) {
-            return {
-                book_id: row('id'),
-                ship: row('ship')
-                    .merge(function (m1) {
-                        return r.db('common').table('ship').get(m1('ship_id')).pluck('ship_name')
-                    }).without('ship_id')
-                    .map(function (m1) {
-                        return m1('ship_name').add(" V.").add(m1('ship_voy_no'))
-                    })
-                    .reduce(function (l, r) {
-                        return r.add("/ ").add(l)
-                    }),
-                surveyor_name: row('surveyor')
-                    .merge(function (m1) {
-                        return r.db('common').table('surveyor').get(m1('surveyor_id')).pluck('surveyor_name')
-                    }).without('ship_id')
-                    .map(function (m1) {
-                        return m1('surveyor_name')
-                    })
-                    .reduce(function (l, r) {
-                        return r.add("/ ").add(l)
-                    }),
-
-                type_rice: r.db('g2g2').table('shipment_detail')
-                    .getAll(row('id'), { index: 'book_id' })
-                    .coerceTo('array')
-                    .pluck(
-                    'type_rice_id', 'package_id', 'shm_det_quantity', 'price_per_ton'
-                    )
-                    .group(function (g1) {
-                        return g1.pluck('type_rice_id', 'package_id', 'price_per_ton')
-                    })
-                    .sum("shm_det_quantity").ungroup()
-                    .merge(function (m1) {
+    var book = r.db('g2g').table('book').get(query.book_id)
+    book.merge(function (m) {
+        var ship = book.getField('ship');
+        var detail = r.db('g2g').table('book_detail').getAll(m('id'), { index: 'book_id' }).coerceTo('array');
+        var contract = r.db('g2g').table('contract').get(m('contract_id')).pluck('buyer')
+        return contract
+            .merge({
+                ship: r.branch(ship.count().gt(1),
+                    ship.reduce(function (left, right) {
+                        return r.branch(left.hasFields('data'),
+                            {
+                                data: left('data').add(' / ', right('ship_name'), ' V.', right('ship_voy'))
+                            },
+                            {
+                                data: left('ship_name').add(" V.", left('ship_voy'), ' / ', right('ship_name'), ' V.', right('ship_voy'))
+                            }
+                        )
+                    })('data'),
+                    ship(0)('ship_name').add(" V.", ship(0)('ship_voy'))
+                ),
+                hamonize: detail.group('hamonize_id', 'package_id').ungroup()
+                    .map(function (map2) {
                         return {
-                            type_rice_id: m1('group')('type_rice_id'),
-                            package_id: m1('group')('package_id'),
-                            price_per_ton: m1('group')('price_per_ton'),
-                            incoterms: row('incoterms').getField('inct_id')
-                                .reduce(function (left, right) {
-                                    return left.add(', ', right)
-                                }),
-                            buyer_masks: row('buyer_masks'),
-                            num_of_container: r.db('g2g2').table('shipment_detail')
-                                .getAll(row('id'), { index: 'book_id' })
-                                .filter({
-                                    type_rice_id: m1('group')('type_rice_id'),
-                                    package_id: m1('group')('package_id')
-                                })
-                                .sum('num_of_container'),
-                            weight_per_container: row('weight_per_container'),
-                            project: row('cl_type_rice')
-                                .filter(function (tb) {
-                                    return tb('type_rice_id').eq(m1('group')('type_rice_id'))
-                                }).getField("project_en")(0),
-                            weight_net: m1('reduction'),
-                            type_rice_name_en: r.db('common').table('type_rice').get(m1('group')('type_rice_id')).getField('type_rice_name_en')
-
-                        }
-                    }).without('group', 'reduction')
-                    .merge(function (m1) {
-                        return r.db('common').table('package').get(m1('package_id')).pluck('package_name_en', 'package_kg_per_bag', 'package_weight_bag')
-                    })
-                    .merge(function (m1) {
-                        return {
-                            quantity_bags: m1('weight_net').mul(1000).div(m1('package_kg_per_bag'))
+                            hamonize_en: map2('reduction')(0)('hamonize')('hamonize_en'),
+                            project_en: map2('reduction')(0)('project_en'),
+                            gross_weight: map2('reduction').sum('gross_weight'),
+                            net_weight: map2('reduction').sum('net_weight'),
+                            package_amount: map2('reduction').sum('package_amount'),
+                            package_name_en: map2('reduction')(0)('package')('package_name_en'),
+                            package_weight_bag: map2('reduction')(0)('package')('package_weight_bag'),
+                            buyer_masks: contract('buyer')('buyer_masks')
                         }
                     })
-                    .merge(function (m1) {
-                        return {
-                            weight_gross: m1('quantity_bags').mul(m1('package_kg_per_bag').add(m1('package_weight_bag').div(1000)).div(1000))
-                        }
-                    })
-                    .merge(function (m1) {
-                        return {
-                            weight_bags: m1('weight_gross').sub(m1('weight_net'))
-                        }
-                    })
-                ,
-                // exporter: r.db('g2g2').table('shipment_detail')
-                //     .getAll(row('id'), { index: 'book_id' })
-                //     .coerceTo('array')
-                //     .pluck('exporter_id')
-                //     .getField('exporter_id')
-                //     .map(function (m1) {
-                //         return r.db('external').table('exporter').get(m1).getField('company_id')
-                //             .do(function (d1) {
-                //                 // return r.db('external').table('trader').get(d1).getField('company_id')
-                //                 //     .do(function (d2) {
-                //                 return r.db('external').table('company').get(d1).getField('company_name_th')
-                //                 // })
-                //             })
-                //     })
-                //     .reduce(function (l, r) {
-                //         return r.add("/ ").add(l)
-                //     }),
-                notify_name: r.db('common').table('notify_party').filter({
-                    port_id: row('deli_port_id'),
-                    buyer_id: row('buyer_id')
-                }).getField('notify_name')(0),
-                notify_address: r.db('common').table('notify_party').filter({
-                    port_id: row('deli_port_id'),
-                    buyer_id: row('buyer_id')
-                }).getField('notify_address')(0),
-                notify_tel: r.db('common').table('notify_party').filter({
-                    port_id: row('deli_port_id'),
-                    buyer_id: row('buyer_id')
-                }).getField('notify_tel')(0),
-                notify_fax: r.db('common').table('notify_party').filter({
-                    port_id: row('deli_port_id'),
-                    buyer_id: row('buyer_id')
-                }).getField('notify_fax')(0)
-            }
-        })
-        .merge(function (m) {
-            return {
-                shipline_name: r.db('common').table('shipline').get(m('shipline_id')).getField('shipline_name'),
-                shipline_tel: r.db('common').table('shipline').get(m('shipline_id')).getField('shipline_tel'),
-                deli_port_name: r.db('common').table('port').get(m('deli_port_id')).getField('port_name'),
-                deli_country_id: r.db('common').table('port').get(m('deli_port_id')).getField('country_id'),
-                dest_port_name: r.db('common').table('port').get(m('dest_port_id')).getField('port_name'),
-                dest_country_id: r.db('common').table('port').get(m('dest_port_id')).getField('country_id'),
-                load_port_name: r.db('common').table('port').get(m('load_port_id')).getField('port_name'),
-                load_country_id: r.db('common').table('port').get(m('load_port_id')).getField('country_id'),
-                product_date: m('product_date').split('T')(0),
-                cut_of_date: m('cut_of_date').split('T')(0)
-            }
-        })
-        .merge(function (m) {
-            return {
-                deli_country_fullname: r.db('common').table('country').get(m('deli_country_id')).getField('country_fullname_en'),
-                dest_country_fullname: r.db('common').table('country').get(m('dest_country_id')).getField('country_fullname_en'),
-                load_country_fullname: r.db('common').table('country').get(m('load_country_id')).getField('country_fullname_en'),
-                deli_country_name: r.db('common').table('country').get(m('deli_country_id')).getField('country_name_en'),
-                dest_country_name: r.db('common').table('country').get(m('dest_country_id')).getField('country_name_en'),
-                load_country_name: r.db('common').table('country').get(m('load_country_id')).getField('country_name_en')
-            }
-        })
-        .without('id', 'contract_date', 'cl_type_rice', 'date_created', 'date_updated', 'creater', 'updater')
-        .without('incoterms', 'surveyor', 'tags')
+            })
+    })
         .run()
         .then(function (result) {
             // res.json(result);
-            res.ireport("shipment/report2.jasper", req.query.export || "pdf", result, parameters);
+            res.ireport("rice/report2.jasper", req.query.export || "pdf", result, parameters);
         });
 }
 
