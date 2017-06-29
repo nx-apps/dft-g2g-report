@@ -3,8 +3,8 @@
 	<property name="ireport.zoom" value="1.0"/>
 	<property name="ireport.x" value="0"/>
 	<property name="ireport.y" value="0"/>
-	<field name="exporter_name" class="java.lang.String"/>
-	<field name="weight" class="java.lang.Double"/>
+	<field name="company_name" class="java.lang.String"/>
+	<field name="net_weight" class="java.lang.Double"/>
 	<detail>
 		<band height="20" splitType="Stretch">
 			<textField>
@@ -12,9 +12,9 @@
 				<textElement>
 					<font fontName="TH SarabunPSK" size="16" pdfFontName="THSarabun.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$F{exporter_name}+" = "+
-new nylon.utility.NumberFormat().toFormat($F{weight},"#,###.##")
-+" ตัน"]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{company_name}+" = "+
+new nylon.utility.NumberFormat().toFormat($F{net_weight},"#,###.##")+
+" ตัน"]]></textFieldExpression>
 			</textField>
 		</band>
 	</detail>

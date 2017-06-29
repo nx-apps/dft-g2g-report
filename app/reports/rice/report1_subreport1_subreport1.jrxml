@@ -3,9 +3,12 @@
 	<property name="ireport.zoom" value="1.0"/>
 	<property name="ireport.x" value="0"/>
 	<property name="ireport.y" value="0"/>
+	<import value="nylon.report.*"/>
 	<field name="package_name_th" class="java.lang.String"/>
-	<field name="package_weight_bag" class="java.lang.Double"/>
+	<field name="package_weight_bag" class="java.lang.String"/>
 	<field name="shm_det_quantity" class="java.lang.Double"/>
+	<field name="package_kg_per_bag" class="java.lang.String"/>
+	<field name="field1" class="java.lang.String"/>
 	<detail>
 		<band height="20" splitType="Stretch">
 			<textField isStretchWithOverflow="true" pattern="#,##0">
@@ -13,11 +16,8 @@
 				<textElement>
 					<font fontName="TH SarabunPSK" size="16" pdfFontName="THSarabun.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$F{package_name_th}+" น้ำหนักไม่น้อยกว่า "+
-new nylon.utility.NumberFormat().toFormat($F{package_weight_bag},"#,###.##")
-+" กรัม จำนวน "+
-new nylon.utility.NumberFormat().toFormat($F{shm_det_quantity},"#,###.##")
-+" ตัน"]]></textFieldExpression>
+				<textFieldExpression><![CDATA["กระสอบ PP ขนาด "+$F{package_kg_per_bag}+" กก. น้ำหนักไม่น้อยกว่า "+$F{package_weight_bag}
++" กรัม"]]></textFieldExpression>
 			</textField>
 		</band>
 	</detail>

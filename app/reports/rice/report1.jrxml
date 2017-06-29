@@ -2,11 +2,20 @@
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="report1" language="groovy" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="4832cfc8-4c63-4219-927a-9e6bcdb30af6">
 	<property name="ireport.zoom" value="1.0245201830476058"/>
 	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="0"/>
+	<property name="ireport.y" value="93"/>
+	<import value="com.fasterxml.jackson.core.type.*"/>
+	<import value="java.io.*"/>
+	<import value="java.util.*"/>
 	<import value="nylon.report.*"/>
+	<import value="com.fasterxml.jackson.databind.*"/>
 	<parameter name="SUBREPORT_DIR" class="java.lang.String" isForPrompting="false">
 		<defaultValueExpression><![CDATA["..\\"]]></defaultValueExpression>
 	</parameter>
+	<parameter name="COUNTRY" class="java.lang.String"/>
+	<parameter name="CL_NO" class="java.lang.String"/>
+	<parameter name="YEAR" class="java.lang.String"/>
+	<parameter name="SHIP_LOT" class="java.lang.String"/>
+	<parameter name="REMARK" class="java.lang.String"/>
 	<queryString>
 		<![CDATA[]]>
 	</queryString>
@@ -15,32 +24,35 @@
 	<field name="cl_no" class="java.lang.String"/>
 	<field name="contract_year" class="java.lang.Integer"/>
 	<field name="ship_lot" class="java.lang.String"/>
-	<field name="ship_name" class="java.lang.String"/>
+	<field name="ship" class="java.lang.String"/>
 	<field name="cut_date" class="java.lang.String"/>
 	<field name="cut_time" class="java.lang.String"/>
 	<field name="etd_date" class="java.lang.String"/>
-	<field name="port_name" class="java.lang.String"/>
-	<field name="shipline_name" class="java.lang.String"/>
-	<field name="shipline_tel" class="java.lang.String"/>
-	<field name="surveyor_name" class="java.lang.String"/>
+	<field name="load_port" class="java.lang.Object"/>
+	<field name="shipline" class="java.lang.Object"/>
+	<field name="surveyor" class="java.lang.String"/>
 	<field name="book_no" class="java.lang.String"/>
-	<field name="type_rice" class="java.lang.Object"/>
+	<field name="hamonize" class="java.lang.Object"/>
 	<field name="buyer_masks" class="java.lang.String"/>
-	<field name="buyer_name" class="java.lang.String"/>
-	<field name="buyer_address" class="java.lang.String"/>
-	<field name="buyer_tel" class="java.lang.String"/>
-	<field name="buyer_fax" class="java.lang.String"/>
-	<field name="notify_name" class="java.lang.String"/>
-	<field name="notify_address" class="java.lang.String"/>
-	<field name="notify_tel" class="java.lang.String"/>
-	<field name="notify_fax" class="java.lang.String"/>
+	<field name="notify_party" class="java.lang.Object"/>
 	<field name="country_fullname_en" class="java.lang.String"/>
-	<field name="deli_port_name" class="java.lang.String"/>
-	<field name="dest_port_name" class="java.lang.String"/>
+	<field name="deli_port" class="java.lang.Object"/>
+	<field name="dest_port" class="java.lang.Object"/>
 	<field name="product_date" class="java.lang.String"/>
 	<field name="exporter" class="java.lang.Object"/>
 	<field name="book_id" class="java.lang.String"/>
 	<field name="book_remark" class="java.lang.String"/>
+	<field name="buyer" class="java.lang.Object"/>
+	<field name="country" class="java.lang.Object"/>
+	<variable name="obj_buyer" class="java.lang.Object">
+		<variableExpression><![CDATA[new iJson2Object($F{buyer})]]></variableExpression>
+	</variable>
+	<variable name="obj_shipline" class="java.lang.Object">
+		<variableExpression><![CDATA[new iJson2Object($F{shipline})]]></variableExpression>
+	</variable>
+	<variable name="obj_notify" class="java.lang.Object">
+		<variableExpression><![CDATA[new iJson2Object($F{notify_party})]]></variableExpression>
+	</variable>
 	<group name="Group" isStartNewPage="true">
 		<groupExpression><![CDATA[$F{book_id}]]></groupExpression>
 		<groupHeader>
@@ -50,12 +62,11 @@
 					<textElement textAlignment="Center" verticalAlignment="Middle">
 						<font fontName="TH SarabunPSK" size="18" isBold="true" pdfFontName="THSarabun.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
 					</textElement>
-					<textFieldExpression><![CDATA["รายละเอียดการส่งมอบข้าวให้รัฐบาล"+$F{country_fullname_th}+
-$F{contract_name}+
-" งวดที่ "+$F{cl_no}+
-" ปี "+$F{contract_year}+
-" ("+$F{ship_lot}+")"+
-" "+$F{book_remark}]]></textFieldExpression>
+					<textFieldExpression><![CDATA["รายละเอียดการส่งมอบข้าวให้รัฐบาล"+$P{COUNTRY}+
+" งวดที่ "+$P{CL_NO}+
+" ปี "+$P{YEAR}+
+" ("+$P{SHIP_LOT}+")"+
+" "+$P{REMARK}]]></textFieldExpression>
 				</textField>
 			</band>
 		</groupHeader>
@@ -67,7 +78,7 @@ $F{contract_name}+
 				<textElement>
 					<font fontName="TH SarabunPSK" size="16" pdfFontName="THSarabun.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$F{ship_name}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{ship}]]></textFieldExpression>
 			</textField>
 			<staticText>
 				<reportElement x="20" y="0" width="130" height="20" uuid="fad9d5ae-d472-4541-8395-38864866eb82"/>
@@ -106,7 +117,7 @@ new nylon.utility.NumberFormat().toThaiDate($F{cut_date})
 				<textElement>
 					<font fontName="TH SarabunPSK" size="16" pdfFontName="THSarabun.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$F{port_name}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[new iJson2Object($F{load_port}).getValue("port_name")+" PORT"]]></textFieldExpression>
 			</textField>
 			<staticText>
 				<reportElement x="20" y="80" width="130" height="20" uuid="9e6cd57d-e338-44d1-8f0f-0d676f98f21d"/>
@@ -121,7 +132,7 @@ new nylon.utility.NumberFormat().toThaiDate($F{cut_date})
 				<textElement>
 					<font fontName="TH SarabunPSK" size="16" pdfFontName="THSarabun.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$F{shipline_name}+" โทร. "+$F{shipline_tel}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$V{obj_shipline}.getValue("shipline_name")+" โทร. "+$V{obj_shipline}.getValue("shipline_tel")]]></textFieldExpression>
 			</textField>
 			<staticText>
 				<reportElement x="20" y="100" width="130" height="20" uuid="1726977e-a1cc-4b46-990a-eb45329c744d"/>
@@ -136,7 +147,7 @@ new nylon.utility.NumberFormat().toThaiDate($F{cut_date})
 				<textElement>
 					<font fontName="TH SarabunPSK" size="16" pdfFontName="THSarabun.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$F{surveyor_name}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{surveyor}]]></textFieldExpression>
 			</textField>
 			<staticText>
 				<reportElement x="20" y="120" width="130" height="20" uuid="6ab0d69a-29af-4a39-bbf1-7fbaabcf2783"/>
@@ -204,7 +215,16 @@ new nylon.utility.NumberFormat().toThaiDate($F{etd_date})]]></textFieldExpressio
 				<text><![CDATA[:]]></text>
 			</staticText>
 		</band>
-		<band height="104"/>
+		<band height="102">
+			<subreport>
+				<reportElement stretchType="RelativeToBandHeight" x="0" y="0" width="555" height="102" uuid="bb753bc2-6456-411f-bf02-ccb306663297"/>
+				<subreportParameter name="SUBREPORT_DIR">
+					<subreportParameterExpression><![CDATA[$P{SUBREPORT_DIR}]]></subreportParameterExpression>
+				</subreportParameter>
+				<dataSourceExpression><![CDATA[new iJsonDS($F{hamonize})]]></dataSourceExpression>
+				<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "/rice/report1_subreport1.jasper"]]></subreportExpression>
+			</subreport>
+		</band>
 		<band height="60">
 			<staticText>
 				<reportElement x="20" y="0" width="130" height="20" uuid="77772172-c6d3-4630-9976-4db0490d2f1c"/>
@@ -234,7 +254,7 @@ new nylon.utility.NumberFormat().toThaiDate($F{etd_date})]]></textFieldExpressio
 				<textElement>
 					<font fontName="TH SarabunPSK" size="16" pdfFontName="THSarabun.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$F{buyer_masks}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$V{obj_buyer}.getValue("buyer_masks")]]></textFieldExpression>
 			</textField>
 			<staticText>
 				<reportElement x="20" y="40" width="130" height="20" uuid="987659b8-b6f6-4754-870c-97544a092247"/>
@@ -248,10 +268,10 @@ new nylon.utility.NumberFormat().toThaiDate($F{etd_date})]]></textFieldExpressio
 				<textElement>
 					<font fontName="TH SarabunPSK" size="16" pdfFontName="THSarabun.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$F{buyer_name}+"\n"+
-$F{buyer_address}+"\n"+
-($F{buyer_tel}!=""?"TEL: "+$F{buyer_tel}:"")+
-($F{buyer_fax}!=""?"FAX: "+$F{buyer_fax}:"")]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$V{obj_buyer}.getValue("buyer_name")+"\n"+
+$V{obj_buyer}.getValue("buyer_address")+"\n"+
+($V{obj_buyer}.getValue("buyer_tel")!=""?"TEL: "+$V{obj_buyer}.getValue("buyer_tel"):"")+
+($V{obj_buyer}.getValue("buyer_fax")!=""?"FAX: "+$V{obj_buyer}.getValue("buyer_fax"):"")]]></textFieldExpression>
 			</textField>
 			<staticText>
 				<reportElement x="150" y="0" width="35" height="20" uuid="01dc14d7-9147-460d-a1df-cc2b39836cdb"/>
@@ -275,9 +295,9 @@ $F{buyer_address}+"\n"+
 				<text><![CDATA[:]]></text>
 			</staticText>
 		</band>
-		<band height="22">
+		<band height="40">
 			<staticText>
-				<reportElement stretchType="RelativeToBandHeight" x="20" y="0" width="129" height="22" isPrintWhenDetailOverflows="true" uuid="c6c1e3b6-d970-4496-bb90-092a5b904538"/>
+				<reportElement stretchType="RelativeToBandHeight" x="20" y="0" width="129" height="40" isPrintWhenDetailOverflows="true" uuid="c6c1e3b6-d970-4496-bb90-092a5b904538"/>
 				<textElement>
 					<font fontName="TH SarabunPSK" size="16" pdfFontName="THSarabun.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
 				</textElement>
@@ -285,17 +305,17 @@ $F{buyer_address}+"\n"+
    NOTIFY PARTY]]></text>
 			</staticText>
 			<textField isStretchWithOverflow="true">
-				<reportElement x="185" y="0" width="370" height="22" uuid="a3527ff6-dbc5-4b4b-964d-5af416635134"/>
+				<reportElement x="185" y="0" width="370" height="40" uuid="a3527ff6-dbc5-4b4b-964d-5af416635134"/>
 				<textElement>
 					<font fontName="TH SarabunPSK" size="16" pdfFontName="THSarabun.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$F{notify_name}+"\n"+
-$F{notify_address}+"\n"+
-"TEL: "+$F{notify_tel}+
-"FAX: "+$F{notify_fax}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$V{obj_notify}.getValue("notify_name")+"\n"+
+$V{obj_notify}.getValue("notify_address")+"\n"+
+"TEL: "+$V{obj_notify}.getValue("notify_tel")+
+"FAX: "+$V{obj_notify}.getValue("notify_fax")]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement x="149" y="0" width="35" height="20" uuid="7dfe7f99-761a-4925-ac0a-7e0669cd5c45"/>
+				<reportElement x="149" y="0" width="35" height="40" uuid="7dfe7f99-761a-4925-ac0a-7e0669cd5c45"/>
 				<textElement textAlignment="Center">
 					<font fontName="TH SarabunPSK" size="16" pdfFontName="THSarabun.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
 				</textElement>
@@ -316,7 +336,7 @@ $F{notify_address}+"\n"+
 				<textElement>
 					<font fontName="TH SarabunPSK" size="16" pdfFontName="THSarabun.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$F{country_fullname_en}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[new iJson2Object($F{country}).getValue("country_fullname_en")]]></textFieldExpression>
 			</textField>
 			<staticText>
 				<reportElement x="20" y="20" width="130" height="20" uuid="11c2ef0b-d15b-4d49-b605-485330d82abd"/>
@@ -380,7 +400,7 @@ $F{notify_address}+"\n"+
 				<textElement>
 					<font fontName="TH SarabunPSK" size="16" pdfFontName="THSarabun.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
 				</textElement>
-				<textFieldExpression><![CDATA[new nylon.utility.NumberFormat().toThaiDate($F{product_date})]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{product_date}]]></textFieldExpression>
 			</textField>
 			<staticText>
 				<reportElement x="20" y="200" width="130" height="20" uuid="16cfdabb-8725-4845-a8f2-b92900db2e36"/>
@@ -419,7 +439,7 @@ Krungthai Bank Co.,Ltd Account No.385-0-12421-5]]></text>
 				<textElement>
 					<font fontName="TH SarabunPSK" size="16" pdfFontName="THSarabun.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
 				</textElement>
-				<textFieldExpression><![CDATA["DO ("+$F{dest_port_name} +")"]]></textFieldExpression>
+				<textFieldExpression><![CDATA["DO ("+new iJson2Object($F{dest_port}).getValue("port_name") +")"]]></textFieldExpression>
 			</textField>
 			<staticText>
 				<reportElement x="20" y="60" width="130" height="20" uuid="e1e64bf6-ea55-44cb-81ed-b0aa0103074d"/>
@@ -434,7 +454,7 @@ Krungthai Bank Co.,Ltd Account No.385-0-12421-5]]></text>
 				<textElement>
 					<font fontName="TH SarabunPSK" size="16" pdfFontName="THSarabun.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
 				</textElement>
-				<textFieldExpression><![CDATA["DO ("+$F{deli_port_name} +")"]]></textFieldExpression>
+				<textFieldExpression><![CDATA["DO ("+new iJson2Object($F{deli_port}).getValue("port_name") +")"]]></textFieldExpression>
 			</textField>
 			<staticText>
 				<reportElement x="149" y="40" width="35" height="20" uuid="aebbaea7-3b2e-48b9-b6b6-7dc42790383a"/>
@@ -478,6 +498,14 @@ Krungthai Bank Co.,Ltd Account No.385-0-12421-5]]></text>
 				</textElement>
 				<text><![CDATA[:]]></text>
 			</staticText>
+			<subreport>
+				<reportElement stretchType="RelativeToBandHeight" x="185" y="200" width="370" height="20" uuid="fa08ab12-a208-4d1f-a513-7de1a35aceec"/>
+				<subreportParameter name="SUBREPORT_DIR">
+					<subreportParameterExpression><![CDATA[$P{SUBREPORT_DIR}]]></subreportParameterExpression>
+				</subreportParameter>
+				<dataSourceExpression><![CDATA[new iJsonDS($F{exporter})]]></dataSourceExpression>
+				<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "/rice/report1_subreport2.jasper"]]></subreportExpression>
+			</subreport>
 		</band>
 	</detail>
 </jasperReport>
