@@ -1,8 +1,21 @@
+function keysToUpper(param) {
+    var keyname = Object.keys(param);
+    for (var i = 0; i < keyname.length; i++) {
+        param[keyname[i].toUpperCase()] = param[keyname[i]];
+        if (keyname[i] != keyname[i].toLowerCase() && keyname[i] != keyname[i].toUpperCase()) { // if CURrent_DATE != current_date and CURrent_DATE != CURRENT_DATE
+            delete param[keyname[i]]; //CURrent_DATE
+        } else {
+            delete param[keyname[i].toLowerCase()];
+        }
+    }
+    return param;
+}
+
 exports.report1 = function (req, res, next) {
     var r = req.r;
     var query = req.query;
     //res.json(__dirname.replace('controller','report'));
-    var parameters = {
+    var params = {
         CURRENT_DATE: new Date().toISOString().slice(0, 10)
         // SUBREPORT_DIR: __dirname.replace('controller', 'report') + '\\' + req.baseUrl.replace("/api/", "") + '\\'
     };
@@ -89,20 +102,19 @@ exports.report1 = function (req, res, next) {
         .run()
         .then(function (result) {
             // res.json(result);
-            parameters.COUNTRY = result.country.country_fullname_th;
-            parameters.CL_NO = result.cl_no;
-            parameters.YEAR = result.contract_date;
-            parameters.SHIP_LOT = result.ship_lot;
-            parameters.REMARK = result.book_remark;
-            res.ireport("rice/report1.jasper", req.query.export || "pdf", [result], parameters);
+            params.COUNTRY = result.country.country_fullname_th;
+            params.CL_NO = result.cl_no;
+            params.YEAR = result.contract_date;
+            params.SHIP_LOT = result.ship_lot;
+            params.REMARK = result.book_remark;
+            res.ireport("rice/report1.jasper", req.query.export || "pdf", [result], params);
         });
 }
-
 exports.report2 = function (req, res, next) {
     var r = req.r;
     var query = req.query;
 
-    var parameters = {
+    var params = {
         origin_page: req.query.ori,
         nn_page: req.query.nn,
         CURRENT_DATE: new Date().toISOString().slice(0, 10)
@@ -146,68 +158,58 @@ exports.report2 = function (req, res, next) {
         .run()
         .then(function (result) {
             // res.json(result);
-            res.ireport("rice/report2.jasper", req.query.export || "pdf", result, parameters);
+            res.ireport("rice/report2.jasper", req.query.export || "pdf", result, params);
         });
 }
-
 exports.report3 = function (req, res, next) {
     var r = req.r;
-    var parameters = {
+    var query = req.query;
+    var params = {
         CURRENT_DATE: new Date().toISOString().slice(0, 10)
     };
 
-    r.db('g2g2').table('shipment_detail')
-        .getAll(r.args(req.query.book_id.split(',')), { index: 'book_id' })
-        .coerceTo('array')
+    r.db('g2g').table('book_detail').getAll(r.args(query.book_id.split(',')), { index: 'book_id' })
+        .eqJoin('contract_id', r.db('g2g').table('contract')).pluck('left', { right: ['contract_no', 'country'] }).zip()
         .group('exporter_id')
         .ungroup()
-        .map(function (expt_map) {
+        .map(function (m) {
+            var book = m('reduction').group('book_id').sum('net_weight').ungroup();
+            var book2 = book.eqJoin('group', r.db('g2g').table('book')).pluck('left', { right: ['ship', 'dest_port', 'ship_lot', 'cl_no'] }).zip();
             return {
-                exporter: r.db('external').table('exporter').get(expt_map('group')).getField('company_id')
-                    .do(function (d1) {
-                        return r.db('external').table('company').get(d1).getField('company_name_th')
-                    }),
-                ship: expt_map('reduction')
-                    .group('book_id')
-                    .sum('shm_det_quantity')
-                    .ungroup()
-                    .eqJoin('group', r.db('g2g2').table('book')).map(function (j_map) {
+                exporter_id: m('group'),
+                company_name_th: m('reduction')(0)('company')('company_name_th'),
+                country_fullname_th: m('reduction')(0)('country')('country_fullname_th'),
+                contract_no: m('reduction')(0)('contract_no'),
+                book: book2
+                    .merge(function (m2) {
+                        var ship = m2('ship');
                         return {
-                            book_id: j_map('left')('group'),
-                            weight: j_map('left')('reduction'),
-                            ship: j_map('right')('ship')
-                                .map(function (m1) {
-                                    return r.db('common').table('ship').get(m1('ship_id')).getField('ship_name')
-                                        .add(" V.", m1('ship_voy_no'))
-                                })
-                                .reduce(function (l, r) {
-                                    return r.add("/ ").add(l)
-                                }),
-                            ship_lot_no: j_map('right')('ship_lot_no'),
-                            dest_port_name: r.db('common').table('port').get(j_map('right')('dest_port_id')).getField('port_name')
+                            ship: r.branch(ship.count().gt(1),
+                                ship.reduce(function (left, right) {
+                                    return r.branch(left.hasFields('data'),
+                                        {
+                                            data: left('data').add(' / ', right('ship_name'), ' V.', right('ship_voy'))
+                                        },
+                                        {
+                                            data: left('ship_name').add(" V.", left('ship_voy'), ' / ', right('ship_name'), ' V.', right('ship_voy'))
+                                        }
+                                    )
+                                })('data'),
+                                ship(0)('ship_name').add(" V.", ship(0)('ship_voy'))
+                            ),
+                            weight: m2('reduction')
                         }
-                    })
-            }
-        })
-        .merge(function (expt_merge) {
-            return {
-                weight: expt_merge('ship').sum('weight'),
-                ship_count: expt_merge('ship').count(),
-                ship_lot_no: expt_merge('ship').getField('ship_lot_no')
-                    .reduce(function (l, r) {
-                        return l.add(', ', r)
                     }),
-                cl_id: r.db('g2g2').table('book').get(expt_merge('ship')(0)('book_id')).getField('cl_id')
+                ship_count: book.count(),
+                net_weight: book.sum('reduction'),
+                cl_no: book2.getField('cl_no')(0),
+                ship_lot: book2.getField('ship_lot')(0)
             }
         })
-        .eqJoin('cl_id', r.db('g2g2').table('confirm_letter')).pluck("left", { right: ["cl_no", "contract_id"] }).zip()
-        .eqJoin('contract_id', r.db('g2g2').table('contract')).pluck("left", { right: ["contract_name", "buyer_id"] }).zip()
-        .eqJoin('buyer_id', r.db('common').table('buyer')).pluck("left", { right: 'country_id' }).zip()
-        .eqJoin('country_id', r.db('common').table('country')).pluck("left", { right: 'country_fullname_th' }).zip()
         .run()
         .then(function (result) {
             // res.json(result);
-            res.ireport("shipment/report3.jasper", req.query.export || "pdf", result, parameters);
+            res.ireport("rice/report3.jasper", req.query.export || "pdf", result, params);
         })
         .error(function (err) {
             res.json(err)
@@ -216,7 +218,7 @@ exports.report3 = function (req, res, next) {
 }
 exports.report3_1 = function (req, res, next) {
     var r = req.r;
-    var parameters = {
+    var params = {
         CURRENT_DATE: new Date().toISOString().slice(0, 10),
         SUBREPORT_DIR: __dirname.replace('controller', 'report') + '\\' + req.baseUrl.replace("/api/", "") + '\\'
     };
@@ -332,13 +334,13 @@ exports.report3_1 = function (req, res, next) {
         .run()
         .then(function (result) {
             // res.json(result);
-            res.ireport("shipment/report3_1.jasper", req.query.export || "pdf", result, parameters);
+            res.ireport("shipment/report3_1.jasper", req.query.export || "pdf", result, params);
         });
 
 }
 exports.report3_2 = function (req, res, next) {
     var r = req.r;
-    var parameters = {
+    var params = {
         CURRENT_DATE: new Date().toISOString().slice(0, 10),
         SUBREPORT_DIR: __dirname.replace('controller', 'report') + '\\' + req.baseUrl.replace("/api/", "") + '\\'
     };
@@ -451,82 +453,59 @@ exports.report3_2 = function (req, res, next) {
         .run()
         .then(function (result) {
             // res.json(result);
-            res.ireport("shipment/report3_2.jasper", req.query.export || "pdf", result, parameters);
+            res.ireport("shipment/report3_2.jasper", req.query.export || "pdf", result, params);
         });
 
 }
 exports.report4 = function (req, res, next) {
     var r = req.r;
-    var parameters = {
-        CURRENT_DATE: new Date().toISOString().slice(0, 10),
-        // SUBREPORT_DIR: __dirname.replace('controller', 'report') + '\\' + req.baseUrl.replace("/api/", "") + '\\'
-    };
+    var query = req.query;
+    var cl = r.db('g2g').table('confirm_letter').get(query.cl_id).pluck('cl_no', 'cl_weight');
+    var book = r.db('g2g').table('book').getAll(query.cl_id, { index: 'cl_id' }).pluck('cl_id', 'invoice_no', 'id', 'book_no', 'bl_no', 'product_date', 'packing_date'
+        , 'shipline', 'ship', 'load_port', 'dest_port', 'eta_date', 'etd_date', 'cut_date', 'value_d', 'contract_id')
+        .eqJoin('contract_id', r.db('g2g').table('contract')).pluck('left', { right: ['id', 'buyer'] }).zip();
+    // .filter({invoice_status:true}).limit(1);
 
-    r.db('g2g2').table('book').getAll(req.params.cl_id, { index: 'cl_id' })
-        .filter({ book_status: true })
-        .eqJoin('cl_id', r.db('g2g2').table('confirm_letter')).pluck({ right: ["cl_type_rice", "contract_id", "cl_no"] }, "left").zip()
-        .merge(function (m) {
-            return {
-                book_id: m('id'),
-                shipment_detail: r.db('g2g2').table('shipment_detail').getAll(m('id'), { index: 'book_id' }).coerceTo('array')
-                    .eqJoin('exporter_id', r.db('external').table('exporter')).pluck("left", { right: "company_id" }).zip()
-                    .eqJoin('company_id', r.db('external').table('company')).pluck("left", { right: "company_name_th" }).zip()
-                    .eqJoin('type_rice_id', r.db('common').table('type_rice')).pluck("left", { right: "type_rice_sub_en" }).zip()
-                    .eqJoin('package_id', r.db('common').table('package')).pluck("left", { right: "package_kg_per_bag" }).zip()
-                    // .merge(function (m1) {
-                    //     return {
-                    //         exporter_name: r.db('external').table('exporter').get(m1('exporter_id')).getField('company_id')
-                    //             .do(function (d1) {
-                    //                 // return r.db('external').table('trader').get(d1).getField('company_id')
-                    //                 //     .do(function (d2) {
-                    //                 return r.db('external').table('company').get(d1).getField('company_name_th')
-                    //                 // })
-                    //             }),
-                    //         type_rice_name: r.db('common').table('type_rice').get(m1('type_rice_id')).getField('type_rice_name_en'),
-                    //         package_name: r.db('common').table('package').get(m1('package_id')).getField('package_kg_per_bag').coerceTo('string').add('KG')
+    // .merge(function(m){
+    //     return {
+    //         detail:r.db('g2g').table('book_detail').getAll(m('id'),{index:'book_id'}).coerceTo('array')
+    //     }
+    // })
+    r.expr({
+        param: cl,
+        data: book.coerceTo('array')
+            .merge(function (m) {
+                var ship = m('ship')
+                return {
+                    ship: m('ship')
+                    //         ship: r.branch(ship.count().gt(1),
+                    //             ship.reduce(function (left, right) {
+                    //                 return r.branch(left.hasFields('data'),
+                    //                     {
+                    //                         data: left('data').add(' / ', right('ship_name'), ' V.', right('ship_voy'))
+                    //                     },
+                    //                     {
+                    //                         data: left('ship_name').add(" V.", left('ship_voy'), ' / ', right('ship_name'), ' V.', right('ship_voy'))
+                    //                     }
+                    //                 )
+                    //             })('data'),
+                    //             ship(0)('ship_name').add(" V.", ship(0)('ship_voy'))
+                    //         ),
+                    //         weight: m2('reduction')
                     //     }
-                    // })
-                    .merge(function (m1) {
-                        return {
-                            values_usd: m1('price_per_ton').mul(m1('shm_det_quantity'))
-                        }
-                    })
-                    .without('tags', 'updater', 'creater', 'date_created', 'date_updated'),
-                ship: m('ship')
-                    .merge(function (m1) {
-                        return r.db('common').table('ship').get(m1('ship_id')).pluck('ship_name')
-                    }).without('ship_id')
-                    .map(function (m1) {
-                        return m1('ship_name').add(" V.").add(m1('ship_voy_no'))
-                    })
-                    .reduce(function (l, r) {
-                        return r.add("/ ").add(l)
-                    }),
-                // shipline_name: r.db('common').table('shipline').get(m('shipline_id')).getField('shipline_name'),
-                dest_port_name: r.db('common').table('port').get(m('dest_port_id')).getField('port_name'),
-                dest_country_id: r.db('common').table('port').get(m('dest_port_id')).getField('country_id'),
-                load_port_name: r.db('common').table('port').get(m('load_port_id')).getField('port_name'),
-                load_country_id: r.db('common').table('port').get(m('load_port_id')).getField('country_id')
-            }
-        })
-        .merge(function (m) {
-            return {
-                values_usd: m('shipment_detail').sum('values_usd'),
-                dest_country_name: r.db('common').table('country').get(m('dest_country_id')).getField('country_name_en'),
-                load_country_name: r.db('common').table('country').get(m('load_country_id')).getField('country_name_en'),
-                type_rice_quantity: m('cl_type_rice').sum('type_rice_quantity')
-            }
-        })
-        .eqJoin('shipline_id', r.db('common').table('shipline')).pluck("left", { right: 'shipline_name' }).zip()
-        .eqJoin('contract_id', r.db('g2g2').table('contract')).pluck({ right: "buyer_id" }, "left").zip()
-        .eqJoin('buyer_id', r.db('common').table('buyer')).pluck({ right: "buyer_masks" }, "left").zip()
-        .merge({ invoice_no: r.db('g2g2').table('invoice').getAll(r.row('book_id'), { index: 'book_id' })(0)('invoice_no') })
-        .without('id', 'cl_type_rice', 'tags', 'surveyor', 'updater', 'creater', 'date_created', 'date_updated')
-        .orderBy([r.row('ship_lot_no').coerceTo('number'), r.row('invoice_no')])
+                    // }),
+                    // detail: r.db('g2g').table('book_detail').getAll(m('id'), { index: 'book_id' }).coerceTo('array')
+                }
+            }),
+
+    })
         .run()
         .then(function (result) {
-            res.json(result)
-            // res.ireport("shipment/report4.jasper", req.query.export || "pdf", result, parameters);
+            var params = result.param;
+            params.current_date = new Date().toISOString().slice(0, 10);
+            params = keysToUpper(params);
+            res.json(params)
+            res.ireport("rice/report4.jasper", req.query.export || "pdf", result['data'], params);
         })
         .error(function (err) {
             res.json(err)

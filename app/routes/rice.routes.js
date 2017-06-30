@@ -6,5 +6,5 @@ module.exports = function (app) {
     app.route('/report3').get(rice.report3);
     app.route('/report3_1/:id').get(rice.report3_1);
     app.route('/report3_2/:id').get(rice.report3_2);
-    app.route('/report4/:cl_id').get(rice.report4);
+    app.route('/report4').get(rice.report4);
 }

@@ -3,9 +3,11 @@
 	<property name="ireport.zoom" value="1.5"/>
 	<property name="ireport.x" value="0"/>
 	<property name="ireport.y" value="0"/>
+	<import value="nylon.report.*"/>
+	<parameter name="SUBREPORT_DIR" class="java.lang.String"/>
 	<field name="ship" class="java.lang.String"/>
 	<field name="weight" class="java.lang.Double"/>
-	<field name="dest_port_name" class="java.lang.String"/>
+	<field name="dest_port" class="java.lang.Object"/>
 	<background>
 		<band splitType="Stretch"/>
 	</background>
@@ -25,7 +27,7 @@ new nylon.utility.NumberFormat().toThaiNumber ($F{ship})
 new nylon.utility.NumberFormat().toThaiNumber(
     new nylon.utility.NumberFormat().toFormat($F{weight},"#,###.##")
 )
-+" ตัน "+" ส่งไปเมืองท่า "+$F{dest_port_name}]]></textFieldExpression>
++" ตัน "+" ส่งไปเมืองท่า "+new iJson2Object($F{dest_port}).getValue("port_name")]]></textFieldExpression>
 			</textField>
 		</band>
 	</detail>

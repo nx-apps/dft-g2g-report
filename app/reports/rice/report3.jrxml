@@ -2,7 +2,7 @@
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="report3" language="groovy" pageWidth="595" pageHeight="842" columnWidth="454" leftMargin="85" rightMargin="56" topMargin="70" bottomMargin="56" uuid="03566586-1cd4-40da-a543-9ba8be19ecfd">
 	<property name="ireport.zoom" value="1.0"/>
 	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="205"/>
+	<property name="ireport.y" value="0"/>
 	<import value="nylon.report.*"/>
 	<parameter name="CURRENT_DATE" class="java.lang.String"/>
 	<parameter name="KROT_BASE64" class="java.lang.String">
@@ -12,15 +12,16 @@
 		<defaultValueExpression><![CDATA["C:\\Users\\tawatchai.w\\My Projects\\dft.go.th\\report-g2g\\59-DFT-RICEDB-II\\app\\reports\\shipment\\"]]></defaultValueExpression>
 	</parameter>
 	<field name="country_fullname_th" class="java.lang.String"/>
-	<field name="contract_name" class="java.lang.String"/>
+	<field name="contract_no" class="java.lang.String"/>
 	<field name="cl_no" class="java.lang.Integer"/>
-	<field name="exporter" class="java.lang.String"/>
-	<field name="ship_lot_no" class="java.lang.String"/>
+	<field name="exporter_id" class="java.lang.String"/>
+	<field name="ship_lot" class="java.lang.String"/>
 	<field name="ship_count" class="java.lang.Integer"/>
-	<field name="ship" class="java.lang.Object"/>
-	<field name="weight" class="java.lang.Double"/>
+	<field name="book" class="java.lang.Object"/>
+	<field name="net_weight" class="java.lang.Double"/>
+	<field name="company_name_th" class="java.lang.String"/>
 	<group name="GROUP" isStartNewPage="true">
-		<groupExpression><![CDATA[$F{exporter}]]></groupExpression>
+		<groupExpression><![CDATA[$F{exporter_id}]]></groupExpression>
 	</group>
 	<pageHeader>
 		<band height="196">
@@ -53,8 +54,8 @@
 				<textElement verticalAlignment="Bottom">
 					<font fontName="TH SarabunPSK" size="16" pdfFontName="THSarabun.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
 				</textElement>
-				<textFieldExpression><![CDATA["การส่งมอบข้าวรัฐบาล"+$F{country_fullname_th}+" "+
-new nylon.utility.NumberFormat().toThaiNumber($F{contract_name})
+				<textFieldExpression><![CDATA["การส่งมอบข้าวรัฐบาล"+$F{country_fullname_th}+" "+"สัญญาที่ "+
+new nylon.utility.NumberFormat().toThaiNumber($F{contract_no})
 +" งวดที่ "+
 new nylon.utility.NumberFormat().toThaiNumber($F{cl_no})]]></textFieldExpression>
 			</textField>
@@ -105,7 +106,7 @@ new nylon.utility.NumberFormat().toThaiNumber(
 				<textElement verticalAlignment="Bottom">
 					<font fontName="TH SarabunPSK" size="16" pdfFontName="THSarabun.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
 				</textElement>
-				<textFieldExpression><![CDATA["กรรมการผู้จัดการ"+$F{exporter}]]></textFieldExpression>
+				<textFieldExpression><![CDATA["กรรมการผู้จัดการ"+$F{company_name_th}]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement x="40" y="25" width="414" height="25" uuid="0ffc2a67-1078-4baf-9460-a96c1f9f2f34"/>
@@ -123,7 +124,7 @@ new nylon.utility.NumberFormat().toThaiNumber(
 					<font fontName="TH SarabunPSK" size="16" pdfFontName="THSarabun.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
 				</textElement>
 				<textFieldExpression><![CDATA["รายละเอียดการส่งมอบข้าวให้รัฐบาล"+$F{country_fullname_th}+
-" ("+new nylon.utility.NumberFormat().toThaiNumber($F{ship_lot_no})
+" ("+new nylon.utility.NumberFormat().toThaiNumber($F{ship_lot})
 +") จำนวน "+
 new nylon.utility.NumberFormat().toThaiNumber($F{ship_count})
 +" ลำ"]]></textFieldExpression>
@@ -145,9 +146,12 @@ new nylon.utility.NumberFormat().toThaiNumber($F{ship_count})
 		</band>
 		<band height="19">
 			<subreport>
-				<reportElement x="0" y="0" width="454" height="19" uuid="9423a1da-3e70-4b3f-a03d-f62211d041da"/>
-				<dataSourceExpression><![CDATA[new iJsonDS($F{ship})]]></dataSourceExpression>
-				<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "/shipment/report3_subreport1.jasper"]]></subreportExpression>
+				<reportElement x="0" y="0" width="454" height="19" uuid="a4ce9718-5f56-452e-9c31-938d46e3990e"/>
+				<subreportParameter name="SUBREPORT_DIR">
+					<subreportParameterExpression><![CDATA[$P{SUBREPORT_DIR}]]></subreportParameterExpression>
+				</subreportParameter>
+				<dataSourceExpression><![CDATA[new iJsonDS($F{book})]]></dataSourceExpression>
+				<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "/rice/report3_subreport1.jasper"]]></subreportExpression>
 			</subreport>
 		</band>
 		<band height="95">
@@ -171,7 +175,7 @@ new nylon.utility.NumberFormat().toThaiNumber($F{ship_count})
 					<font fontName="TH SarabunPSK" size="16" pdfFontName="THSarabun.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
 				</textElement>
 				<textFieldExpression><![CDATA["รวมปริมาณ " +  new nylon.utility.NumberFormat().toThaiNumber(
-    new nylon.utility.NumberFormat().toFormat($F{weight},"#,###.##")
+    new nylon.utility.NumberFormat().toFormat($F{net_weight},"#,###.##")
     )
     +" ตัน" + "โดยมีรายละเอียดตามสิ่งที่ส่งมาด้วย"]]></textFieldExpression>
 			</textField>
