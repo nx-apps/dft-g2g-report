@@ -463,8 +463,9 @@ exports.report4 = function (req, res, next) {
     var query = req.query;
     var cl = r.db('g2g').table('confirm_letter').get(query.cl_id).pluck('cl_no', 'cl_weight');
     var book = r.db('g2g').table('book').getAll(query.cl_id, { index: 'cl_id' }).pluck('cl_id', 'invoice_no', 'id', 'book_no', 'bl_no', 'product_date', 'packing_date'
-        , 'shipline', 'ship', 'load_port', 'dest_port', 'eta_date', 'etd_date', 'cut_date', 'value_d', 'contract_id', 'ship_lot')
-        .eqJoin('contract_id', r.db('g2g').table('contract')).pluck('left', { right: 'buyer' }).zip().limit(10);
+        , 'shipline', 'ship', 'load_port', 'dest_port', 'eta_date', 'etd_date', 'cut_date', 'value_d', 'contract_id', 'ship_lot');
+        // .eqJoin('contract_id', r.db('g2g').table('contract')).pluck('left', { right: 'buyer' }).zip()
+        // .limit(10);
 
     r.expr({
         param: cl,
@@ -485,18 +486,19 @@ exports.report4 = function (req, res, next) {
                         })('data'),
                         ship(0)('ship_name').add(" V.", ship(0)('ship_voy'))
                     ),
-                    detail: r.db('g2g').table('book_detail').getAll(m('id'), { index: 'book_id' }).coerceTo('array').eqJoin('contract_id', r.db('g2g').table('contract')),
+                    detail: r.db('g2g').table('book_detail').getAll(m('id'), { index: 'book_id' }).coerceTo('array')
+                    .eqJoin('contract_id', r.db('g2g').table('contract')).pluck('left', { right: 'buyer' }).zip(),
                     cut_date:m('cut_date').inTimezone('+07').toISO8601().split('T')(0),
                     eta_date:m('eta_date').inTimezone('+07').toISO8601().split('T')(0),
                     etd_date:m('etd_date').inTimezone('+07').toISO8601().split('T')(0),
                     packing_date:m('packing_date').inTimezone('+07').toISO8601().split('T')(0),
                     product_date:m('product_date').inTimezone('+07').toISO8601().split('T')(0),
                 }
-            })
+            }).orderBy('ship_lot')
     })
         .run()
         .then(function (result) {
-            res.json(result)
+            // res.json(result)
             var params = result.param;
             params.current_date = new Date().toISOString().slice(0, 10);
             params = keysToUpper(params);

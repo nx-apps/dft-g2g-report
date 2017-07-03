@@ -10,6 +10,7 @@
 	<field name="company" class="java.lang.Object"/>
 	<field name="hamonize" class="java.lang.Object"/>
 	<field name="book_no" class="java.lang.String"/>
+	<field name="buyer" class="java.lang.Object"/>
 	<detail>
 		<band height="10" splitType="Stretch">
 			<textField isStretchWithOverflow="true">
@@ -75,7 +76,7 @@
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font fontName="TH SarabunPSK" size="6" isBold="false" pdfFontName="THSarabun.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
 				</textElement>
-				<textFieldExpression><![CDATA[new iJson2Object($F{book_no}).getValue("buyer_masks")]]></textFieldExpression>
+				<textFieldExpression><![CDATA[new iJson2Object($F{buyer}).getValue("buyer_masks")]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true">
 				<reportElement stretchType="RelativeToBandHeight" x="225" y="0" width="40" height="10" uuid="110a2198-fd20-4b21-830b-1e3add5e0228"/>
