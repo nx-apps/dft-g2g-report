@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="report4" language="groovy" pageWidth="842" pageHeight="595" orientation="Landscape" columnWidth="802" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="78f106af-83c5-4d5a-bbd1-591f2253d3c7">
 	<property name="ireport.zoom" value="1.927716447147658"/>
-	<property name="ireport.x" value="0"/>
+	<property name="ireport.x" value="99"/>
 	<property name="ireport.y" value="0"/>
 	<import value="nylon.report.*"/>
 	<parameter name="SUBREPORT_DIR" class="java.lang.String" isForPrompting="false">
@@ -12,7 +12,7 @@
 	<parameter name="CURRENT_DATE" class="java.lang.String"/>
 	<field name="cl_no" class="java.lang.Integer"/>
 	<field name="type_rice_quantity" class="java.lang.Double"/>
-	<field name="ship_lot_no" class="java.lang.String"/>
+	<field name="ship_lot" class="java.lang.String"/>
 	<field name="invoice_no" class="java.lang.String"/>
 	<field name="buyer" class="java.lang.Object"/>
 	<field name="book_no" class="java.lang.String"/>
@@ -69,7 +69,7 @@ new nylon.utility.NumberFormat().toFormat($P{CL_WEIGHT},"#,###.##")+
 	<columnHeader>
 		<band height="30" splitType="Stretch">
 			<staticText>
-				<reportElement x="0" y="0" width="10" height="30" uuid="0be94ded-f48a-40f2-9f44-99119cb35417"/>
+				<reportElement x="0" y="0" width="15" height="30" uuid="0be94ded-f48a-40f2-9f44-99119cb35417"/>
 				<box>
 					<topPen lineWidth="0.75"/>
 					<leftPen lineWidth="0.75"/>
@@ -83,7 +83,7 @@ new nylon.utility.NumberFormat().toFormat($P{CL_WEIGHT},"#,###.##")+
 No.]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="10" y="0" width="30" height="30" uuid="3cade8c3-a70d-455d-bb32-9fbc37b4d27e"/>
+				<reportElement x="15" y="0" width="25" height="30" uuid="3cade8c3-a70d-455d-bb32-9fbc37b4d27e"/>
 				<box>
 					<topPen lineWidth="0.75"/>
 					<leftPen lineWidth="0.75"/>
@@ -334,7 +334,7 @@ documents]]></text>
 	<detail>
 		<band height="10" splitType="Stretch">
 			<textField isStretchWithOverflow="true">
-				<reportElement stretchType="RelativeToBandHeight" x="0" y="0" width="10" height="10" uuid="d0d9ad3b-e443-4607-be5e-2bc5d62b995f"/>
+				<reportElement stretchType="RelativeToBandHeight" x="0" y="0" width="15" height="10" uuid="d0d9ad3b-e443-4607-be5e-2bc5d62b995f"/>
 				<box>
 					<topPen lineWidth="0.75"/>
 					<leftPen lineWidth="0.75"/>
@@ -344,10 +344,10 @@ documents]]></text>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font fontName="TH SarabunPSK" size="6" isBold="false" pdfFontName="THSarabun.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$F{ship_lot_no}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{ship_lot}]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true">
-				<reportElement stretchType="RelativeToBandHeight" x="10" y="0" width="30" height="10" uuid="25740607-42b9-40f8-bf64-97387b7f695a"/>
+				<reportElement stretchType="RelativeToBandHeight" x="15" y="0" width="25" height="10" uuid="25740607-42b9-40f8-bf64-97387b7f695a"/>
 				<box>
 					<topPen lineWidth="0.75"/>
 					<leftPen lineWidth="0.75"/>
@@ -357,33 +357,7 @@ documents]]></text>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font fontName="TH SarabunPSK" size="6" isBold="false" pdfFontName="THSarabun.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$F{invoice_no}]]></textFieldExpression>
-			</textField>
-			<textField isStretchWithOverflow="true">
-				<reportElement stretchType="RelativeToBandHeight" x="235" y="0" width="30" height="10" uuid="eeef9967-a604-4103-8de9-3c10b71c7bf6"/>
-				<box>
-					<topPen lineWidth="0.75"/>
-					<leftPen lineWidth="0.75"/>
-					<bottomPen lineWidth="0.75"/>
-					<rightPen lineWidth="0.75"/>
-				</box>
-				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font fontName="TH SarabunPSK" size="6" isBold="false" pdfFontName="THSarabun.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
-				</textElement>
-				<textFieldExpression><![CDATA[new iJson2Object($F{buyer}).getValue("buyer_masks")]]></textFieldExpression>
-			</textField>
-			<textField isStretchWithOverflow="true">
-				<reportElement stretchType="RelativeToBandHeight" x="265" y="0" width="40" height="10" uuid="f41708c0-81d2-402c-a51c-9108a57df9ae"/>
-				<box>
-					<topPen lineWidth="0.75"/>
-					<leftPen lineWidth="0.75"/>
-					<bottomPen lineWidth="0.75"/>
-					<rightPen lineWidth="0.75"/>
-				</box>
-				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font fontName="TH SarabunPSK" size="6" isBold="false" pdfFontName="THSarabun.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
-				</textElement>
-				<textFieldExpression><![CDATA[$F{book_no}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[($F{invoice_no}==null ? " ":$F{invoice_no})]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true">
 				<reportElement stretchType="RelativeToBandHeight" x="305" y="0" width="40" height="10" uuid="cd4637d5-967b-49b4-9b04-70665daf7c9f"/>
@@ -409,7 +383,7 @@ documents]]></text>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font fontName="TH SarabunPSK" size="6" isBold="false" pdfFontName="THSarabun.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
 				</textElement>
-				<textFieldExpression><![CDATA[new nylon.utility.NumberFormat().toEngDateShort($F{product_date})]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{product_date}]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true">
 				<reportElement stretchType="RelativeToBandHeight" x="385" y="0" width="35" height="10" uuid="1fa1cdaa-0627-44b2-b2ca-0c4db9427cf5"/>
@@ -530,7 +504,15 @@ documents]]></text>
 			</textField>
 		</band>
 	</detail>
+	<lastPageFooter>
+		<band height="20">
+			<textField>
+				<reportElement x="100" y="0" width="100" height="20" uuid="f0af4553-5fc3-4997-ad62-af3353c4d61b"/>
+				<textFieldExpression><![CDATA[$F{product_date}.split('T')[0]]]></textFieldExpression>
+			</textField>
+		</band>
+	</lastPageFooter>
 	<summary>
-		<band height="42" splitType="Stretch"/>
+		<band height="20" splitType="Stretch"/>
 	</summary>
 </jasperReport>
