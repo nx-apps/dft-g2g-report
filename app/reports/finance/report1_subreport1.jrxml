@@ -1,38 +1,42 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="report1_subreport1" language="groovy" pageWidth="555" pageHeight="405" columnWidth="555" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" uuid="e7281117-f956-43c7-9392-7240c9e90544">
-	<property name="ireport.zoom" value="0.9090909090909113"/>
+	<property name="ireport.zoom" value="1.5"/>
 	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="0"/>
-	<field name="buyer_masks" class="java.lang.String"/>
-	<field name="quantity_bags" class="java.lang.Integer"/>
+	<property name="ireport.y" value="48"/>
+	<import value="nylon.report.*"/>
+	<field name="buyer" class="java.lang.Object"/>
+	<field name="package_amount" class="java.lang.Integer"/>
 	<field name="invoice_of" class="java.lang.String"/>
 	<field name="package_name_en" class="java.lang.String"/>
 	<field name="package_weight_bag" class="java.lang.Integer"/>
-	<field name="price_per_ton" class="java.lang.Integer"/>
+	<field name="net_weight" class="java.lang.Integer"/>
 	<field name="incoterms" class="java.lang.String"/>
-	<field name="weight_gross" class="java.lang.Double"/>
-	<field name="weight_tare" class="java.lang.Double"/>
-	<field name="weight_net" class="java.lang.Double"/>
-	<field name="amount_usd" class="java.lang.Double"/>
+	<field name="gross_weight" class="java.lang.Double"/>
+	<field name="tare_weight" class="java.lang.Double"/>
+	<field name="value_d" class="java.lang.Double"/>
 	<field name="contract_name" class="java.lang.String"/>
 	<field name="contract_date" class="java.lang.String"/>
 	<field name="buyer_name" class="java.lang.String"/>
 	<field name="jasper_count" class="java.lang.Integer"/>
 	<field name="jasper_group" class="java.lang.String"/>
-	<variable name="sum_bags" class="java.lang.Double" calculation="Sum">
-		<variableExpression><![CDATA[$F{quantity_bags}]]></variableExpression>
+	<field name="package" class="java.lang.Object"/>
+	<field name="hamonize" class="java.lang.Object"/>
+	<field name="project_en" class="java.lang.String"/>
+	<field name="buyer_masks" class="java.lang.String"/>
+	<variable name="sum_pack_amount" class="java.lang.Double" calculation="Sum">
+		<variableExpression><![CDATA[$F{package_amount}]]></variableExpression>
 	</variable>
 	<variable name="sum_gross" class="java.lang.Double" calculation="Sum">
-		<variableExpression><![CDATA[$F{weight_gross}]]></variableExpression>
+		<variableExpression><![CDATA[$F{gross_weight}]]></variableExpression>
 	</variable>
 	<variable name="sum_tare" class="java.lang.Double" calculation="Sum">
-		<variableExpression><![CDATA[$F{weight_tare}]]></variableExpression>
+		<variableExpression><![CDATA[$F{tare_weight}]]></variableExpression>
 	</variable>
 	<variable name="sum_net" class="java.lang.Double" calculation="Sum">
-		<variableExpression><![CDATA[$F{weight_net}]]></variableExpression>
+		<variableExpression><![CDATA[$F{net_weight}]]></variableExpression>
 	</variable>
-	<variable name="sum_amount" class="java.lang.Double" calculation="Sum">
-		<variableExpression><![CDATA[$F{amount_usd}]]></variableExpression>
+	<variable name="sum_value_d" class="java.lang.Double" calculation="Sum">
+		<variableExpression><![CDATA[$F{value_d}]]></variableExpression>
 	</variable>
 	<group name="Group_Detail" minHeightToStartNewPage="100">
 		<groupExpression><![CDATA[$F{jasper_group}]]></groupExpression>
@@ -103,14 +107,14 @@
 				<textElement textAlignment="Center">
 					<font fontName="TH SarabunPSK" size="12" pdfFontName="THSarabun.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$F{buyer_masks}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[new iJson2Object($F{buyer}).getValue("buyer_masks")]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement x="80" y="0" width="80" height="20" uuid="3e8f896a-5e85-421a-9625-ea4b9f71a7f7"/>
 				<textElement textAlignment="Center">
 					<font fontName="TH SarabunPSK" size="12" pdfFontName="THSarabun.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
 				</textElement>
-				<textFieldExpression><![CDATA[new nylon.utility.NumberFormat().toFormat($F{quantity_bags},"#,###")
+				<textFieldExpression><![CDATA[new nylon.utility.NumberFormat().toFormat($F{package_amount},"#,###")
 +" BAGS"]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true">
@@ -119,11 +123,11 @@
 				<textElement textAlignment="Justified">
 					<font fontName="TH SarabunPSK" size="12" pdfFontName="THSarabun.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$F{invoice_of}.toUpperCase()+".\n"+
-"PACKING : IN STRONG EXPORT SEAWORTHY "+$F{package_name_en}.toUpperCase()+
-"NET WITH MINIMUM TARE WEIGHT TO BE AT "+$F{package_weight_bag}+" GRAM/BAG."+
+				<textFieldExpression><![CDATA[new iJson2Object($F{hamonize}).getValue("hamonize_en")+" BROKENS, "+$F{project_en}.toUpperCase()+".\n"+
+"PACKING : IN STRONG EXPORT SEAWORTHY "+new iJson2Object($F{package}).getValue("package_name_en").toUpperCase()+
+"NET WITH MINIMUM TARE WEIGHT TO BE AT "+new iJson2Object($F{package}).getValue("package_weight_bag")+" GRAM/BAG."+
 "TWO PERCENT (2%) MARKED SPARE EMPTY BAGS TO BE SUPPLIED FREE OF CHARGE BY THE SELLER ALONG WITH THE SHIPENT.\n"+
-"PRICE : USD "+$F{price_per_ton}+"PER METRIC TON, "+$F{incoterms}.toUpperCase()+
+"PRICE : USD "+$F{net_weight}+"PER METRIC TON, "+$F{incoterms}.toUpperCase()+
 " BANGKOK OR LEAM CHABANG AT BUYER'S OPTION."]]></textFieldExpression>
 			</textField>
 		</band>
@@ -175,28 +179,28 @@
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font fontName="TH SarabunPSK" size="12" isBold="true" pdfFontName="THSarabun.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
 				</textElement>
-				<textFieldExpression><![CDATA["USD "+new nylon.utility.NumberFormat().toFormat($F{amount_usd},"#,###.00")]]></textFieldExpression>
+				<textFieldExpression><![CDATA["USD "+new nylon.utility.NumberFormat().toFormat($F{value_d},"#,###.00")]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement x="274" y="0" width="64" height="18" uuid="02b815c7-a3e9-4de7-9b86-ab478b52209f"/>
 				<textElement textAlignment="Right" verticalAlignment="Middle">
 					<font fontName="TH SarabunPSK" size="12" isBold="false" pdfFontName="THSarabun.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
 				</textElement>
-				<textFieldExpression><![CDATA[new nylon.utility.NumberFormat().toFormat($F{weight_gross},"#,##0.000")]]></textFieldExpression>
+				<textFieldExpression><![CDATA[new nylon.utility.NumberFormat().toFormat($F{gross_weight},"#,##0.000")]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement x="274" y="18" width="64" height="18" uuid="092e7eb1-559b-4f35-93a8-9dab65c466f1"/>
 				<textElement textAlignment="Right" verticalAlignment="Middle">
 					<font fontName="TH SarabunPSK" size="12" isBold="false" isUnderline="false" isStrikeThrough="false" pdfFontName="THSarabun.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
 				</textElement>
-				<textFieldExpression><![CDATA[new nylon.utility.NumberFormat().toFormat($F{weight_tare},"#,##0.000")]]></textFieldExpression>
+				<textFieldExpression><![CDATA[new nylon.utility.NumberFormat().toFormat($F{tare_weight},"#,##0.000")]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement x="274" y="34" width="64" height="18" uuid="3aba07c5-e953-4ccf-86e6-8ee60685ae4e"/>
 				<textElement textAlignment="Right" verticalAlignment="Middle">
 					<font fontName="TH SarabunPSK" size="12" isBold="false" isUnderline="true" pdfFontName="THSarabun.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
 				</textElement>
-				<textFieldExpression><![CDATA[new nylon.utility.NumberFormat().toFormat($F{weight_net},"#,##0.000")]]></textFieldExpression>
+				<textFieldExpression><![CDATA[new nylon.utility.NumberFormat().toFormat($F{net_weight},"#,##0.000")]]></textFieldExpression>
 			</textField>
 			<staticText>
 				<reportElement x="344" y="0" width="59" height="18" uuid="432c18f8-6887-4e84-9e9e-d237031f0480"/>
@@ -230,7 +234,7 @@
 				</textElement>
 				<textFieldExpression><![CDATA["(US.DOLLARS "+
 new nylon.utility.NumberFormat().toEngString(
-   $F{amount_usd}.intValue()
+   $F{value_d}.intValue()
 )
 +" ONLY)"]]></textFieldExpression>
 			</textField>
@@ -246,11 +250,11 @@ new nylon.utility.NumberFormat().toEngString(
 				</textElement>
 				<textFieldExpression><![CDATA["(US.DOLLARS "+
 new nylon.utility.NumberFormat().toEngString(
-   $V{sum_amount}.intValue()
+   $V{sum_value_d}.intValue()
 )
 +" ONLY)"+
 "\nUNDER THE SALE AND PURCHASE CONTRACT NO."+$F{contract_name}+
-" BETWEEN "+$F{buyer_name}+" AND DEPARTMENT OF FOREIGN TRADE,"+
+" BETWEEN "+new iJson2Object($F{buyer}).getValue("buyer_name")+" AND DEPARTMENT OF FOREIGN TRADE,"+
 " MINISTRY OF COMMERCE OF THAILAND DATED "+
 new nylon.utility.NumberFormat().toEngDateShort($F{contract_date})+
 ".\n"+
@@ -319,7 +323,7 @@ new nylon.utility.NumberFormat().toEngDateShort($F{contract_date})+
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font fontName="TH SarabunPSK" size="12" isBold="true" pdfFontName="THSarabun.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
 				</textElement>
-				<textFieldExpression><![CDATA["USD "+new nylon.utility.NumberFormat().toFormat($V{sum_amount},"#,###.00")]]></textFieldExpression>
+				<textFieldExpression><![CDATA["USD "+new nylon.utility.NumberFormat().toFormat($V{sum_value_d},"#,###.00")]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement x="274" y="38" width="64" height="18" uuid="d7156922-68db-4fda-991f-c087240c1635"/>
@@ -353,7 +357,7 @@ new nylon.utility.NumberFormat().toEngDateShort($F{contract_date})+
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font fontName="TH SarabunPSK" size="12" isBold="true" pdfFontName="THSarabun.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
 				</textElement>
-				<textFieldExpression><![CDATA[new nylon.utility.NumberFormat().toFormat($V{sum_bags},"#,###")
+				<textFieldExpression><![CDATA[new nylon.utility.NumberFormat().toFormat($V{sum_pack_amount},"#,###")
 +" BAGS"]]></textFieldExpression>
 			</textField>
 			<staticText>
