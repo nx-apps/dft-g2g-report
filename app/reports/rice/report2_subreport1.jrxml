@@ -8,7 +8,7 @@
 	<parameter name="SUBREPORT_DIR" class="java.lang.String" isForPrompting="false">
 		<defaultValueExpression><![CDATA["C:\\Users\\Accounting\\Documents\\Project\\report_g2g\\dft-g2g-report\\app\\reports\\rice\\"]]></defaultValueExpression>
 	</parameter>
-	<field name="hamonize_en" class="java.lang.String"/>
+	<field name="hamonize_en2" class="java.lang.String"/>
 	<field name="project_en" class="java.lang.String"/>
 	<field name="package" class="java.lang.Object"/>
 	<field name="package_amount" class="java.lang.Long"/>
@@ -24,7 +24,7 @@
 				<textElement textAlignment="Justified">
 					<font fontName="TH SarabunPSK" size="16" pdfFontName="THSarabun.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$F{hamonize_en}.toUpperCase()+", "
+				<textFieldExpression><![CDATA[$F{hamonize_en2}.toUpperCase()+", "
 +$F{project_en}.toUpperCase()+" CURRENT NEW CROP,"+
 "\nDOUBLE-POLISHED AND SORTEXED QUALITY."]]></textFieldExpression>
 			</textField>

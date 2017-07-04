@@ -7,8 +7,8 @@
 	<parameter name="SUBREPORT_DIR" class="java.lang.String" isForPrompting="false">
 		<defaultValueExpression><![CDATA["..\\"]]></defaultValueExpression>
 	</parameter>
-	<field name="hamonize_th" class="java.lang.String"/>
-	<field name="hamonize_en" class="java.lang.String"/>
+	<field name="hamonize_th2" class="java.lang.String"/>
+	<field name="hamonize_en2" class="java.lang.String"/>
 	<field name="project_en" class="java.lang.String"/>
 	<field name="net_weight" class="java.lang.Double"/>
 	<field name="num_of_container" class="java.lang.Integer"/>
@@ -21,7 +21,7 @@
 		<initialValueExpression><![CDATA[new java.lang.Integer(0)]]></initialValueExpression>
 	</variable>
 	<group name="Group_rice">
-		<groupExpression><![CDATA[$F{hamonize_th}]]></groupExpression>
+		<groupExpression><![CDATA[$F{hamonize_th2}]]></groupExpression>
 	</group>
 	<detail>
 		<band height="20" splitType="Stretch">
@@ -30,9 +30,9 @@
 				<textElement>
 					<font fontName="TH SarabunPSK" size="16" pdfFontName="THSarabun.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$F{hamonize_th}+" ปีการผลิต "+$F{project_en}+" ฤดูใหม่"+
+				<textFieldExpression><![CDATA[$F{hamonize_th2}+" ปีการผลิต "+$F{project_en}+" ฤดูใหม่"+
 "\n(ขัดสี 2 ครั้ง และคัดแยกเมล็ดข้าว)"+
-"\n"+$F{hamonize_en}+", "+$F{project_en}+" CURRENT NEW CROP,"+
+"\n"+$F{hamonize_en2}+", "+$F{project_en}+" CURRENT NEW CROP,"+
 "\nDOUBLE POLISHED AND SORTEXED QUALITY"]]></textFieldExpression>
 			</textField>
 			<textField>

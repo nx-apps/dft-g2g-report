@@ -463,7 +463,7 @@ exports.report4 = function (req, res, next) {
     var query = req.query;
     var cl = r.db('g2g').table('confirm_letter').get(query.cl_id).pluck('cl_no', 'cl_weight');
     var book = r.db('g2g').table('book').getAll(query.cl_id, { index: 'cl_id' }).pluck('cl_id', 'invoice_no', 'id', 'book_no', 'bl_no', 'product_date', 'packing_date'
-        , 'shipline', 'ship', 'load_port', 'dest_port', 'eta_date', 'etd_date', 'cut_date', 'value_d', 'contract_id', 'ship_lot');
+        , 'shipline', 'ship', 'load_port', 'dest_port', 'eta_date', 'etd_date', 'cut_date', 'value_d', 'contract_id', 'ship_lot').limit(10);
         // .eqJoin('contract_id', r.db('g2g').table('contract')).pluck('left', { right: 'buyer' }).zip()
         // .limit(10);
 
@@ -498,7 +498,7 @@ exports.report4 = function (req, res, next) {
     })
         .run()
         .then(function (result) {
-            // res.json(result)
+            res.json(result)
             var params = result.param;
             params.current_date = new Date().toISOString().slice(0, 10);
             params = keysToUpper(params);
