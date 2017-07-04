@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="report4" language="groovy" pageWidth="842" pageHeight="595" orientation="Landscape" columnWidth="802" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="78f106af-83c5-4d5a-bbd1-591f2253d3c7">
 	<property name="ireport.zoom" value="2.0"/>
-	<property name="ireport.x" value="75"/>
+	<property name="ireport.x" value="0"/>
 	<property name="ireport.y" value="0"/>
 	<import value="nylon.report.*"/>
 	<parameter name="SUBREPORT_DIR" class="java.lang.String" isForPrompting="false">
@@ -46,7 +46,7 @@
 					<rightPen lineWidth="1.0"/>
 				</box>
 				<textElement verticalAlignment="Middle">
-					<font fontName="TH SarabunPSK" size="12" isBold="true" pdfFontName="THSarabun.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+					<font fontName="TH SarabunPSK" size="10" isBold="true" pdfFontName="THSarabun.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
 				</textElement>
 				<textFieldExpression><![CDATA["SHIPMENT SCHEDULE OF THE "+
 $P{CL_NO}+
@@ -197,7 +197,7 @@ Containers(20')]]></text>
 				<text><![CDATA[BL No.]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="380" y="0" width="40" height="30" uuid="537fb906-48a0-4b79-9768-ec4e99db5070"/>
+				<reportElement x="380" y="0" width="35" height="30" uuid="537fb906-48a0-4b79-9768-ec4e99db5070"/>
 				<box>
 					<topPen lineWidth="0.75"/>
 					<leftPen lineWidth="0.75"/>
@@ -210,7 +210,7 @@ Containers(20')]]></text>
 				<text><![CDATA[Production Date]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="420" y="0" width="35" height="30" uuid="1cb5ab66-ccc1-4b3f-a39f-791320ce94da"/>
+				<reportElement x="415" y="0" width="30" height="30" uuid="1cb5ab66-ccc1-4b3f-a39f-791320ce94da"/>
 				<box>
 					<topPen lineWidth="0.75"/>
 					<leftPen lineWidth="0.75"/>
@@ -223,7 +223,7 @@ Containers(20')]]></text>
 				<text><![CDATA[Packing Date]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="455" y="0" width="47" height="30" uuid="b104f417-22fa-46e1-a544-3ee59de9e069"/>
+				<reportElement x="445" y="0" width="92" height="30" uuid="b104f417-22fa-46e1-a544-3ee59de9e069"/>
 				<box>
 					<topPen lineWidth="0.75"/>
 					<leftPen lineWidth="0.75"/>
@@ -236,7 +236,7 @@ Containers(20')]]></text>
 				<text><![CDATA[Carrier]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="502" y="0" width="60" height="30" uuid="ac96e36a-83c6-448c-a83d-b48cf5ad3b16"/>
+				<reportElement x="537" y="0" width="60" height="30" uuid="ac96e36a-83c6-448c-a83d-b48cf5ad3b16"/>
 				<box>
 					<topPen lineWidth="0.75"/>
 					<leftPen lineWidth="0.75"/>
@@ -250,7 +250,7 @@ Containers(20')]]></text>
 Voyage Number]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="562" y="0" width="60" height="30" uuid="591b0746-21bd-496f-9d77-04c35584224b"/>
+				<reportElement x="597" y="0" width="60" height="30" uuid="591b0746-21bd-496f-9d77-04c35584224b"/>
 				<box>
 					<topPen lineWidth="0.75"/>
 					<leftPen lineWidth="0.75"/>
@@ -263,7 +263,7 @@ Voyage Number]]></text>
 				<text><![CDATA[Loading Port]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="622" y="0" width="60" height="30" uuid="529f5ab3-db2c-47e5-b007-52d5d6c99bc9"/>
+				<reportElement x="657" y="0" width="55" height="30" uuid="529f5ab3-db2c-47e5-b007-52d5d6c99bc9"/>
 				<box>
 					<topPen lineWidth="0.75"/>
 					<leftPen lineWidth="0.75"/>
@@ -276,7 +276,7 @@ Voyage Number]]></text>
 				<text><![CDATA[Final Destination Port]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="682" y="0" width="35" height="30" uuid="90151e87-c456-4eb4-9dbe-29839cd61e00"/>
+				<reportElement x="712" y="0" width="30" height="30" uuid="90151e87-c456-4eb4-9dbe-29839cd61e00"/>
 				<box>
 					<topPen lineWidth="0.75"/>
 					<leftPen lineWidth="0.75"/>
@@ -291,7 +291,7 @@ Loading
 Port]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="717" y="0" width="45" height="30" uuid="e3a96f79-ac88-4bbf-bf94-1ad324170735"/>
+				<reportElement x="742" y="0" width="30" height="30" uuid="e3a96f79-ac88-4bbf-bf94-1ad324170735"/>
 				<box>
 					<topPen lineWidth="0.75"/>
 					<leftPen lineWidth="0.75"/>
@@ -306,7 +306,7 @@ Destination
 Port]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="762" y="0" width="40" height="30" uuid="9b4faac1-9ff3-446b-a616-1876929bd3c4"/>
+				<reportElement x="772" y="0" width="30" height="30" uuid="9b4faac1-9ff3-446b-a616-1876929bd3c4"/>
 				<box>
 					<topPen lineWidth="0.75"/>
 					<leftPen lineWidth="0.75"/>
@@ -362,7 +362,7 @@ Port]]></text>
 				<textFieldExpression><![CDATA[$F{bl_no}]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true">
-				<reportElement stretchType="RelativeToBandHeight" x="380" y="0" width="40" height="10" isPrintWhenDetailOverflows="true" uuid="9c7cf2e0-b662-492f-80bc-14cc82a719b0"/>
+				<reportElement stretchType="RelativeToBandHeight" x="380" y="0" width="35" height="10" isPrintWhenDetailOverflows="true" uuid="9c7cf2e0-b662-492f-80bc-14cc82a719b0"/>
 				<box>
 					<topPen lineWidth="0.75"/>
 					<leftPen lineWidth="0.75"/>
@@ -375,7 +375,7 @@ Port]]></text>
 				<textFieldExpression><![CDATA[$F{product_date}]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true">
-				<reportElement stretchType="RelativeToBandHeight" x="420" y="0" width="35" height="10" isPrintWhenDetailOverflows="true" uuid="1fa1cdaa-0627-44b2-b2ca-0c4db9427cf5"/>
+				<reportElement stretchType="RelativeToBandHeight" x="415" y="0" width="30" height="10" isPrintWhenDetailOverflows="true" uuid="1fa1cdaa-0627-44b2-b2ca-0c4db9427cf5"/>
 				<box>
 					<topPen lineWidth="0.75"/>
 					<leftPen lineWidth="0.75"/>
@@ -388,7 +388,7 @@ Port]]></text>
 				<textFieldExpression><![CDATA[new nylon.utility.NumberFormat().toEngDateShort($F{packing_date})]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true">
-				<reportElement stretchType="RelativeToBandHeight" x="455" y="0" width="47" height="10" isPrintWhenDetailOverflows="true" uuid="dd9f22b7-4ccf-4b88-af5a-0b7580a1f61d"/>
+				<reportElement stretchType="RelativeToBandHeight" x="445" y="0" width="92" height="10" isPrintWhenDetailOverflows="true" uuid="dd9f22b7-4ccf-4b88-af5a-0b7580a1f61d"/>
 				<box>
 					<topPen lineWidth="0.75"/>
 					<leftPen lineWidth="0.75"/>
@@ -401,7 +401,7 @@ Port]]></text>
 				<textFieldExpression><![CDATA[new iJson2Object($F{shipline}).getValue("shipline_name")]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true">
-				<reportElement stretchType="RelativeToBandHeight" x="502" y="0" width="60" height="10" isPrintWhenDetailOverflows="true" uuid="8cf3a20b-eeec-446f-b96a-05747c35a056"/>
+				<reportElement stretchType="RelativeToBandHeight" x="537" y="0" width="60" height="10" isPrintWhenDetailOverflows="true" uuid="8cf3a20b-eeec-446f-b96a-05747c35a056"/>
 				<box>
 					<topPen lineWidth="0.75"/>
 					<leftPen lineWidth="0.75"/>
@@ -414,7 +414,7 @@ Port]]></text>
 				<textFieldExpression><![CDATA[$F{ship}]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true">
-				<reportElement stretchType="RelativeToBandHeight" x="562" y="0" width="60" height="10" isPrintWhenDetailOverflows="true" uuid="bb86271a-bdcb-4efa-b990-8db8efae650b"/>
+				<reportElement stretchType="RelativeToBandHeight" x="597" y="0" width="60" height="10" isPrintWhenDetailOverflows="true" uuid="bb86271a-bdcb-4efa-b990-8db8efae650b"/>
 				<box>
 					<topPen lineWidth="0.75"/>
 					<leftPen lineWidth="0.75"/>
@@ -427,7 +427,7 @@ Port]]></text>
 				<textFieldExpression><![CDATA[new iJson2Object($F{load_port}).getValue("port_name").toUpperCase()+", "+new iJson2Object($F{load_port}).getValue("country_name_en").toUpperCase()]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true">
-				<reportElement stretchType="RelativeToBandHeight" x="622" y="0" width="60" height="10" isPrintWhenDetailOverflows="true" uuid="525e9ca0-64b4-444b-a760-dcefd010de9a"/>
+				<reportElement stretchType="RelativeToBandHeight" x="657" y="0" width="55" height="10" isPrintWhenDetailOverflows="true" uuid="525e9ca0-64b4-444b-a760-dcefd010de9a"/>
 				<box>
 					<topPen lineWidth="0.75"/>
 					<leftPen lineWidth="0.75"/>
@@ -440,7 +440,7 @@ Port]]></text>
 				<textFieldExpression><![CDATA[new iJson2Object($F{dest_port}).getValue("port_name").toUpperCase()+", "+new iJson2Object($F{dest_port}).getValue("country_name_en").toUpperCase()]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true">
-				<reportElement stretchType="RelativeToBandHeight" x="682" y="0" width="35" height="10" isPrintWhenDetailOverflows="true" uuid="8b9cfb5f-5f89-4e40-a05e-a2e0e190fa79"/>
+				<reportElement stretchType="RelativeToBandHeight" x="712" y="0" width="30" height="10" isPrintWhenDetailOverflows="true" uuid="8b9cfb5f-5f89-4e40-a05e-a2e0e190fa79"/>
 				<box>
 					<topPen lineWidth="0.75"/>
 					<leftPen lineWidth="0.75"/>
@@ -453,7 +453,7 @@ Port]]></text>
 				<textFieldExpression><![CDATA[new nylon.utility.NumberFormat().toEngDateShort($F{etd_date})]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true">
-				<reportElement stretchType="RelativeToBandHeight" x="717" y="0" width="45" height="10" isPrintWhenDetailOverflows="true" uuid="44ef0544-f518-474e-83f9-f31ae0af2b24"/>
+				<reportElement stretchType="RelativeToBandHeight" x="742" y="0" width="30" height="10" isPrintWhenDetailOverflows="true" uuid="44ef0544-f518-474e-83f9-f31ae0af2b24"/>
 				<box>
 					<topPen lineWidth="0.75"/>
 					<leftPen lineWidth="0.75"/>
@@ -466,7 +466,7 @@ Port]]></text>
 				<textFieldExpression><![CDATA[new nylon.utility.NumberFormat().toEngDateShort($F{eta_date})]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true">
-				<reportElement stretchType="RelativeToBandHeight" x="762" y="0" width="40" height="10" isPrintWhenDetailOverflows="true" uuid="5c47a86b-19b8-4af6-ba38-1f301e98241e"/>
+				<reportElement stretchType="RelativeToBandHeight" x="772" y="0" width="30" height="10" isPrintWhenDetailOverflows="true" uuid="5c47a86b-19b8-4af6-ba38-1f301e98241e"/>
 				<box>
 					<topPen lineWidth="0.75"/>
 					<leftPen lineWidth="0.75"/>
@@ -489,7 +489,7 @@ Port]]></text>
 		</band>
 	</detail>
 	<pageFooter>
-		<band height="20">
+		<band height="30">
 			<textField>
 				<reportElement x="0" y="10" width="361" height="10" uuid="3acc7f0d-0ff0-4eac-a9b1-8ce7441fbd0f"/>
 				<box leftPadding="5" rightPadding="5">
