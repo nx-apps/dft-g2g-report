@@ -498,7 +498,7 @@ exports.report4 = function (req, res, next) {
     })
         .run()
         .then(function (result) {
-            // res.json(result)
+            res.json(result)
             var params = result.param;
             params.current_date = new Date().toISOString().slice(0, 10);
             params = keysToUpper(params);

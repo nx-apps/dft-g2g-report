@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="report2_subreport2_subreport1" language="groovy" pageWidth="140" pageHeight="555" orientation="Landscape" columnWidth="140" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" uuid="c0e03771-e9be-482b-ac47-58bf03043f8d">
+	<property name="ireport.zoom" value="4.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<import value="nylon.report.*"/>
+	<field name="buyer" class="java.lang.Object"/>
+	<field name="company" class="java.lang.Object"/>
+	<field name="net_weight" class="java.lang.Double"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<detail>
+		<band height="10" splitType="Stretch">
+			<textField isStretchWithOverflow="true">
+				<reportElement stretchType="RelativeToBandHeight" x="105" y="0" width="25" height="10" isPrintWhenDetailOverflows="true" uuid="6e21a491-0bad-4984-8c2f-6964be321e45"/>
+				<box leftPadding="3" rightPadding="3">
+					<topPen lineWidth="0.25"/>
+					<leftPen lineWidth="0.25"/>
+					<bottomPen lineWidth="0.25"/>
+					<rightPen lineWidth="0.25"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font fontName="TH SarabunPSK" size="5" isBold="false" pdfFontName="THSarabun.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[new nylon.utility.NumberFormat().toFormat($F{net_weight},"#,###.##")]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement stretchType="RelativeToBandHeight" x="30" y="0" width="75" height="10" isPrintWhenDetailOverflows="true" uuid="8ee0f005-59ae-43ab-af38-0d3cfd5af4c8"/>
+				<box leftPadding="3" rightPadding="3">
+					<topPen lineWidth="0.25"/>
+					<leftPen lineWidth="0.25"/>
+					<bottomPen lineWidth="0.25"/>
+					<rightPen lineWidth="0.25"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font fontName="TH SarabunPSK" size="5" isBold="false" pdfFontName="THSarabun.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[new iJson2Object($F{company}).getValue("company_name_th")]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement stretchType="RelativeToBandHeight" x="0" y="0" width="30" height="10" isPrintWhenDetailOverflows="true" uuid="44e805eb-a450-48a4-b444-0f4a388ef87e"/>
+				<box leftPadding="3" rightPadding="3">
+					<topPen lineWidth="0.25"/>
+					<leftPen lineWidth="0.25"/>
+					<bottomPen lineWidth="0.25"/>
+					<rightPen lineWidth="0.25"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="TH SarabunPSK" size="5" isBold="false" pdfFontName="THSarabun.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[new iJson2Object($F{buyer}).getValue("buyer_masks")]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+</jasperReport>

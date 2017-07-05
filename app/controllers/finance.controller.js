@@ -1,3 +1,15 @@
+function keysToUpper(param) {
+    var keyname = Object.keys(param);
+    for (var i = 0; i < keyname.length; i++) {
+        param[keyname[i].toUpperCase()] = param[keyname[i]];
+        if (keyname[i] != keyname[i].toLowerCase() && keyname[i] != keyname[i].toUpperCase()) { // if CURrent_DATE != current_date and CURrent_DATE != CURRENT_DATE
+            delete param[keyname[i]]; //CURrent_DATE
+        } else {
+            delete param[keyname[i].toLowerCase()];
+        }
+    }
+    return param;
+}
 exports.report1 = function (req, res, next) {
     var r = req.r;
     var query = req.query;
@@ -74,6 +86,61 @@ exports.report1 = function (req, res, next) {
 
 }
 exports.report2 = function (req, res, next) {
+    var r = req.r;
+    var query = req.query;
+    var cl = r.db('g2g').table('confirm_letter').get(query.cl_id)
+        .merge(function (m) {
+            var contract = r.table('contract').get(m('contract_id'));
+            return contract
+                .merge(contract('country').pluck('country_name_th'))
+        }).pluck('cl_no', 'contract_no', 'country_name_th');
+
+    var book = r.db('g2g').table('book').getAll(query.cl_id, { index: 'cl_id' })
+        .pluck('cl_id', 'ship_lot', 'invoice_date', 'invoice_no', 'id', 'book_no', 'bl_no', 'deli_port', 'ship', 'load_port', 'dest_port', 'value_d', 'contract_id', 'notify_party')
+        .eqJoin('contract_id', r.db('g2g').table('contract')).pluck('left', { right: ['buyer', 'contract_name'] }).zip();
+
+
+    r.expr({
+        param: cl,
+        data: book.coerceTo('array')
+            .merge(function (m) {
+                return {
+                    detail: r.db('g2g').table('book_detail').getAll(m('id'), { index: 'book_id' }).coerceTo('array')
+                        .group('hamonize_id', 'package_id').ungroup()
+                        .merge(function (m2) {
+                            var data = m2('reduction');
+                            return data(0).pluck('hamonize', 'package', 'price_d', 'project_en', 'value_d')
+                                .merge({
+                                    net_weight: data.sum('net_weight'),
+                                })
+                                .merge(function (con_merge) {
+                                    // var contract = r.table('contract').get(m('contract_id'))
+                                    return {
+                                        reduction: m2('reduction')
+                                            .merge(function (con2_merge) {
+                                                return r.table('contract').get(m('contract_id')).pluck('buyer', 'company')
+                                            })
+                                    }
+                                })
+                        })
+                }
+            })
+            .orderBy('ship_lot')
+    })
+        .run()
+        .then(function (result) {
+            // res.json(result)
+            var params = result.param;
+            params.current_date = new Date().toISOString().slice(0, 10);
+            params = keysToUpper(params);
+            // res.json(params)
+            res.ireport("finance/report2.jasper", req.query.export || "pdf", result['data'], params);
+        })
+        .error(function (err) {
+            res.json(err)
+        })
+}
+exports.report3 = function (req, res, next) {
     var r = req.r;
     var parameters = {
         CURRENT_DATE: new Date().toISOString().slice(0, 10),

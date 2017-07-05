@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="report2_subreport2" language="groovy" pageWidth="301" pageHeight="555" orientation="Landscape" columnWidth="301" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" uuid="8aede339-adda-4e34-a72f-6d5c4332afe9">
+	<property name="ireport.zoom" value="2.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<import value="nylon.report.*"/>
+	<parameter name="SUBREPORT_DIR" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA["C:\\Users\\Accounting\\Documents\\Project\\report_g2g\\dft-g2g-report\\app\\reports\\finance\\"]]></defaultValueExpression>
+	</parameter>
+	<field name="hamonize" class="java.lang.Object"/>
+	<field name="package" class="java.lang.Object"/>
+	<field name="project_en" class="java.lang.String"/>
+	<field name="price_d" class="java.lang.Double"/>
+	<field name="value_d" class="java.lang.Double"/>
+	<field name="net_weight" class="java.lang.Double"/>
+	<field name="reduction" class="java.lang.Object"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<detail>
+		<band height="10" splitType="Stretch">
+			<textField isStretchWithOverflow="true">
+				<reportElement stretchType="RelativeToBandHeight" x="125" y="0" width="25" height="10" isPrintWhenDetailOverflows="true" uuid="d002c1dc-4e59-4148-8971-d6200cdd3578"/>
+				<box leftPadding="3" rightPadding="3">
+					<topPen lineWidth="0.25"/>
+					<leftPen lineWidth="0.25"/>
+					<bottomPen lineWidth="0.25"/>
+					<rightPen lineWidth="0.25"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font fontName="TH SarabunPSK" size="5" isBold="false" pdfFontName="THSarabun.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[new nylon.utility.NumberFormat().toFormat($F{value_d},"#,###.##")]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement stretchType="RelativeToBandHeight" x="100" y="0" width="25" height="10" isPrintWhenDetailOverflows="true" uuid="a0c7ef9d-acda-4c4b-bb16-9e9972aa0a9b"/>
+				<box leftPadding="3" rightPadding="3">
+					<topPen lineWidth="0.25"/>
+					<leftPen lineWidth="0.25"/>
+					<bottomPen lineWidth="0.25"/>
+					<rightPen lineWidth="0.25"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font fontName="TH SarabunPSK" size="5" isBold="false" pdfFontName="THSarabun.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[new nylon.utility.NumberFormat().toFormat($F{net_weight},"#,###.##")]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement stretchType="RelativeToBandHeight" x="0" y="0" width="55" height="10" isPrintWhenDetailOverflows="true" uuid="0a949033-decd-4d75-82bd-b4b1626dba7c"/>
+				<box leftPadding="3" rightPadding="3">
+					<topPen lineWidth="0.25"/>
+					<leftPen lineWidth="0.25"/>
+					<bottomPen lineWidth="0.25"/>
+					<rightPen lineWidth="0.25"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font fontName="TH SarabunPSK" size="5" isBold="false" pdfFontName="THSarabun.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[new iJson2Object($F{hamonize}).getValue("hamonize_th2")+" ปีการผลิต "+$F{project_en}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement stretchType="RelativeToBandHeight" x="55" y="0" width="20" height="10" isPrintWhenDetailOverflows="true" uuid="92681b72-fa91-402c-9960-65ad45627184"/>
+				<box leftPadding="3" rightPadding="3">
+					<topPen lineWidth="0.25"/>
+					<leftPen lineWidth="0.25"/>
+					<bottomPen lineWidth="0.25"/>
+					<rightPen lineWidth="0.25"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="TH SarabunPSK" size="5" isBold="false" pdfFontName="THSarabun.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[new iJson2Object($F{package}).getValue("package_kg_per_bag")]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement stretchType="RelativeToBandHeight" x="75" y="0" width="25" height="10" isPrintWhenDetailOverflows="true" uuid="fceac44c-0437-4907-8eae-8933ca1be8a8"/>
+				<box leftPadding="3" rightPadding="3">
+					<topPen lineWidth="0.25"/>
+					<leftPen lineWidth="0.25"/>
+					<bottomPen lineWidth="0.25"/>
+					<rightPen lineWidth="0.25"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font fontName="TH SarabunPSK" size="5" isBold="false" pdfFontName="THSarabun.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[new nylon.utility.NumberFormat().toFormat($F{price_d},"#,###.##")]]></textFieldExpression>
+			</textField>
+			<subreport>
+				<reportElement x="150" y="0" width="130" height="10" uuid="4894e61a-63be-45df-b948-9f432a380b58"/>
+				<subreportParameter name="SUBREPORT_DIR">
+					<subreportParameterExpression><![CDATA[$P{SUBREPORT_DIR}]]></subreportParameterExpression>
+				</subreportParameter>
+				<dataSourceExpression><![CDATA[new iJsonDS($F{reduction})]]></dataSourceExpression>
+				<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "/finance/report2_subreport2_subreport1.jasper"]]></subreportExpression>
+			</subreport>
+		</band>
+	</detail>
+</jasperReport>

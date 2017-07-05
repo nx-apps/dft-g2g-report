@@ -81,8 +81,7 @@
 				<textElement verticalAlignment="Middle">
 					<font fontName="TH SarabunPSK" size="14" pdfFontName="THSarabun.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
 				</textElement>
-				<textFieldExpression><![CDATA[new nylon.utility.NumberFormat().toEngDateShort($F{invoice_date}== null ?" ":$F{invoice_date})
-]]></textFieldExpression>
+				<textFieldExpression><![CDATA[new nylon.utility.NumberFormat().toEngDateShort($F{invoice_date}== null ?" ":$F{invoice_date})]]></textFieldExpression>
 			</textField>
 			<staticText>
 				<reportElement x="15" y="230" width="67" height="20" uuid="66810749-d7e3-4685-801e-d948bc8de6c5"/>
@@ -166,8 +165,7 @@
 				<textElement verticalAlignment="Top">
 					<font fontName="TH SarabunPSK" size="14" pdfFontName="THSarabun.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
 				</textElement>
-				<textFieldExpression><![CDATA[($F{made_out_to}== null ?" ":$F{made_out_to}).toUpperCase()
-]]></textFieldExpression>
+				<textFieldExpression><![CDATA[($F{made_out_to}== null ?" ":$F{made_out_to}).toUpperCase()]]></textFieldExpression>
 			</textField>
 			<staticText>
 				<reportElement x="15" y="330" width="115" height="20" uuid="a8aba5ef-661f-4f56-9eb8-5c12dc9b1ab6"/>
@@ -195,8 +193,7 @@
 				<textElement verticalAlignment="Top">
 					<font fontName="TH SarabunPSK" size="14" pdfFontName="THSarabun.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
 				</textElement>
-				<textFieldExpression><![CDATA[new nylon.utility.NumberFormat().toEngDateShort($F{invoice_date}== null ?" ":$F{invoice_date})
-]]></textFieldExpression>
+				<textFieldExpression><![CDATA[new nylon.utility.NumberFormat().toEngDateShort($F{invoice_date}== null ?" ":$F{invoice_date})]]></textFieldExpression>
 			</textField>
 			<image scaleImage="RealSize">
 				<reportElement x="233" y="0" width="80" height="85" uuid="250a2865-b7d2-459b-9feb-ee556574fad9"/>
