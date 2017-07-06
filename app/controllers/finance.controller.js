@@ -142,6 +142,50 @@ exports.report2 = function (req, res, next) {
 }
 exports.report3 = function (req, res, next) {
     var r = req.r;
+    var query = req.query;
+    var params = {
+        date_start: query.date_start
+    };
+    var date_start = req.query.date_start + "T00:00:00+07:00";
+
+    var fee = r.db('g2g').table('fee')
+        .filter(function (row) {
+            return row('fee_date').date().eq(r.ISO8601(date_start))
+        });
+    // r.db('g2g').table('fee').get(query.id)
+        fee.group(function (g) {
+            return g.pluck('cl_no', 'fee_no', 'fee_round')
+        }).ungroup()
+            .getField('reduction')
+            .reduce(function (left, right) {
+                return left.add(right)
+            })
+            .merge(function (m) {
+                return {
+                    book: m('book').pluck('invoice_no', 'invoice_date', 'net_weight', 'price_d', 'detail')
+                        .merge(function (m2) {
+                            return {
+                                detail: m2('detail').pluck('price_d', 'value_d')
+                            }
+                        })
+                }
+            })
+            // .orderBy('cl_no','fee_no','fee_fee_round')
+        .run()
+        .then(function (result) {
+            // res.json(result)
+            // var params = result.param;
+            // params.current_date = new Date().toISOString().slice(0, 10);
+            // params = keysToUpper(params);
+            // res.json(params)
+            res.ireport("finance/report3.jasper", req.query.export || "pdf", result, params);
+        })
+        .error(function (err) {
+            res.json(err)
+        })
+}
+exports.report5 = function (req, res, next) {
+    var r = req.r;
     var parameters = {
         CURRENT_DATE: new Date().toISOString().slice(0, 10),
         SUBREPORT_DIR: __dirname.replace('controller', 'report') + '\\' + req.baseUrl.replace("/api/", "") + '\\'
@@ -264,7 +308,6 @@ exports.report3 = function (req, res, next) {
             res.json(err)
         })
 }
-
 exports.report4 = function (req, res, next) {
     var r = req.r;
     var parameters = {
