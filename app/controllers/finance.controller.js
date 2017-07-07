@@ -144,13 +144,13 @@ exports.report3 = function (req, res, next) {
     var r = req.r;
     var query = req.query;
     var params = {
-        date_start: query.date_start
+        date_start: query.date
     };
-    var date_start = req.query.date_start + "T00:00:00+07:00";
+    var date = req.query.date + "T00:00:00+07:00";
 
     var datas = r.db('g2g').table('fee').getAll(query.contract_id, { index: 'contract_id' })
         .filter(function (row) {
-            return row('fee_date').date().eq(r.ISO8601(date_start))
+            return row('fee_date').date().eq(r.ISO8601(date))
         })
         .group(function (g) {
             return g.pluck('cl_no', 'fee_no', 'fee_round')
