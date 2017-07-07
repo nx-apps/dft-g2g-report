@@ -213,6 +213,99 @@ exports.report3 = function (req, res, next) {
             res.json(err)
         })
 }
+exports.report4 = function (req, res, next) {
+    var r = req.r;
+    var query = req.query;
+    var params = {
+        date_start: query.date
+    };
+    var date = req.query.date + "T00:00:00+07:00";
+
+    var datas = r.db('g2g').table('fee').getAll(query.contract_id, { index: 'contract_id' })
+        .filter(function (row) {
+            return row('fee_date').date().eq(r.ISO8601(date))
+        })
+        .group(function (g) {
+            return g.pluck('cl_no', 'fee_no', 'fee_round')
+        }).ungroup()
+        .getField('reduction')
+        .reduce(function (left, right) {
+            return left.add(right)
+        })
+        .merge(function (m) {
+            return {
+                fee_date: m('fee_date').inTimezone('+07').toISO8601().split('T')(0)
+    //             book: m('book').pluck('invoice_no', 'detail')
+
+    //                 // .merge(function (m2) {
+    //                 //     return {
+    //                 //         detail: m2('detail').pluck('price_d', 'value_d', 'net_weight')
+    //                 //             .group('price_d').ungroup()
+    //                 //             .orderBy('invoice_date')
+    //                 // .map(function (m3) {
+    //                 //     return m2.without('detail')
+    //                 // .merge({
+    //                 //     price_d: m3('group'),
+    //                 //     net_weight: m3('reduction').sum('net_weight'),
+    //                 //     value_d: m3('reduction').sum('value_d'),
+    //                 //     // invoice_date: m2('invoice_date').inTimezone('+07').toISO8601().split('T')(0)
+    //                 // })
+    //                 // })
+                        }
+                    })
+                    .without('detail')
+    //             // .getField('detail')
+    //             // .reduce(function (left, right) {
+    //             //     return left.add(right)
+    //             // })
+        //     }
+        // })
+        .merge(function (m2) {
+            return {
+                count_invoice:m2('book')('invoice_no').count(),
+                amount_received: m2('value_d').sub(m2('fee_ex_d'))
+            }
+        })
+        .merge(function (m3) {
+            return {
+                amount_b: m3('rate_bank_b').mul(m3('amount_received'))
+            }
+        })
+        .merge(function (m4) {
+            return {
+                get_money: m4('amount_b').sub(m4('fee_in_b'))
+            }
+        })
+        .pluck('cl_no', 'contract_id', 'book', 'invoice_no', 'count_invoice', 'net_weight',
+        'amount_received', 'fee_ex_d', 'amount_b', 'fee_date', 'rate_tt_b', 'rate_bank_b', 'value_d', 'fee_in_b', 'get_money', 'fee_no', 'fee_round')
+        .eqJoin('contract_id', r.db('g2g').table('contract')).pluck('left', { right: [{ 'country': 'country_name_th' }, { 'buyer': 'buyer_name' }] }).zip()
+        .map(function (m) {
+            return m.getField('book').merge(m.without('book'))
+        })
+        .reduce(function (left, right) {
+            return left.add(right)
+        })
+        .orderBy('cl_no', 'fee_no', 'fee_round')
+
+    // r.expr({
+    //     datas: datas.without('country', 'buyer', 'contract_id'),
+    //     params: {
+    //         country_name_th: datas(0)('country')('country_name_th'),
+    //         buyer_name: datas(0)('buyer')('buyer_name')
+    //     }
+    // })
+
+        .run()
+        .then(function (result) {
+            res.json(result);
+            // var params = result['params'];
+            // params.current_date = new Date().toISOString().slice(0, 10);
+            params = keysToUpper(params);
+            // res.json(params)
+            res.ireport("finance/report4.jasper", req.query.export || "pdf", result, params);
+        });
+
+}
 exports.report5 = function (req, res, next) {
     var r = req.r;
     var parameters = {
@@ -336,105 +429,6 @@ exports.report5 = function (req, res, next) {
         .error(function (err) {
             res.json(err)
         })
-}
-exports.report4 = function (req, res, next) {
-    var r = req.r;
-    var parameters = {
-        CURRENT_DATE: new Date().toISOString().slice(0, 10),
-        SUBREPORT_DIR: __dirname.replace('controller', 'report') + '\\' + req.baseUrl.replace("/api/", "") + '\\'
-    };
-    r.db('g2g2').table('fee_detail').getAll((req.params.id), { index: 'fee_id' })
-        .merge(function (fee_merge) {
-            return {
-                fee_det_id: fee_merge('id')
-            }
-        })
-        .merge(function (invoice_merge) {
-            return {
-                invoice: invoice_merge('invoice')
-                    .merge(function (invoice_detail_merge) {
-                        return {
-                            invoice_detail: invoice_detail_merge('invoice_detail')
-                                .merge(function (table_shipment) {
-                                    return r.db('g2g2').table('shipment_detail').get(table_shipment('shm_det_id'))
-                                        //  .pluck('price_per_ton','shm_det_id','shm_det_quantity','type_rice_id','invoice_fee','book_id')
-                                        .merge(function (m) {
-                                            return r.db('g2g2').table('book').get(m('book_id')).pluck('ship', 'ship_lot_no')
-                                        })
-                                        .merge(function (ship_merge) {
-                                            return {
-                                                ship: ship_merge('ship').merge(function (shipname_merge) {
-                                                    return r.db('common').table('ship').get(shipname_merge('ship_id')).pluck('ship_name')
-                                                })
-                                                    .map(function (shipname_merge) {
-                                                        return shipname_merge('ship_name').add(' V.', shipname_merge('ship_voy_no'))
-                                                    })
-                                                    .reduce(function (left, right) {
-                                                        return left.add(' / ', right)
-                                                    })
-                                            }
-                                        })
-                                        .merge(function (rate_merge) {
-                                            return {
-                                                fee_det_id: (invoice_merge('fee_det_id')),
-                                                rate_bank: (invoice_merge('rate_bank')),
-                                                fee_id: (invoice_merge('fee_id')),
-                                                fee_internal: (invoice_merge('fee_internal')),
-                                                fee_other: (invoice_merge('fee_other')),
-                                                fee_foreign: (invoice_merge('fee_foreign')),
-                                                rate_tt: (invoice_merge('rate_tt')),
-                                                amount_usd: (rate_merge('shm_det_quantity')).mul(rate_merge('price_per_ton'))
-                                            }
-                                        })
-                                        .merge(function (amount_merge) {
-                                            return {
-                                                amount_bath: (amount_merge('rate_bank')).mul(amount_merge('amount_usd')),
-                                                fee_bank: (amount_merge('rate_bank')).mul(amount_merge('fee_foreign'))
-                                                    .add(amount_merge('fee_foreign')).add(amount_merge('fee_other'))
-                                            }
-                                        })
-                                        .merge(function (balance_merge) {
-                                            return {
-                                                balance: (balance_merge('amount_bath')).sub(balance_merge('fee_bank'))
-                                            }
-                                        })
-                                        .merge(function (tax_merge) {
-                                            return {
-                                                tax: (tax_merge('balance')).mul(0.01)
-                                            }
-                                        })
-                                        .merge(function (balance_2_merge) {
-                                            return {
-                                                balance_2: (balance_2_merge('balance')).sub(balance_2_merge('tax'))
-                                            }
-                                        })
-                                })
-                        }
-                    })
-                    .map(function (invoice_detail_merge) {
-                        return invoice_detail_merge.getField('invoice_detail')
-                    })(0)
-            }
-        }).map(function (invoice_merge) {
-            return invoice_merge.getField('invoice')
-        })
-        .reduce(function (left, right) {
-            return left.add(right)
-        })
-
-
-
-        // .without('shm_det_id')
-        .eqJoin('exporter_id', r.db('external').table('exporter')).pluck('left', { right: 'company_id' }).zip()
-        .eqJoin('company_id', r.db('external_f3').table('company')).pluck('left', { right: 'company_name_th' }).zip()
-        .without('id')
-        .eqJoin('fee_id', r.db('g2g2').table('fee')).pluck('left', { right: 'fee_no' }).zip()
-        .run()
-        .then(function (result) {
-            // res.json(result);
-            res.ireport("payment/report4.jasper", req.query.export || "pdf", result, parameters);
-        });
-
 }
 exports.report6 = function (req, res, next) {
     var r = req.r;
