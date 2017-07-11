@@ -233,36 +233,36 @@ exports.report4 = function (req, res, next) {
             return left.add(right)
         })
         .merge(function (m) {
+            var invoice = m('book').getField('invoice_no');
             return {
-                fee_date: m('fee_date').inTimezone('+07').toISO8601().split('T')(0)
-    //             book: m('book').pluck('invoice_no', 'detail')
-
-    //                 // .merge(function (m2) {
-    //                 //     return {
-    //                 //         detail: m2('detail').pluck('price_d', 'value_d', 'net_weight')
-    //                 //             .group('price_d').ungroup()
-    //                 //             .orderBy('invoice_date')
-    //                 // .map(function (m3) {
-    //                 //     return m2.without('detail')
-    //                 // .merge({
-    //                 //     price_d: m3('group'),
-    //                 //     net_weight: m3('reduction').sum('net_weight'),
-    //                 //     value_d: m3('reduction').sum('value_d'),
-    //                 //     // invoice_date: m2('invoice_date').inTimezone('+07').toISO8601().split('T')(0)
-    //                 // })
-    //                 // })
-                        }
-                    })
-                    .without('detail')
-    //             // .getField('detail')
-    //             // .reduce(function (left, right) {
-    //             //     return left.add(right)
-    //             // })
-        //     }
-        // })
+                fee_date: m('fee_date').inTimezone('+07').toISO8601().split('T')(0),
+                invoice_no: invoice.reduce(function (left, right) {
+                    return left.add(',', right)
+                }),
+                count_invoice: invoice.count()
+                // book: m('book').pluck('invoice_no', 'invoice_date', 'detail')
+                // .merge(function (m2) {
+                //     return {
+                //         detail: m2('detail')//.pluck('price_d', 'value_d', 'net_weight')
+                // .group('price_d').ungroup()
+                // .orderBy('invoice_date')
+                // .map(function (m3) {
+                //     return m2.without('detail').merge({
+                //         price_d: m3('group'),
+                //         net_weight: m3('reduction').sum('net_weight'),
+                //         value_d: m3('reduction').sum('value_d'),
+                //         invoice_date: m2('invoice_date').inTimezone('+07').toISO8601().split('T')(0)
+                //     })
+                // })
+                //     }
+                // })//.getField('detail')
+            }
+        })
+        .without('book')
+        // .without('detail')
         .merge(function (m2) {
             return {
-                count_invoice:m2('book')('invoice_no').count(),
+                // count_invoice: m2('book')('invoice_no').count(),
                 amount_received: m2('value_d').sub(m2('fee_ex_d'))
             }
         })
@@ -276,33 +276,33 @@ exports.report4 = function (req, res, next) {
                 get_money: m4('amount_b').sub(m4('fee_in_b'))
             }
         })
-        .pluck('cl_no', 'contract_id', 'book', 'invoice_no', 'count_invoice', 'net_weight',
+        .pluck('cl_no', 'contract_id', 'invoice_no', 'count_invoice', 'net_weight',
         'amount_received', 'fee_ex_d', 'amount_b', 'fee_date', 'rate_tt_b', 'rate_bank_b', 'value_d', 'fee_in_b', 'get_money', 'fee_no', 'fee_round')
         .eqJoin('contract_id', r.db('g2g').table('contract')).pluck('left', { right: [{ 'country': 'country_name_th' }, { 'buyer': 'buyer_name' }] }).zip()
-        .map(function (m) {
-            return m.getField('book').merge(m.without('book'))
-        })
-        .reduce(function (left, right) {
-            return left.add(right)
-        })
+        // .map(function (m) {
+        //     return m.getField('book').merge(m.without('book'))
+        // })
+        // .reduce(function (left, right) {
+        //     return left.add(right)
+        // })
         .orderBy('cl_no', 'fee_no', 'fee_round')
 
-    // r.expr({
-    //     datas: datas.without('country', 'buyer', 'contract_id'),
-    //     params: {
-    //         country_name_th: datas(0)('country')('country_name_th'),
-    //         buyer_name: datas(0)('buyer')('buyer_name')
-    //     }
-    // })
+        r.expr({
+            datas: datas.without('country', 'buyer', 'contract_id'),
+            params: {
+                country_name_th: datas(0)('country')('country_name_th'),
+                buyer_name: datas(0)('buyer')('buyer_name')
+            }
+        })
 
         .run()
         .then(function (result) {
-            res.json(result);
-            // var params = result['params'];
+            // res.json(result);
+            var params = result['params'];
             // params.current_date = new Date().toISOString().slice(0, 10);
             params = keysToUpper(params);
             // res.json(params)
-            res.ireport("finance/report4.jasper", req.query.export || "pdf", result, params);
+            res.ireport("finance/report4.jasper", req.query.export || "pdf", result['datas'], params);
         });
 
 }

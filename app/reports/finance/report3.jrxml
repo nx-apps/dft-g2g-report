@@ -31,7 +31,7 @@
 		<variableExpression><![CDATA[$F{value_d}]]></variableExpression>
 	</variable>
 	<group name="G_cl_feeNo" isStartNewPage="true">
-		<groupExpression><![CDATA["CL"+$F{cl_no}+"FeeNO"+$F{fee_no}]]></groupExpression>
+		<groupExpression><![CDATA["CL"+$F{cl_no}+"FEE"+$F{fee_no}]]></groupExpression>
 		<groupHeader>
 			<band height="90">
 				<textField>
@@ -318,7 +318,7 @@
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font fontName="TH SarabunPSK" size="14" isBold="false" pdfFontName="THSarabun.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$V{G_cl_feeNo_feeRound_COUNT}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$V{G_cl_feeNo_feeRound2_COUNT}]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true" pattern="#,##0.00">
 				<reportElement stretchType="RelativeToBandHeight" x="240" y="0" width="100" height="20" isPrintWhenDetailOverflows="true" uuid="e099e49b-a3b0-4135-b9c8-965b4a82343b"/>
