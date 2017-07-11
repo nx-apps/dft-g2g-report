@@ -23,6 +23,8 @@
 	<field name="bl_no" class="java.lang.String"/>
 	<field name="buyer" class="java.lang.Object"/>
 	<field name="contract_name" class="java.lang.String"/>
+	<field name="invoice_type" class="java.lang.String"/>
+	<field name="invoice_year" class="java.lang.String"/>
 	<variable name="CURRENT_PAGE" class="java.lang.Integer" resetType="None" calculation="DistinctCount">
 		<variableExpression><![CDATA[$V{PAGE_NUMBER}]]></variableExpression>
 		<initialValueExpression><![CDATA[new Integer(1)]]></initialValueExpression>
@@ -394,7 +396,7 @@
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font fontName="TH SarabunPSK" size="5" isBold="false" pdfFontName="THSarabun.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
 				</textElement>
-				<textFieldExpression><![CDATA[($F{invoice_no}==null ? " ":$F{invoice_no})]]></textFieldExpression>
+				<textFieldExpression><![CDATA[($F{invoice_no}==null ? " ":$F{invoice_no}+$F{invoice_type}+"/"+$F{invoice_year})]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true" pattern="">
 				<reportElement stretchType="RelativeToBandHeight" x="692" y="0" width="65" height="10" isPrintInFirstWholeBand="true" uuid="d9a9dad4-3822-48de-976d-e1ad306cc017"/>

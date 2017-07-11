@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="report4" language="groovy" pageWidth="842" pageHeight="595" orientation="Landscape" columnWidth="802" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="e3cf70cf-6d13-4388-b698-0baaeaea0a95">
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="report4" language="groovy" pageWidth="842" pageHeight="595" orientation="Landscape" whenNoDataType="NoDataSection" columnWidth="802" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="e3cf70cf-6d13-4388-b698-0baaeaea0a95">
 	<property name="ireport.zoom" value="1.0"/>
 	<property name="ireport.x" value="0"/>
 	<property name="ireport.y" value="0"/>
@@ -10,16 +10,18 @@
 	<field name="net_weight" class="java.lang.Double"/>
 	<field name="value_d" class="java.lang.Double"/>
 	<field name="fee_ex_d" class="java.lang.Double"/>
-	<field name="amount_received" class="java.lang.Double"/>
+	<field name="amount_d" class="java.lang.Double"/>
 	<field name="fee_date" class="java.lang.String"/>
 	<field name="rate_tt_b" class="java.lang.Double"/>
 	<field name="rate_bank_b" class="java.lang.Double"/>
 	<field name="amount_b" class="java.lang.Double"/>
 	<field name="fee_in_b" class="java.lang.Double"/>
-	<field name="get_money" class="java.lang.Double"/>
+	<field name="get_b" class="java.lang.Double"/>
 	<field name="invoice_no" class="java.lang.String"/>
 	<field name="fee_no" class="java.lang.String"/>
 	<field name="fee_round" class="java.lang.String"/>
+	<field name="invoice_type" class="java.lang.String"/>
+	<field name="invoice_year" class="java.lang.String"/>
 	<variable name="SUM_COUNT_INVOICE" class="java.lang.Integer" calculation="Sum">
 		<variableExpression><![CDATA[$F{count_invoice}]]></variableExpression>
 	</variable>
@@ -32,8 +34,8 @@
 	<variable name="SUM_FEE_EX_D" class="java.lang.Double" calculation="Sum">
 		<variableExpression><![CDATA[$F{fee_ex_d}]]></variableExpression>
 	</variable>
-	<variable name="SUM_AMOUNT" class="java.lang.Double" calculation="Sum">
-		<variableExpression><![CDATA[$F{amount_received}]]></variableExpression>
+	<variable name="SUM_AMOUNT_D" class="java.lang.Double" calculation="Sum">
+		<variableExpression><![CDATA[$F{amount_d}]]></variableExpression>
 	</variable>
 	<variable name="SUM_AMOUNT_B" class="java.lang.Double" calculation="Sum">
 		<variableExpression><![CDATA[$F{amount_b}]]></variableExpression>
@@ -41,8 +43,8 @@
 	<variable name="SUM_FEE_IN_B" class="java.lang.Double" calculation="Sum">
 		<variableExpression><![CDATA[$F{fee_in_b}]]></variableExpression>
 	</variable>
-	<variable name="SUM_GET_MONEY" class="java.lang.Double" calculation="Sum">
-		<variableExpression><![CDATA[$F{get_money}]]></variableExpression>
+	<variable name="SUM_GET_B" class="java.lang.Double" calculation="Sum">
+		<variableExpression><![CDATA[$F{get_b}]]></variableExpression>
 	</variable>
 	<group name="GP" isStartNewPage="true">
 		<groupExpression><![CDATA["CL"+$F{cl_no}+"feeNo"+$F{fee_no}]]></groupExpression>
@@ -74,20 +76,21 @@
 					</textElement>
 					<text><![CDATA[ครั้งที่]]></text>
 				</staticText>
-				<staticText>
-					<reportElement x="30" y="30" width="70" height="40" uuid="9c0541d3-b1c9-4b02-a66a-ea02f9cc2b60"/>
+				<textField>
+					<reportElement x="30" y="30" width="70" height="40" uuid="780370cf-6edd-453c-9309-3d83448ae33c"/>
 					<box>
+						<pen lineWidth="0.25"/>
 						<topPen lineWidth="0.25"/>
 						<leftPen lineWidth="0.25"/>
 						<bottomPen lineWidth="0.25"/>
 						<rightPen lineWidth="0.25"/>
 					</box>
-					<textElement textAlignment="Center" verticalAlignment="Middle">
+					<textElement textAlignment="Center" verticalAlignment="Middle" markup="none">
 						<font fontName="TH SarabunPSK" size="12" isBold="true" pdfFontName="THSarabun.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
 					</textElement>
-					<text><![CDATA[ใบกำกับสินค้า
-เลขที่ c..../.....]]></text>
-				</staticText>
+					<textFieldExpression><![CDATA["ใบกำกับสินค้า\n"+
+"เลขที่ "+$F{invoice_type}+".../....."]]></textFieldExpression>
+				</textField>
 				<staticText>
 					<reportElement x="100" y="30" width="30" height="40" uuid="16e2e953-f426-45ff-bd8f-4078fa9ddf3d"/>
 					<box>
@@ -282,7 +285,7 @@
 					<textElement textAlignment="Center" verticalAlignment="Middle">
 						<font fontName="TH SarabunPSK" size="14" isBold="false" pdfFontName="THSarabun.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
 					</textElement>
-					<textFieldExpression><![CDATA[$F{invoice_no}]]></textFieldExpression>
+					<textFieldExpression><![CDATA[$F{invoice_no}+"/"+$F{invoice_year}]]></textFieldExpression>
 				</textField>
 				<textField isStretchWithOverflow="true">
 					<reportElement stretchType="RelativeToBandHeight" x="100" y="0" width="30" height="20" isPrintWhenDetailOverflows="true" uuid="e3a2bc3d-75ce-42f2-a2f2-8fbc64377ed8"/>
@@ -347,7 +350,7 @@
 					<textElement textAlignment="Right" verticalAlignment="Middle">
 						<font fontName="TH SarabunPSK" size="14" isBold="false" pdfFontName="THSarabun.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
 					</textElement>
-					<textFieldExpression><![CDATA[$F{amount_received}]]></textFieldExpression>
+					<textFieldExpression><![CDATA[$F{amount_d}]]></textFieldExpression>
 				</textField>
 				<textField isStretchWithOverflow="true">
 					<reportElement stretchType="RelativeToBandHeight" x="410" y="0" width="70" height="20" isPrintWhenDetailOverflows="true" uuid="c090f84a-8622-4156-812a-321ff3c778c9"/>
@@ -425,7 +428,7 @@
 					<textElement textAlignment="Right" verticalAlignment="Middle">
 						<font fontName="TH SarabunPSK" size="14" isBold="false" pdfFontName="THSarabun.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
 					</textElement>
-					<textFieldExpression><![CDATA[$F{get_money}]]></textFieldExpression>
+					<textFieldExpression><![CDATA[$F{get_b}]]></textFieldExpression>
 				</textField>
 			</band>
 		</groupHeader>
@@ -485,7 +488,7 @@
 				<textElement textAlignment="Right" verticalAlignment="Middle">
 					<font fontName="TH SarabunPSK" size="14" isBold="false" pdfFontName="THSarabun.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$V{SUM_GET_MONEY}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$V{SUM_GET_B}]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true">
 				<reportElement stretchType="RelativeToBandHeight" x="410" y="0" width="70" height="20" isPrintWhenDetailOverflows="true" uuid="0252ac2a-76d5-4921-959d-024f4df825f3"/>
@@ -537,7 +540,7 @@
 				<textElement textAlignment="Right" verticalAlignment="Middle">
 					<font fontName="TH SarabunPSK" size="14" isBold="false" pdfFontName="THSarabun.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$V{SUM_AMOUNT}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$V{SUM_AMOUNT_D}]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true" pattern="#,##0.00">
 				<reportElement stretchType="RelativeToBandHeight" x="190" y="0" width="70" height="20" isPrintWhenDetailOverflows="true" uuid="9bb00d27-0030-4eaa-9301-7787ca57c00c"/>
@@ -593,4 +596,225 @@
 			</textField>
 		</band>
 	</summary>
+	<noData>
+		<band height="119">
+			<textField>
+				<reportElement x="30" y="25" width="70" height="40" uuid="f433edc2-a2a1-401c-aede-69490ab7e87d"/>
+				<box>
+					<pen lineWidth="0.25"/>
+					<topPen lineWidth="0.25"/>
+					<leftPen lineWidth="0.25"/>
+					<bottomPen lineWidth="0.25"/>
+					<rightPen lineWidth="0.25"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle" markup="none">
+					<font fontName="TH SarabunPSK" size="12" isBold="true" pdfFontName="THSarabun.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA["ใบกำกับสินค้า\n"+
+"เลขที่ "+$F{invoice_type}+".../....."]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="480" y="25" width="120" height="20" uuid="8e6f2b39-6f6f-41c8-b951-e8645b5118ec"/>
+				<box>
+					<topPen lineWidth="0.25"/>
+					<leftPen lineWidth="0.25"/>
+					<bottomPen lineWidth="0.25"/>
+					<rightPen lineWidth="0.25"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="TH SarabunPSK" size="12" isBold="true" pdfFontName="THSarabun.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+				</textElement>
+				<text><![CDATA[อัตราแลกเปลี่ยน]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="100" y="25" width="30" height="40" uuid="58d6b953-5fa5-4a93-8cb1-631585ce1d7d"/>
+				<box>
+					<topPen lineWidth="0.25"/>
+					<leftPen lineWidth="0.25"/>
+					<bottomPen lineWidth="0.25"/>
+					<rightPen lineWidth="0.25"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="TH SarabunPSK" size="12" isBold="true" pdfFontName="THSarabun.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+				</textElement>
+				<text><![CDATA[จำนวน
+(ชุด)]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="480" y="45" width="40" height="20" uuid="5b8727ed-ec61-4241-a66b-2f1d652c8220"/>
+				<box>
+					<topPen lineWidth="0.25"/>
+					<leftPen lineWidth="0.25"/>
+					<bottomPen lineWidth="0.25"/>
+					<rightPen lineWidth="0.25"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="TH SarabunPSK" size="12" isBold="true" pdfFontName="THSarabun.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+				</textElement>
+				<text><![CDATA[T/T]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="25" width="30" height="40" uuid="c497ed4a-d479-4f75-9916-cda92ead5365"/>
+				<box>
+					<topPen lineWidth="0.25"/>
+					<leftPen lineWidth="0.25"/>
+					<bottomPen lineWidth="0.25"/>
+					<rightPen lineWidth="0.25"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="TH SarabunPSK" size="12" isBold="true" pdfFontName="THSarabun.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+				</textElement>
+				<text><![CDATA[ครั้งที่]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="600" y="25" width="70" height="40" uuid="7c853419-8e36-47f3-b576-7686833f962a"/>
+				<box>
+					<topPen lineWidth="0.25"/>
+					<leftPen lineWidth="0.25"/>
+					<bottomPen lineWidth="0.25"/>
+					<rightPen lineWidth="0.25"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="TH SarabunPSK" size="12" isBold="true" pdfFontName="THSarabun.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+				</textElement>
+				<text><![CDATA[จำนวนเงิน
+(บาท)]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="410" y="25" width="70" height="40" uuid="58da61c0-6034-4a84-a383-3ef4943ba62c"/>
+				<box>
+					<topPen lineWidth="0.25"/>
+					<leftPen lineWidth="0.25"/>
+					<bottomPen lineWidth="0.25"/>
+					<rightPen lineWidth="0.25"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="TH SarabunPSK" size="12" isBold="true" pdfFontName="THSarabun.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+				</textElement>
+				<text><![CDATA[วันที่รับเงิน]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="520" y="45" width="80" height="20" uuid="f5e8cb9b-455f-4977-9e52-98e0df82c72f"/>
+				<box>
+					<topPen lineWidth="0.25"/>
+					<leftPen lineWidth="0.25"/>
+					<bottomPen lineWidth="0.25"/>
+					<rightPen lineWidth="0.25"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="TH SarabunPSK" size="12" isBold="true" pdfFontName="THSarabun.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+				</textElement>
+				<text><![CDATA[ธนาคารกรุงไทยเสนอ]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="260" y="25" width="80" height="40" uuid="f162ad73-c66a-474f-bda2-740519f88de8"/>
+				<box>
+					<topPen lineWidth="0.25"/>
+					<leftPen lineWidth="0.25"/>
+					<bottomPen lineWidth="0.25"/>
+					<rightPen lineWidth="0.25"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="TH SarabunPSK" size="12" isBold="true" pdfFontName="THSarabun.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+				</textElement>
+				<text><![CDATA[ค่าธรรมเนียมธนาคาร
+ต่างประเทศ (USD)]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="670" y="25" width="62" height="40" uuid="2fcfe2a3-b3d0-4b5a-9fea-18f0ca4bd550"/>
+				<box>
+					<topPen lineWidth="0.25"/>
+					<leftPen lineWidth="0.25"/>
+					<bottomPen lineWidth="0.25"/>
+					<rightPen lineWidth="0.25"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="TH SarabunPSK" size="12" isBold="true" pdfFontName="THSarabun.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+				</textElement>
+				<text><![CDATA[ค่าธรรมเนียม
+(บาท)]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="190" y="25" width="70" height="40" uuid="d4494bdd-8aaa-4b91-a424-acb1c7cdb1d2"/>
+				<box>
+					<topPen lineWidth="0.25"/>
+					<leftPen lineWidth="0.25"/>
+					<bottomPen lineWidth="0.25"/>
+					<rightPen lineWidth="0.25"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="TH SarabunPSK" size="12" isBold="true" pdfFontName="THSarabun.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+				</textElement>
+				<text><![CDATA[มูลค่า (USD)]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="340" y="25" width="70" height="40" uuid="58573258-0026-4571-a2c2-0c4578530063"/>
+				<box>
+					<topPen lineWidth="0.25"/>
+					<leftPen lineWidth="0.25"/>
+					<bottomPen lineWidth="0.25"/>
+					<rightPen lineWidth="0.25"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="TH SarabunPSK" size="12" isBold="true" pdfFontName="THSarabun.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+				</textElement>
+				<text><![CDATA[จำนวนเงินที่ได้รับ
+(USD)]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="732" y="25" width="70" height="40" uuid="9cce0ffb-edff-4473-8573-63cf3b296310"/>
+				<box>
+					<topPen lineWidth="0.25"/>
+					<leftPen lineWidth="0.25"/>
+					<bottomPen lineWidth="0.25"/>
+					<rightPen lineWidth="0.25"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="TH SarabunPSK" size="12" isBold="true" pdfFontName="THSarabun.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+				</textElement>
+				<text><![CDATA[ได้รับเงิน
+(บาท)]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="130" y="25" width="60" height="40" uuid="0fd4994f-b8bc-4b2b-a8da-5735ad5ee474"/>
+				<box>
+					<topPen lineWidth="0.25"/>
+					<leftPen lineWidth="0.25"/>
+					<bottomPen lineWidth="0.25"/>
+					<rightPen lineWidth="0.25"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="TH SarabunPSK" size="12" isBold="true" pdfFontName="THSarabun.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+				</textElement>
+				<text><![CDATA[จำนวน
+(ตัน)]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="0" y="0" width="802" height="20" uuid="6f150679-6fcc-424d-8ea6-9a055ef81506"/>
+				<box leftPadding="2">
+					<topPen lineWidth="0.0"/>
+					<leftPen lineWidth="0.0"/>
+					<bottomPen lineWidth="0.0"/>
+					<rightPen lineWidth="0.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="TH SarabunPSK" size="14" isBold="true" pdfFontName="THSarabun.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA["รายละเอียดการรับเงินค่าข้าว"]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement stretchType="RelativeToBandHeight" x="0" y="65" width="802" height="54" isPrintWhenDetailOverflows="true" uuid="3641dc32-a39a-406c-8c58-78e691ed4534"/>
+				<box leftPadding="3" rightPadding="3">
+					<topPen lineWidth="0.25"/>
+					<leftPen lineWidth="0.25"/>
+					<bottomPen lineWidth="0.25"/>
+					<rightPen lineWidth="0.25"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="TH SarabunPSK" size="20" isBold="false" pdfFontName="THSarabun.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA["ไม่มีข้อมูล"]]></textFieldExpression>
+			</textField>
+		</band>
+	</noData>
 </jasperReport>

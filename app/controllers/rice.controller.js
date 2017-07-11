@@ -61,8 +61,8 @@ exports.report1 = function (req, res, next) {
                     var pack = map('reduction').group('package_id').ungroup().getField('reduction');
                     return {
                         weight_container: m('weight_container'),
-                        hamonize_th: map('reduction')(0)('hamonize')('hamonize_th'),
-                        hamonize_en: map('reduction')(0)('hamonize')('hamonize_en').upcase(),
+                        hamonize_th2: map('reduction')(0)('hamonize')('hamonize_th2'),
+                        hamonize_en2: map('reduction')(0)('hamonize')('hamonize_en2').upcase(),
                         project_en: map('reduction')(0)('project_en'),
                         net_weight: map('reduction').sum('net_weight'),
                         num_of_container: map('reduction').sum('num_of_container'),
@@ -143,7 +143,7 @@ exports.report2 = function (req, res, next) {
                 hamonize: detail.group('hamonize_id', 'package_id').ungroup()
                     .map(function (map2) {
                         return {
-                            hamonize_en: map2('reduction')(0)('hamonize')('hamonize_en'),
+                            hamonize_en2: map2('reduction')(0)('hamonize')('hamonize_en2'),
                             project_en: map2('reduction')(0)('project_en'),
                             gross_weight: map2('reduction').sum('gross_weight'),
                             net_weight: map2('reduction').sum('net_weight'),
@@ -462,7 +462,7 @@ exports.report4 = function (req, res, next) {
     var r = req.r;
     var query = req.query;
     var cl = r.db('g2g').table('confirm_letter').get(query.cl_id).pluck('cl_no', 'cl_weight');
-    var book = r.db('g2g').table('book').getAll(query.cl_id, { index: 'cl_id' }).pluck('cl_id', 'invoice_no', 'id', 'book_no', 'bl_no', 'product_date', 'packing_date'
+    var book = r.db('g2g').table('book').getAll(query.cl_id, { index: 'cl_id' }).pluck('cl_id', 'invoice_no','invoice_type','invoice_year', 'id', 'book_no', 'bl_no', 'product_date', 'packing_date'
         , 'shipline', 'ship', 'load_port', 'dest_port', 'eta_date', 'etd_date', 'cut_date', 'value_d', 'contract_id', 'ship_lot');
         // .eqJoin('contract_id', r.db('g2g').table('contract')).pluck('left', { right: 'buyer' }).zip()
         // .limit(10);
@@ -498,7 +498,7 @@ exports.report4 = function (req, res, next) {
     })
         .run()
         .then(function (result) {
-            res.json(result)
+            // res.json(result)
             var params = result.param;
             params.current_date = new Date().toISOString().slice(0, 10);
             params = keysToUpper(params);

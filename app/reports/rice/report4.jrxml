@@ -30,6 +30,8 @@
 	<field name="cut_date" class="java.lang.String"/>
 	<field name="value_d" class="java.lang.Double"/>
 	<field name="detail" class="java.lang.Object"/>
+	<field name="invoice_type" class="java.lang.String"/>
+	<field name="invoice_year" class="java.lang.String"/>
 	<variable name="CURRENT_PAGE" class="java.lang.Integer" resetType="None" calculation="DistinctCount">
 		<variableExpression><![CDATA[$V{PAGE_NUMBER}]]></variableExpression>
 		<initialValueExpression><![CDATA[new Integer(1)]]></initialValueExpression>
@@ -346,7 +348,7 @@ Port]]></text>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font fontName="TH SarabunPSK" size="6" isBold="false" pdfFontName="THSarabun.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
 				</textElement>
-				<textFieldExpression><![CDATA[($F{invoice_no}==null ? " ":$F{invoice_no})]]></textFieldExpression>
+				<textFieldExpression><![CDATA[($F{invoice_no}==null ? " ":$F{invoice_no}+$F{invoice_type}+"/"+$F{invoice_year})]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true">
 				<reportElement stretchType="RelativeToBandHeight" x="340" y="0" width="40" height="10" isPrintWhenDetailOverflows="true" uuid="cd4637d5-967b-49b4-9b04-70665daf7c9f"/>

@@ -29,6 +29,8 @@
 	<field name="contract_name" class="java.lang.String"/>
 	<field name="contract_date" class="java.lang.String"/>
 	<field name="value_d" class="java.lang.Double"/>
+	<field name="invoice_type" class="java.lang.String"/>
+	<field name="invoice_year" class="java.lang.String"/>
 	<variable name="CURRENT_PAGE" class="java.lang.Integer" resetType="Page">
 		<variableExpression><![CDATA[1]]></variableExpression>
 		<initialValueExpression><![CDATA[$V{PAGE_NUMBER}]]></initialValueExpression>
@@ -43,7 +45,7 @@
 				<textElement verticalAlignment="Middle">
 					<font fontName="TH SarabunPSK" size="14" pdfFontName="THSarabun.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
 				</textElement>
-				<textFieldExpression><![CDATA[($F{invoice_no}== null ?" ":$F{invoice_no})]]></textFieldExpression>
+				<textFieldExpression><![CDATA[($F{invoice_no}== null ?" ":$F{invoice_no}+$F{invoice_type}+"/"+$F{invoice_year})]]></textFieldExpression>
 			</textField>
 			<line>
 				<reportElement x="184" y="156" width="189" height="1" uuid="bde85bcb-cf49-4057-9b2f-d34a23bbeeb4"/>

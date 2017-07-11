@@ -20,7 +20,7 @@ exports.report1 = function (req, res, next) {
     };
     // res.json('123')
     r.db('g2g').table('book').get(query.id)
-        .pluck('id', 'cl_id', 'ship', 'load_port', 'dest_port', 'deli_port', 'bl_no', 'contract_id', 'invoice_no', 'invoice_date', 'made_out_to', 'invoice_status')
+        .pluck('id', 'cl_id', 'ship', 'load_port', 'dest_port', 'deli_port', 'bl_no', 'contract_id', 'invoice_no', 'invoice_date', 'made_out_to', 'invoice_status', 'invoice_type', 'invoice_year')
         .merge(function (m) {
             var detail = r.table('book_detail').getAll(req.query.id, { index: 'book_id' }).coerceTo('array')
                 .pluck('package_amount', 'package', 'price_d', 'gross_weight', 'tare_weight', 'net_weight', 'value_d',
@@ -96,7 +96,7 @@ exports.report2 = function (req, res, next) {
         }).pluck('cl_no', 'contract_no', 'country_name_th');
 
     var book = r.db('g2g').table('book').getAll(query.cl_id, { index: 'cl_id' })
-        .pluck('cl_id', 'ship_lot', 'invoice_date', 'invoice_no', 'id', 'book_no', 'bl_no', 'deli_port', 'ship', 'load_port', 'dest_port', 'value_d', 'contract_id', 'notify_party')
+        .pluck('cl_id', 'ship_lot', 'invoice_date', 'invoice_no', 'invoice_type', 'invoice_year', 'id', 'book_no', 'bl_no', 'deli_port', 'ship', 'load_port', 'dest_port', 'value_d', 'contract_id', 'notify_party')
         .eqJoin('contract_id', r.db('g2g').table('contract')).pluck('left', { right: ['buyer', 'contract_name'] }).zip();
 
 
@@ -152,53 +152,56 @@ exports.report3 = function (req, res, next) {
         .filter(function (row) {
             return row('fee_date').date().eq(r.ISO8601(date))
         })
-        .group(function (g) {
+    datas = r.expr(r.branch(datas.count().gt(0),
+        datas.group(function (g) {
             return g.pluck('cl_no', 'fee_no', 'fee_round')
         }).ungroup()
-        .getField('reduction')
-        .reduce(function (left, right) {
-            return left.add(right)
-        })
-        .merge(function (m) {
-            return {
-                fee_date: m('fee_date').inTimezone('+07').toISO8601().split('T')(0),
-                book: m('book').pluck('invoice_no', 'invoice_date', 'detail')
-                    .merge(function (m2) {
-                        return {
-                            detail: m2('detail').pluck('price_d', 'value_d', 'net_weight')
-                                .group('price_d').ungroup()
-                                .orderBy('invoice_date')
-                                .map(function (m3) {
-                                    return m2.without('detail').merge({
-                                        price_d: m3('group'),
-                                        net_weight: m3('reduction').sum('net_weight'),
-                                        value_d: m3('reduction').sum('value_d'),
-                                        invoice_date: m2('invoice_date').inTimezone('+07').toISO8601().split('T')(0)
+            .getField('reduction')
+            .reduce(function (left, right) {
+                return left.add(right)
+            })
+            .merge(function (m) {
+                return {
+                    fee_date: m('fee_date').inTimezone('+07').toISO8601().split('T')(0),
+                    book: m('book').pluck('invoice_no', 'invoice_type', 'invoice_year', 'invoice_date', 'detail').orderBy('invoice_no')
+                        .merge(function (m2) {
+                            return {
+                                detail: m2('detail').pluck('price_d', 'value_d', 'net_weight')
+                                    .group('price_d').ungroup()
+                                    .orderBy('invoice_date')
+                                    .map(function (m3) {
+                                        return m2.without('detail').merge({
+                                            price_d: m3('group'),
+                                            net_weight: m3('reduction').sum('net_weight'),
+                                            value_d: m3('reduction').sum('value_d'),
+                                            invoice_date: m2('invoice_date').inTimezone('+07').toISO8601().split('T')(0)
+                                        })
                                     })
-                                })
-                        }
-                    }).getField('detail')
-                    .reduce(function (left, right) {
-                        return left.add(right)
-                    })
-            }
-        })
-        .pluck('cl_no', 'contract_id', 'fee_no', 'fee_date', 'fee_round', 'book')
-        .eqJoin('contract_id', r.db('g2g').table('contract')).pluck('left', { right: [{ 'country': 'country_name_th' }, { 'buyer': 'buyer_name' }] }).zip()
-        .map(function (m) {
-            return m.getField('book').merge(m.without('book'))
-        })
-        .reduce(function (left, right) {
-            return left.add(right)
-        })
-        .orderBy('cl_no', 'fee_no', 'fee_round')
+                            }
+                        }).getField('detail')
+                        .reduce(function (left, right) {
+                            return left.add(right)
+                        })
+                }
+            })
+            .pluck('cl_no', 'contract_id', 'fee_no', 'fee_date', 'fee_round', 'book')
+            .eqJoin('contract_id', r.db('g2g').table('contract')).pluck('left', { right: [{ 'country': 'country_name_th' }, { 'buyer': 'buyer_name' }] }).zip()
+            .map(function (m) {
+                return m.getField('book').merge(m.without('book'))
+            })
+            .reduce(function (left, right) {
+                return left.add(right)
+            })
+            .orderBy('cl_no', 'fee_no', 'fee_round'),
+        []
+    ))
 
     r.expr({
         datas: datas.without('country', 'buyer', 'contract_id'),
-        params: {
+        params: r.branch(datas.count().gt(0), {
             country_name_th: datas(0)('country')('country_name_th'),
             buyer_name: datas(0)('buyer')('buyer_name')
-        }
+        }, {})
     })
         .run()
         .then(function (result) {
@@ -225,76 +228,45 @@ exports.report4 = function (req, res, next) {
         .filter(function (row) {
             return row('fee_date').date().eq(r.ISO8601(date))
         })
-        .group(function (g) {
+    datas = r.expr(r.branch(datas.count().gt(0),
+        datas.group(function (g) {
             return g.pluck('cl_no', 'fee_no', 'fee_round')
-        }).ungroup()
-        .getField('reduction')
-        .reduce(function (left, right) {
-            return left.add(right)
         })
-        .merge(function (m) {
-            var invoice = m('book').getField('invoice_no');
-            return {
-                fee_date: m('fee_date').inTimezone('+07').toISO8601().split('T')(0),
-                invoice_no: invoice.reduce(function (left, right) {
-                    return left.add(',', right)
-                }),
-                count_invoice: invoice.count()
-                // book: m('book').pluck('invoice_no', 'invoice_date', 'detail')
-                // .merge(function (m2) {
-                //     return {
-                //         detail: m2('detail')//.pluck('price_d', 'value_d', 'net_weight')
-                // .group('price_d').ungroup()
-                // .orderBy('invoice_date')
-                // .map(function (m3) {
-                //     return m2.without('detail').merge({
-                //         price_d: m3('group'),
-                //         net_weight: m3('reduction').sum('net_weight'),
-                //         value_d: m3('reduction').sum('value_d'),
-                //         invoice_date: m2('invoice_date').inTimezone('+07').toISO8601().split('T')(0)
-                //     })
-                // })
-                //     }
-                // })//.getField('detail')
-            }
-        })
-        .without('book')
-        // .without('detail')
-        .merge(function (m2) {
-            return {
-                // count_invoice: m2('book')('invoice_no').count(),
-                amount_received: m2('value_d').sub(m2('fee_ex_d'))
-            }
-        })
-        .merge(function (m3) {
-            return {
-                amount_b: m3('rate_bank_b').mul(m3('amount_received'))
-            }
-        })
-        .merge(function (m4) {
-            return {
-                get_money: m4('amount_b').sub(m4('fee_in_b'))
-            }
-        })
-        .pluck('cl_no', 'contract_id', 'invoice_no', 'count_invoice', 'net_weight',
-        'amount_received', 'fee_ex_d', 'amount_b', 'fee_date', 'rate_tt_b', 'rate_bank_b', 'value_d', 'fee_in_b', 'get_money', 'fee_no', 'fee_round')
-        .eqJoin('contract_id', r.db('g2g').table('contract')).pluck('left', { right: [{ 'country': 'country_name_th' }, { 'buyer': 'buyer_name' }] }).zip()
-        // .map(function (m) {
-        //     return m.getField('book').merge(m.without('book'))
-        // })
-        // .reduce(function (left, right) {
-        //     return left.add(right)
-        // })
-        .orderBy('cl_no', 'fee_no', 'fee_round')
+            .ungroup()
+            .getField('reduction')
+            .reduce(function (left, right) {
+                return left.add(right)
+            })
+            .merge(function (m) {
+                var invoice = m('book').orderBy('invoice_no').getField('invoice_no');
+                var amount_d = m('value_d').sub(m('fee_ex_d'));
+                var amount_b = m('rate_bank_b').mul(amount_d);
+                return {
+                    fee_date: m('fee_date').inTimezone('+07').toISO8601().split('T')(0),
+                    invoice_type: m('book')(0)('invoice_type'),
+                    invoice_no: invoice.reduce(function (left, right) {
+                        return left.coerceTo('string').add(',', right.coerceTo('string'))
+                    }),
+                    invoice_year: m('book')(0)('invoice_year'),
+                    count_invoice: invoice.count(),
+                    amount_d: amount_d,
+                    amount_b: amount_b,
+                    get_b: amount_b.sub(m('fee_in_b'))
+                }
+            })
+            .eqJoin('contract_id', r.db('g2g').table('contract')).pluck('left', { right: [{ 'country': 'country_name_th' }, { 'buyer': 'buyer_name' }] }).zip()
+            .without('book', 'cl_id', 'creater', 'date_created', 'date_updated', 'fee_status', 'fin_status', 'id', 'rice_status', 'updater')
+            .orderBy('cl_no', 'fee_no', 'fee_round'),
+        []
+    ))
 
-        r.expr({
-            datas: datas.without('country', 'buyer', 'contract_id'),
-            params: {
-                country_name_th: datas(0)('country')('country_name_th'),
-                buyer_name: datas(0)('buyer')('buyer_name')
-            }
-        })
-
+    r.expr({
+        datas: datas.without('country', 'buyer', 'contract_id'),
+        params: r.branch(datas.count().gt(0), {
+            country_name_th: datas(0)('country')('country_name_th'),
+            buyer_name: datas(0)('buyer')('buyer_name')
+        }, {})
+    })
         .run()
         .then(function (result) {
             // res.json(result);
