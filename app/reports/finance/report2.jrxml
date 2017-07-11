@@ -396,7 +396,7 @@
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font fontName="TH SarabunPSK" size="5" isBold="false" pdfFontName="THSarabun.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
 				</textElement>
-				<textFieldExpression><![CDATA[($F{invoice_no}==null ? " ":$F{invoice_no}+$F{invoice_type}+"/"+$F{invoice_year})]]></textFieldExpression>
+				<textFieldExpression><![CDATA[($F{invoice_no}==null ? " ":$F{invoice_type}+$F{invoice_no}+"/"+$F{invoice_year})]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true" pattern="">
 				<reportElement stretchType="RelativeToBandHeight" x="692" y="0" width="65" height="10" isPrintInFirstWholeBand="true" uuid="d9a9dad4-3822-48de-976d-e1ad306cc017"/>
@@ -465,7 +465,7 @@
 				<textElement verticalAlignment="Middle">
 					<font fontName="TH SarabunPSK" size="5" isBold="false" pdfFontName="THSarabun.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
 				</textElement>
-				<textFieldExpression><![CDATA[new iJson2Object($F{load_port}).getValue("port_name")+"PORT"]]></textFieldExpression>
+				<textFieldExpression><![CDATA[new iJson2Object($F{load_port}).getValue("port_name")+" PORT"]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true">
 				<reportElement stretchType="RelativeToBandHeight" x="232" y="0" width="140" height="10" isPrintWhenDetailOverflows="true" uuid="415a1bb4-4384-4527-9df2-4808841a3365"/>

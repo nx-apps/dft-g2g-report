@@ -348,7 +348,7 @@ Port]]></text>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font fontName="TH SarabunPSK" size="6" isBold="false" pdfFontName="THSarabun.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
 				</textElement>
-				<textFieldExpression><![CDATA[($F{invoice_no}==null ? " ":$F{invoice_no}+$F{invoice_type}+"/"+$F{invoice_year})]]></textFieldExpression>
+				<textFieldExpression><![CDATA[($F{invoice_no}==null ? " ":$F{invoice_type}+$F{invoice_no}+"/"+$F{invoice_year})]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true">
 				<reportElement stretchType="RelativeToBandHeight" x="340" y="0" width="40" height="10" isPrintWhenDetailOverflows="true" uuid="cd4637d5-967b-49b4-9b04-70665daf7c9f"/>

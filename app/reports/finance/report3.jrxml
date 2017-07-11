@@ -290,7 +290,7 @@
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font fontName="TH SarabunPSK" size="14" isBold="false" pdfFontName="THSarabun.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$F{invoice_no}+$F{invoice_type}+"/"+$F{invoice_year}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{invoice_type}+$F{invoice_no}+"/"+$F{invoice_year}]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true">
 				<reportElement stretchType="RelativeToBandHeight" x="150" y="0" width="90" height="20" isPrintWhenDetailOverflows="true" uuid="5356d74e-fd26-4297-b254-abedc44259a0"/>
