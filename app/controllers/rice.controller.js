@@ -1,16 +1,4 @@
-function keysToUpper(param) {
-    var keyname = Object.keys(param);
-    for (var i = 0; i < keyname.length; i++) {
-        param[keyname[i].toUpperCase()] = param[keyname[i]];
-        if (keyname[i] != keyname[i].toLowerCase() && keyname[i] != keyname[i].toUpperCase()) { // if CURrent_DATE != current_date and CURrent_DATE != CURRENT_DATE
-            delete param[keyname[i]]; //CURrent_DATE
-        } else {
-            delete param[keyname[i].toLowerCase()];
-        }
-    }
-    return param;
-}
-
+var rpt = require('../global/report');
 exports.report1 = function (req, res, next) {
     var r = req.r;
     var query = req.query;
@@ -501,7 +489,7 @@ exports.report4 = function (req, res, next) {
             // res.json(result)
             var params = result.param;
             params.current_date = new Date().toISOString().slice(0, 10);
-            params = keysToUpper(params);
+            params = rpt.keysToUpper(params);
             // res.json(params)
             res.ireport("rice/report4.jasper", req.query.export || "pdf", result['data'], params);
         })

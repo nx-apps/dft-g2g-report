@@ -3,66 +3,68 @@
 	<property name="ireport.zoom" value="1.5"/>
 	<property name="ireport.x" value="0"/>
 	<property name="ireport.y" value="0"/>
+	<import value="nylon.report.*"/>
 	<field name="fee_no" class="java.lang.String"/>
-	<field name="ship_lot_no" class="java.lang.String"/>
+	<field name="cl_no" class="java.lang.String"/>
+	<field name="ship_lot" class="java.lang.String"/>
 	<field name="ship" class="java.lang.String"/>
-	<field name="shm_det_quantity" class="java.lang.Double"/>
-	<field name="price_per_ton" class="java.lang.String"/>
-	<field name="amount_usd" class="java.lang.Double"/>
-	<field name="amount_bath" class="java.lang.Double"/>
-	<field name="fee_bank" class="java.lang.Double"/>
-	<field name="balance" class="java.lang.Double"/>
-	<field name="tax" class="java.lang.Double"/>
-	<field name="balance_2" class="java.lang.Double"/>
+	<field name="net_weight" class="java.lang.Double"/>
+	<field name="price_d" class="java.lang.String"/>
+	<field name="value_d" class="java.lang.Double"/>
+	<field name="value_b" class="java.lang.Double"/>
+	<field name="value_fee_b" class="java.lang.Double"/>
+	<field name="value_bal_b" class="java.lang.Double"/>
+	<field name="value_tax_b" class="java.lang.Double"/>
+	<field name="value_final_b" class="java.lang.Double"/>
 	<field name="seller_name_th" class="java.lang.String"/>
-	<field name="fee_det_id" class="java.lang.String">
+	<field name="fee_round" class="java.lang.String">
 		<fieldDescription><![CDATA[]]></fieldDescription>
 	</field>
-	<field name="fee_id" class="java.lang.String"/>
-	<variable name="TOTAL_SHM_DET_QUATITY" class="java.lang.Double" resetType="Group" resetGroup="GP" calculation="Sum">
-		<variableExpression><![CDATA[$F{shm_det_quantity}]]></variableExpression>
+	<field name="company" class="java.lang.Object"/>
+	<variable name="TOTAL_NET_WEIGHT" class="java.lang.Double" resetType="Group" resetGroup="GP" calculation="Sum">
+		<variableExpression><![CDATA[$F{net_weight}]]></variableExpression>
 	</variable>
-	<variable name="TOTAL_USD" class="java.lang.Double" resetType="Group" resetGroup="GP" calculation="Sum">
-		<variableExpression><![CDATA[$F{amount_usd}]]></variableExpression>
+	<variable name="TOTAL_VALUE_D" class="java.lang.Double" resetType="Group" resetGroup="GP" calculation="Sum">
+		<variableExpression><![CDATA[$F{value_d}]]></variableExpression>
 	</variable>
-	<variable name="TOTAL_BATH" class="java.lang.Double" resetType="Group" resetGroup="GP" calculation="Sum">
-		<variableExpression><![CDATA[$F{amount_bath}]]></variableExpression>
+	<variable name="TOTAL_VALUE_B" class="java.lang.Double" resetType="Group" resetGroup="GP" calculation="Sum">
+		<variableExpression><![CDATA[$F{value_b}]]></variableExpression>
 	</variable>
-	<variable name="TOTAL_BANK" class="java.lang.Double" resetType="Group" resetGroup="GP" calculation="Sum">
-		<variableExpression><![CDATA[$F{fee_bank}]]></variableExpression>
+	<variable name="TOTAL_VALUE_FEE_B" class="java.lang.Double" resetType="Group" resetGroup="GP" calculation="Sum">
+		<variableExpression><![CDATA[$F{value_fee_b}]]></variableExpression>
 	</variable>
-	<variable name="TOTAL_BALANCE" class="java.lang.Double" resetType="Group" resetGroup="GP" calculation="Sum">
-		<variableExpression><![CDATA[$F{balance}]]></variableExpression>
+	<variable name="TOTAL_VALUE_BAL_B" class="java.lang.Double" resetType="Group" resetGroup="GP" calculation="Sum">
+		<variableExpression><![CDATA[$F{value_bal_b}]]></variableExpression>
 	</variable>
-	<variable name="TOTAL_TAX" class="java.lang.Double" resetType="Group" resetGroup="GP" calculation="Sum">
-		<variableExpression><![CDATA[$F{tax}]]></variableExpression>
+	<variable name="TOTAL_VALUE_TAX_B" class="java.lang.Double" resetType="Group" resetGroup="GP" calculation="Sum">
+		<variableExpression><![CDATA[$F{value_tax_b}]]></variableExpression>
 	</variable>
-	<variable name="TOTAL_BALANCE_2" class="java.lang.Double" resetType="Group" resetGroup="GP" calculation="Sum">
-		<variableExpression><![CDATA[$F{tax}]]></variableExpression>
+	<variable name="TOTAL_VALUE_FINAL_B" class="java.lang.Double" resetType="Group" resetGroup="GP" calculation="Sum">
+		<variableExpression><![CDATA[$F{value_final_b}]]></variableExpression>
 	</variable>
-	<variable name="TOTAL2_SHM_DET_QUATITY" class="java.lang.Double" calculation="Sum">
-		<variableExpression><![CDATA[$F{shm_det_quantity}]]></variableExpression>
+	<variable name="SUM_NET_WEIGHT" class="java.lang.Double" calculation="Sum">
+		<variableExpression><![CDATA[$F{net_weight}]]></variableExpression>
 	</variable>
-	<variable name="TOTAL2_USD" class="java.lang.Double" calculation="Sum">
-		<variableExpression><![CDATA[$F{amount_usd}]]></variableExpression>
+	<variable name="SUM_VALUE_D" class="java.lang.Double" calculation="Sum">
+		<variableExpression><![CDATA[$F{value_d}]]></variableExpression>
 	</variable>
-	<variable name="TOTAL2_BATH" class="java.lang.Double" calculation="Sum">
-		<variableExpression><![CDATA[$F{amount_bath}]]></variableExpression>
+	<variable name="SUM_VALUE_B" class="java.lang.Double" calculation="Sum">
+		<variableExpression><![CDATA[$F{value_b}]]></variableExpression>
 	</variable>
-	<variable name="TOTAL2_BANK" class="java.lang.Double" calculation="Sum">
-		<variableExpression><![CDATA[$F{fee_bank}]]></variableExpression>
+	<variable name="SUM_VALUE_FEE_B" class="java.lang.Double" calculation="Sum">
+		<variableExpression><![CDATA[$F{value_fee_b}]]></variableExpression>
 	</variable>
-	<variable name="TOTAL2_BALANCE" class="java.lang.Double" calculation="Sum">
-		<variableExpression><![CDATA[$F{balance}]]></variableExpression>
+	<variable name="SUM_VALUE_BAL_B" class="java.lang.Double" calculation="Sum">
+		<variableExpression><![CDATA[$F{value_bal_b}]]></variableExpression>
 	</variable>
-	<variable name="TOTAL2_TAX" class="java.lang.Double" calculation="Sum">
-		<variableExpression><![CDATA[$F{tax}]]></variableExpression>
+	<variable name="SUM_VALUE_TAX_B" class="java.lang.Double" calculation="Sum">
+		<variableExpression><![CDATA[$F{value_tax_b}]]></variableExpression>
 	</variable>
-	<variable name="TOTAL2_BALANCE_2" class="java.lang.Double" calculation="Sum">
-		<variableExpression><![CDATA[$F{tax}]]></variableExpression>
+	<variable name="SUM_VALUE_FINAL_B" class="java.lang.Double" calculation="Sum">
+		<variableExpression><![CDATA[$F{value_final_b}]]></variableExpression>
 	</variable>
 	<group name="GP" isStartNewPage="true">
-		<groupExpression><![CDATA[$F{fee_det_id}]]></groupExpression>
+		<groupExpression><![CDATA[$F{fee_round}]]></groupExpression>
 		<groupFooter>
 			<band height="20">
 				<textField pattern="#,##0">
@@ -77,7 +79,7 @@
 					<textElement textAlignment="Right" verticalAlignment="Middle">
 						<font fontName="TH SarabunPSK" size="12" isBold="true" pdfFontName="THSarabun.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
 					</textElement>
-					<textFieldExpression><![CDATA[$V{TOTAL_SHM_DET_QUATITY}]]></textFieldExpression>
+					<textFieldExpression><![CDATA[$V{TOTAL_NET_WEIGHT}]]></textFieldExpression>
 				</textField>
 				<staticText>
 					<reportElement x="29" y="0" width="105" height="20" uuid="249b9fa9-4150-4964-ae2b-a392131eaa4b"/>
@@ -105,7 +107,7 @@
 					<textElement textAlignment="Right" verticalAlignment="Middle">
 						<font fontName="TH SarabunPSK" size="12" isBold="true" pdfFontName="THSarabun.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
 					</textElement>
-					<textFieldExpression><![CDATA[$V{TOTAL_USD}]]></textFieldExpression>
+					<textFieldExpression><![CDATA[$V{TOTAL_VALUE_D}]]></textFieldExpression>
 				</textField>
 				<textField pattern="#,##0.00">
 					<reportElement x="282" y="0" width="89" height="20" uuid="113c6426-959c-4cdd-b6f0-ec835f90bde8"/>
@@ -119,7 +121,7 @@
 					<textElement textAlignment="Right" verticalAlignment="Middle">
 						<font fontName="TH SarabunPSK" size="12" isBold="true" pdfFontName="THSarabun.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
 					</textElement>
-					<textFieldExpression><![CDATA[$V{TOTAL_BATH}]]></textFieldExpression>
+					<textFieldExpression><![CDATA[$V{TOTAL_VALUE_B}]]></textFieldExpression>
 				</textField>
 				<textField pattern="#,##0.00">
 					<reportElement x="443" y="0" width="82" height="20" uuid="9d7a0023-94ff-478f-8986-1c1e233f3cac"/>
@@ -133,7 +135,7 @@
 					<textElement textAlignment="Right" verticalAlignment="Middle">
 						<font fontName="TH SarabunPSK" size="12" isBold="true" pdfFontName="THSarabun.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
 					</textElement>
-					<textFieldExpression><![CDATA[$V{TOTAL_BALANCE}]]></textFieldExpression>
+					<textFieldExpression><![CDATA[$V{TOTAL_VALUE_BAL_B}]]></textFieldExpression>
 				</textField>
 				<textField pattern="#,##0.00">
 					<reportElement x="608" y="0" width="82" height="20" uuid="6e809ef9-5b96-4244-b956-adf126e27638"/>
@@ -147,7 +149,7 @@
 					<textElement textAlignment="Right" verticalAlignment="Middle">
 						<font fontName="TH SarabunPSK" size="12" isBold="true" pdfFontName="THSarabun.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
 					</textElement>
-					<textFieldExpression><![CDATA[$V{TOTAL_BALANCE_2}]]></textFieldExpression>
+					<textFieldExpression><![CDATA[$V{TOTAL_VALUE_FINAL_B}]]></textFieldExpression>
 				</textField>
 				<textField pattern="#,##0.00">
 					<reportElement x="371" y="0" width="72" height="20" uuid="4c31cdc3-5535-4571-b12f-57017df8aa6f"/>
@@ -161,7 +163,7 @@
 					<textElement textAlignment="Center" verticalAlignment="Middle">
 						<font fontName="TH SarabunPSK" size="12" isBold="true" pdfFontName="THSarabun.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
 					</textElement>
-					<textFieldExpression><![CDATA[$V{TOTAL_BANK}]]></textFieldExpression>
+					<textFieldExpression><![CDATA[$V{TOTAL_VALUE_FEE_B}]]></textFieldExpression>
 				</textField>
 				<staticText>
 					<reportElement x="0" y="0" width="29" height="20" uuid="750320c9-b835-49d4-9fab-60f09b4afc87"/>
@@ -189,7 +191,7 @@
 					<textElement textAlignment="Right" verticalAlignment="Middle">
 						<font fontName="TH SarabunPSK" size="12" isBold="true" pdfFontName="THSarabun.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
 					</textElement>
-					<textFieldExpression><![CDATA[$V{TOTAL_TAX}]]></textFieldExpression>
+					<textFieldExpression><![CDATA[$V{TOTAL_VALUE_TAX_B}]]></textFieldExpression>
 				</textField>
 				<staticText>
 					<reportElement x="173" y="0" width="60" height="20" uuid="cc239a99-cf01-412c-861f-7f241980de5d"/>
@@ -390,7 +392,7 @@ USD
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font fontName="TH SarabunPSK" size="16" isBold="true" pdfFontName="THSarabun.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
 				</textElement>
-				<textFieldExpression><![CDATA['รายละเอียดค่าข้าวและค่าใช้จ่ายส่งมอบ COFCO Lot ที่ 10 ครั้งที่ '+  $F{fee_no}]]></textFieldExpression>
+				<textFieldExpression><![CDATA['รายละเอียดค่าข้าวและค่าใช้จ่ายส่งมอบ COFCO Lot ที่ '+ $F{cl_no} +' ครั้งที่ '+  $F{fee_no}]]></textFieldExpression>
 			</textField>
 		</band>
 	</pageHeader>
@@ -408,7 +410,7 @@ USD
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font fontName="TH SarabunPSK" size="12" isBold="false" pdfFontName="THSarabun.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$F{ship_lot_no}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{ship_lot}]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true">
 				<reportElement stretchType="RelativeToBandHeight" x="29" y="0" width="105" height="20" uuid="3653cfce-2f2e-4979-997b-760a8db672af"/>
@@ -436,7 +438,7 @@ USD
 				<textElement textAlignment="Right" verticalAlignment="Middle">
 					<font fontName="TH SarabunPSK" size="12" isBold="false" pdfFontName="THSarabun.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$F{balance}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{value_bal_b}]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true" pattern="#,##0.00">
 				<reportElement stretchType="RelativeToBandHeight" x="525" y="0" width="83" height="20" uuid="c1fc15f7-ba8b-465a-be54-0b37dd80d99f"/>
@@ -450,7 +452,7 @@ USD
 				<textElement textAlignment="Right" verticalAlignment="Middle">
 					<font fontName="TH SarabunPSK" size="12" isBold="false" pdfFontName="THSarabun.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$F{tax}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{value_tax_b}]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true" pattern="#,##0.00">
 				<reportElement stretchType="RelativeToBandHeight" x="608" y="0" width="82" height="20" uuid="db80e565-0418-4771-959a-493a0f9b0434"/>
@@ -464,7 +466,7 @@ USD
 				<textElement textAlignment="Right" verticalAlignment="Middle">
 					<font fontName="TH SarabunPSK" size="12" isBold="false" pdfFontName="THSarabun.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$F{balance_2}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{value_final_b}]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true" pattern="#,##0">
 				<reportElement stretchType="RelativeToBandHeight" x="134" y="0" width="39" height="20" uuid="0dda0737-13f4-48e9-bb11-d138d1f2cf8e"/>
@@ -478,7 +480,7 @@ USD
 				<textElement textAlignment="Right" verticalAlignment="Middle">
 					<font fontName="TH SarabunPSK" size="12" isBold="false" pdfFontName="THSarabun.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$F{shm_det_quantity}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{net_weight}]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true" pattern="#,##0">
 				<reportElement stretchType="RelativeToBandHeight" x="233" y="0" width="49" height="20" uuid="6dd6973c-fe63-4abf-9517-d813541f2d0e"/>
@@ -492,7 +494,7 @@ USD
 				<textElement textAlignment="Right" verticalAlignment="Middle">
 					<font fontName="TH SarabunPSK" size="12" isBold="false" pdfFontName="THSarabun.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$F{amount_usd}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{value_d}]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true">
 				<reportElement stretchType="RelativeToBandHeight" x="173" y="0" width="60" height="20" uuid="5441667a-596d-4548-8bd4-0b44d104e4e3"/>
@@ -506,7 +508,7 @@ USD
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font fontName="TH SarabunPSK" size="12" isBold="false" pdfFontName="THSarabun.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$F{price_per_ton}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{price_d}]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true" pattern="#,##0.00">
 				<reportElement stretchType="RelativeToBandHeight" x="371" y="0" width="72" height="20" uuid="5934155d-e925-484d-863c-b8e11d7a208f"/>
@@ -520,7 +522,7 @@ USD
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font fontName="TH SarabunPSK" size="12" isBold="false" pdfFontName="THSarabun.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$F{fee_bank}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{value_fee_b}]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true" pattern="#,##0.00">
 				<reportElement stretchType="RelativeToBandHeight" x="282" y="0" width="89" height="20" uuid="6deaace7-a640-47f1-8fb6-bc309c28a8d0"/>
@@ -534,7 +536,7 @@ USD
 				<textElement textAlignment="Right" verticalAlignment="Middle">
 					<font fontName="TH SarabunPSK" size="12" isBold="false" pdfFontName="THSarabun.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$F{amount_bath}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{value_b}]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true" pattern="#,##0.00">
 				<reportElement stretchType="RelativeToBandHeight" x="690" y="0" width="112" height="20" uuid="f3df6aab-5947-4b72-8087-5babaeeb17a8"/>
@@ -542,7 +544,7 @@ USD
 				<textElement verticalAlignment="Middle">
 					<font fontName="TH SarabunPSK" size="12" isBold="false" pdfFontName="THSarabun.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$F{seller_name_th}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[new iJson2Object($F{company}).getValue("company_name_th")]]></textFieldExpression>
 			</textField>
 		</band>
 	</detail>
@@ -560,7 +562,7 @@ USD
 				<textElement textAlignment="Right" verticalAlignment="Middle">
 					<font fontName="TH SarabunPSK" size="12" isBold="true" pdfFontName="THSarabun.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$V{TOTAL2_TAX}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$V{SUM_VALUE_TAX_B}]]></textFieldExpression>
 			</textField>
 			<textField pattern="#,##0.00">
 				<reportElement x="371" y="0" width="72" height="20" uuid="0f886b0f-a5ac-495c-9e40-9bb4c8c68107"/>
@@ -574,7 +576,7 @@ USD
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font fontName="TH SarabunPSK" size="12" isBold="true" pdfFontName="THSarabun.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$V{TOTAL2_BANK}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$V{SUM_VALUE_FEE_B}]]></textFieldExpression>
 			</textField>
 			<textField pattern="#,##0.00">
 				<reportElement x="608" y="0" width="82" height="20" uuid="532bf16d-efa7-4faf-96b6-35cfe442fa0d"/>
@@ -588,7 +590,7 @@ USD
 				<textElement textAlignment="Right" verticalAlignment="Middle">
 					<font fontName="TH SarabunPSK" size="12" isBold="true" pdfFontName="THSarabun.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$V{TOTAL2_BALANCE_2}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$V{SUM_VALUE_FINAL_B}]]></textFieldExpression>
 			</textField>
 			<textField pattern="#,##0.00">
 				<reportElement x="443" y="0" width="82" height="20" uuid="a1b0ee48-eb8f-470d-89b0-a6d07f063d5b"/>
@@ -602,7 +604,7 @@ USD
 				<textElement textAlignment="Right" verticalAlignment="Middle">
 					<font fontName="TH SarabunPSK" size="12" isBold="true" pdfFontName="THSarabun.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$V{TOTAL_BALANCE}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$V{SUM_VALUE_BAL_B}]]></textFieldExpression>
 			</textField>
 			<textField pattern="#,##0.00">
 				<reportElement x="282" y="0" width="89" height="20" uuid="2c700364-28dc-44de-b31b-6596fc115e8e"/>
@@ -616,7 +618,7 @@ USD
 				<textElement textAlignment="Right" verticalAlignment="Middle">
 					<font fontName="TH SarabunPSK" size="12" isBold="true" pdfFontName="THSarabun.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$V{TOTAL2_BATH}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$V{SUM_VALUE_B}]]></textFieldExpression>
 			</textField>
 			<staticText>
 				<reportElement x="29" y="0" width="105" height="20" uuid="8ddb2a17-18a0-4337-a10a-4187046cf717"/>
@@ -644,7 +646,7 @@ USD
 				<textElement textAlignment="Right" verticalAlignment="Middle">
 					<font fontName="TH SarabunPSK" size="12" isBold="true" pdfFontName="THSarabun.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$V{TOTAL2_USD}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$V{SUM_VALUE_D}]]></textFieldExpression>
 			</textField>
 			<textField pattern="#,##0">
 				<reportElement x="134" y="0" width="39" height="20" uuid="187a93d3-9d7c-4044-ae27-01c024f6ca1e"/>
@@ -658,7 +660,7 @@ USD
 				<textElement textAlignment="Right" verticalAlignment="Middle">
 					<font fontName="TH SarabunPSK" size="12" isBold="true" pdfFontName="THSarabun.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$V{TOTAL2_SHM_DET_QUATITY}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$V{SUM_NET_WEIGHT}]]></textFieldExpression>
 			</textField>
 			<staticText>
 				<reportElement x="0" y="0" width="29" height="20" uuid="804549e9-19fe-4ad7-badc-f460d67a35d6"/>
