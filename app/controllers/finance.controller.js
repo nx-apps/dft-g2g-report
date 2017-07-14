@@ -196,7 +196,7 @@ exports.report3 = function (req, res, next) {
         .then(function (result) {
             // res.json(result)
             var params = result['params'];
-            // params.current_date = new Date().toISOString().slice(0, 10);
+            params.current_date = new Date().toISOString().slice(0, 10);
             params = rpt.keysToUpper(params);
             // res.json(params)
             res.ireport("finance/report3.jasper", req.query.export || "pdf", result['datas'], params);
@@ -260,7 +260,7 @@ exports.report4 = function (req, res, next) {
         .then(function (result) {
             // res.json(result);
             var params = result['params'];
-            // params.current_date = new Date().toISOString().slice(0, 10);
+            params.current_date = new Date().toISOString().slice(0, 10);
             params = rpt.keysToUpper(params);
             // res.json(params)
             res.ireport("finance/report4.jasper", req.query.export || "pdf", result['datas'], params);
@@ -270,19 +270,18 @@ exports.report4 = function (req, res, next) {
 exports.report5 = function (req, res, next) {
     var r = req.r;
     var parameters = {
-        CURRENT_DATE: new Date().toISOString().slice(0, 10),
-        SUBREPORT_DIR: __dirname.replace('controller', 'report') + '\\' + req.baseUrl.replace("/api/", "") + '\\'
+        CURRENT_DATE: new Date().toISOString().slice(0, 10)
     };
     r.db('g2g').table('fee')
-    .getAll([Number(req.query.fee_no), req.query.contract_id, req.query.cl_id], { index: 'feenoContractCL' })
-    // .getAll(req.query.contract_id, { index: 'contract_id' })
+        .getAll([Number(req.query.fee_no), req.query.contract_id, req.query.cl_id], { index: 'feenoContractCL' })
+        // .getAll(req.query.contract_id, { index: 'contract_id' })
         // .get(req.query.fee_id)
         .merge(function (m) {
             return m('book')
                 .map(function (m2) {
                     return m2('detail')
                         .merge(function (m3) {
-                            return m.pluck('cl_no', 'contract_id', 'fee_no', 'ship', 'fee_round','cl_id').merge(function (m4) {
+                            return m.pluck('cl_no', 'contract_id', 'fee_no', 'ship', 'fee_round', 'cl_id', 'rate_bank_b').merge(function (m4) {
                                 return m2.pluck('ship', 'ship_lot')
                             })
                         })
@@ -306,31 +305,91 @@ exports.report5 = function (req, res, next) {
 }
 exports.report6 = function (req, res, next) {
     var r = req.r;
-    var parameters = {
+    var query = req.query;
+    var params = {
         CURRENT_DATE: new Date().toISOString().slice(0, 10),
-        SUBREPORT_DIR: __dirname.replace('controller', 'report') + '\\' + req.baseUrl.replace("/api/", "") + '\\'
+        deliver_date: query.deliver_date
+
     };
-    r.db('g2g2').table('payment').get(req.params.id)
+    var deliver_date = req.query.deliver_date + "T00:00:00+07:00";
+
+    r.db('g2g').table('payment').getAll([query.contract_id, r.ISO8601(deliver_date)], { index: 'contractDeliverDate' })
+        // .filter(function (row) {
+        //     return row('deliver_date').date().eq(r.ISO8601(date))
+        // })
         .merge(function (m) {
             return {
-                TOTAL: m('pay_amount').mul(0.01)
+                deliver_date: m('deliver_date').inTimezone('+07').toISO8601().split('T')(0),
+                ship: m('ship')(0)
             }
         })
-        .merge(r.db('external').table('exporter').get(r.row('exporter_id')).pluck('company_id'))
-        // .merge(r.db('external').table('trader').get(r.row('trader_id')).pluck('company_id'))
-        .merge(r.db('external').table('company').get(r.row('company_id')).pluck('company_taxno', 'company_name_th', 'company_address_th'))
-        .without('payment_detail', 'tags')
-        //   .eqJoin('exporter_id',r.db('external').table('exporter')).pluck('left',{right:'trader_id'}).zip()
-        //   .eqJoin('trader_id',r.db('external').table('trader')).pluck('left',{right:'company_id'}).zip()
-        //   .eqJoin('company_id',r.db('external').table('company')).pluck('left',{right:['company_taxno','company_name_th','company_address_th','']}).zip()
+        .eqJoin('contract_id', r.db('g2g').table('contract')).pluck('left', { right: [{ 'country': 'country_name_th' }, { 'buyer': 'buyer_name' }] }).zip()
+
         .run()
         .then(function (result) {
-            // res.json([result]);
-            res.ireport("payment/report6.jasper", req.query.export || "pdf", result, parameters);
+            // res.json(result);
+            res.ireport("finance/report6.jasper", req.query.export || "pdf", result, params);
         });
 
 }
 exports.report7 = function (req, res, next) {
+    var r = req.r;
+    var parameters = {
+        CURRENT_DATE: new Date().toISOString().slice(0, 10)
+    };
+    r.db('g2g').table('payment').get(req.query.id)
+        .merge(function (m) {
+            return {
+                invoice_company_date: m('invoice_company_date').inTimezone('+07').toISO8601().split('T')(0),
+                pay_date: m('pay_date').year().add(543)
+            }
+        })
+
+        .run()
+        .then(function (result) {
+            // res.json(result);
+            res.ireport("finance/report7.jasper", req.query.export || "pdf", result, parameters);
+        });
+
+}
+exports.report8 = function (req, res, next) {
+    var r = req.r;
+    var query = req.query;
+    var params = {
+        CURRENT_DATE: new Date().toISOString().slice(0, 10),
+        Pay_Date: query.Pay_Date
+
+    };
+    var Pay_Date = req.query.Pay_Date + "T00:00:00+07:00";
+
+    r.db('g2g').table('payment').getAll([query.contract_id, r.ISO8601(Pay_Date)], { index: 'contractPayDate' })
+        .group(function (g) {
+            return g.pluck('cl_id', 'cl_no', 'fee_no')
+        }).ungroup()
+        .merge(function (m) {
+            return {
+                no_cheque: r.db('g2g').table('payment').getAll([query.contract_id, m('group')('cl_id'), m('group')('fee_no')], { index: 'contractClFee' }).filter(function (f) {
+                    return f.hasFields('pay_date').eq(false)
+                }).count()
+            }
+        })
+        .merge(function (m2) {
+            return {
+                cl_no: m2('reduction')(0)('cl_no'),
+                fee_no: m2('reduction')(0)('fee_no')
+            }
+        })
+
+
+
+        .run()
+        .then(function (result) {
+            // res.json(result);
+            res.ireport("finance/report8.jasper", req.query.export || "pdf", result, params);
+        });
+
+}
+exports.report8_1 = function (req, res, next) {
     var r = req.r;
     var parameters = {
         CURRENT_DATE: new Date().toISOString().slice(0, 10),
@@ -382,11 +441,11 @@ exports.report7 = function (req, res, next) {
         .run()
         .then(function (result) {
             // res.json(result);
-            res.ireport("payment/report7.jasper", req.query.export || "pdf", result, parameters);
+            res.ireport("payment/report8_1.jasper", req.query.export || "pdf", result, parameters);
         });
 
 }
-exports.report8 = function (req, res, next) {
+exports.report9 = function (req, res, next) {
     var r = req.r;
     var parameters = {
         PAGE: '',
@@ -431,7 +490,7 @@ exports.report8 = function (req, res, next) {
             // console.log(result.length/6)
             parameters["PAGE"] = result.length / 6;
             // res.json(result);
-            res.ireport("payment/report8.jasper", req.query.export || "pdf", result, parameters);
+            res.ireport("payment/report9.jasper", req.query.export || "pdf", result, parameters);
         });
 
 }
