@@ -370,13 +370,15 @@ exports.report8 = function (req, res, next) {
             return {
                 no_cheque: r.db('g2g').table('payment').getAll([query.contract_id, m('group')('cl_id'), m('group')('fee_no')], { index: 'contractClFee' }).filter(function (f) {
                     return f.hasFields('pay_date').eq(false)
-                }).count()
-            }
-        })
-        .merge(function (m2) {
-            return {
-                cl_no: m2('reduction')(0)('cl_no'),
-                fee_no: m2('reduction')(0)('fee_no')
+                }).count(),
+                cl_no: m('reduction')(0)('cl_no'),
+                fee_no: m('reduction')(0)('fee_no'),
+                price_d: m('reduction')(0)('price_d'),
+                reduction: m('reduction').merge(function (ship_merge) {
+                    return {
+                        ship: ship_merge('ship')(0)
+                    }
+                })
             }
         })
 
