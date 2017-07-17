@@ -337,11 +337,11 @@ exports.report7 = function (req, res, next) {
     var parameters = {
         CURRENT_DATE: new Date().toISOString().slice(0, 10)
     };
-    r.db('g2g').table('payment').get(req.query.id)
+    r.db('g2g').table('payment').getAll(r.args(req.query.id.split(',')))
         .merge(function (m) {
             return {
-                invoice_company_date: m('invoice_company_date').inTimezone('+07').toISO8601().split('T')(0),
-                pay_date: m('pay_date').year().add(543)
+                invoice_company_date: m('invoice_company_date').inTimezone('+07').toISO8601().split('T')(0)
+                // pay_date: m('pay_date').year().add(543)
             }
         })
 

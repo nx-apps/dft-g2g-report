@@ -242,8 +242,8 @@
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font fontName="TH SarabunPSK" size="14" isBold="true" pdfFontName="THSarabun.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
 				</textElement>
-				<text><![CDATA[จำนวนเงินคงเหลือ
-สุทธิ]]></text>
+				<text><![CDATA[จำนวนเงิน
+คงเหลือสุทธิ]]></text>
 			</staticText>
 			<staticText>
 				<reportElement x="522" y="0" width="80" height="60" uuid="5104b6bd-f98b-4f80-a7db-6fa42833e1f0"/>
