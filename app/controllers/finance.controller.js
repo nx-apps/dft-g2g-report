@@ -121,7 +121,7 @@ exports.report2 = function (req, res, next) {
             // res.json(result)
             var params = result.param;
             params.current_date = new Date().toISOString().slice(0, 10);
-            params = keysToUpper(params);
+            params = rpt.keysToUpper(params);
             // res.json(params)
             res.ireport("finance/report2.jasper", req.query.export || "pdf", result['data'], params);
         })
@@ -357,12 +357,12 @@ exports.report8 = function (req, res, next) {
     var query = req.query;
     var params = {
         CURRENT_DATE: new Date().toISOString().slice(0, 10),
-        Pay_Date: query.Pay_Date
+        pay_Date: query.Pay_Date
 
     };
-    var Pay_Date = req.query.Pay_Date + "T00:00:00+07:00";
+    var pay_Date = req.query.pay_Date + "T00:00:00+07:00";
 
-    r.db('g2g').table('payment').getAll([query.contract_id, r.ISO8601(Pay_Date)], { index: 'contractPayDate' })
+    r.db('g2g').table('payment').getAll([query.contract_id, r.ISO8601(pay_Date)], { index: 'contractPayDate' })
         .group(function (g) {
             return g.pluck('cl_id', 'cl_no', 'fee_no')
         }).ungroup()
