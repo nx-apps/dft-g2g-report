@@ -75,16 +75,17 @@ exports.report1 = function (req, res, next) {
 
 }
 exports.report2 = function (req, res, next) {
+    // r.db('g2g').table('confirm_letter').get(req.query.cl_id)
     var r = req.r;
     var query = req.query;
-    var cl = r.db('g2g').table('confirm_letter').get(query.cl_id)
+    var cl = r.db('g2g').table('confirm_letter').get(query.id)
         .merge(function (m) {
             var contract = r.table('contract').get(m('contract_id'));
             return contract
                 .merge(contract('country').pluck('country_name_th'))
         }).pluck('cl_no', 'contract_no', 'country_name_th');
 
-    var book = r.db('g2g').table('book').getAll(query.cl_id, { index: 'cl_id' })
+    var book = r.db('g2g').table('book').getAll(query.id, { index: 'cl_id' })
         .pluck('cl_id', 'ship_lot', 'invoice_date', 'invoice_no', 'invoice_type', 'invoice_year', 'id', 'book_no', 'bl_no', 'deli_port', 'ship', 'load_port', 'dest_port', 'value_d', 'contract_id', 'notify_party')
         .eqJoin('contract_id', r.db('g2g').table('contract')).pluck('left', { right: ['buyer', 'contract_name'] }).zip();
 
@@ -392,34 +393,38 @@ exports.report8 = function (req, res, next) {
 
 }
 exports.report9 = function (req, res, next) {
-    var r = req.r;
-    var query = req.query;
+    var month = parseInt(req.query.month);
+    var year = parseInt(req.query.year);
     var params = {
-        CURRENT_DATE: new Date().toISOString().slice(0, 10),
-        // month: parseInt(year) + '-' + month + '-01',
-        // year: parseInt(year) + 543
+        CURRENT_DATE: new Date().toISOString().slice(0, 10)
 
     };
 
-    r.db('g2g').table('payment')
-        // .filter(function (pay_filter) {
-        //     return pay_filter('pay_date').year().eq(year)
-        //         .and(
-        //         pay_filter('pay_date').month().eq(month)
-        //         )
-        // })
-        // .merge(function(m){
-        //     return{
-        //         aa:m('pay_no')//pay_date:m('pay_date')//.inTimezone('+07').toISO8601().split('T'),
-        //     }
-        // })
-        
+    var table = r.db('g2g').table('payment')
+        .merge(function (m) {
+            return {
+                pay_date: r.branch(m.hasFields('pay_date'), m('pay_date'), null),
+                paid_date: r.branch(m.hasFields('paid_date'), m('paid_date').toISO8601().split('T')(0), null)
+            }
+        })
+        .pluck('pay_date', 'pay_no', 'bank', 'company', 'pay_value_b', 'paid_date', 'pay_running', 'pay_year', 'pay_status');
+
+    if (req.query.pay_status == 'true') {
+        table = table.filter(r.row('pay_date').ne(null)
+            .and(r.row('pay_date').month().eq(month)
+                .and(r.row('pay_date').year().eq(year))
+            ))
+    }
+    if (req.query.pay_status == 'false') {
+        table = table.filter(r.row('pay_date').eq(null))
+    }
 
 
-        .run()
+
+    table.run()
         .then(function (result) {
             res.json(result);
-            res.ireport("finance/report8.jasper", req.query.export || "pdf", result, params);
+            // res.ireport("finance/report9.jasper", req.query.export || "pdf", result, params);
         });
 
 }
@@ -475,7 +480,7 @@ exports.report10 = function (req, res, next) {
         .run()
         .then(function (result) {
             // res.json(result);
-            res.ireport("payment/report8_1.jasper", req.query.export || "pdf", result, parameters);
+            res.ireport("payment/report10.jasper", req.query.export || "pdf", result, parameters);
         });
 
 }
@@ -524,7 +529,7 @@ exports.report11 = function (req, res, next) {
             // console.log(result.length/6)
             parameters["PAGE"] = result.length / 6;
             // res.json(result);
-            res.ireport("payment/report9.jasper", req.query.export || "pdf", result, parameters);
+            res.ireport("payment/report11.jasper", req.query.export || "pdf", result, parameters);
         });
 
 }
@@ -615,7 +620,7 @@ exports.report12 = function (req, res, next) {
                 }
             }
             // res.json(result);
-            res.ireport("payment/report10.jasper", req.query.export || "pdf", result, parameters);
+            res.ireport("payment/report12.jasper", req.query.export || "pdf", result, parameters);
         });
 
 }
@@ -678,7 +683,7 @@ exports.report13 = function (req, res, next) {
             BUYER_NAME: contract.buyer_name
         };
         // res.json(parameters);
-        res.ireport("payment/report11.jasper", req.query.export || "pdf", data, parameters);
+        res.ireport("payment/report13.jasper", req.query.export || "pdf", data, parameters);
     });
 
 }
