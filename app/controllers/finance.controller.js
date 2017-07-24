@@ -347,7 +347,7 @@ exports.report7 = function (req, res, next) {
 
         .run()
         .then(function (result) {
-            // res.json(result);
+            res.json(result);
             res.ireport("finance/report7.jasper", req.query.export || "pdf", result, parameters);
         });
 
@@ -360,7 +360,7 @@ exports.report8 = function (req, res, next) {
         pay_Date: query.Pay_Date
 
     };
-    var pay_Date = req.query.pay_Date + "T00:00:00+07:00";
+    var pay_Date = query.pay_Date + "T00:00:00+07:00";
 
     r.db('g2g').table('payment').getAll([query.contract_id, r.ISO8601(pay_Date)], { index: 'contractPayDate' })
         .group(function (g) {
@@ -391,7 +391,39 @@ exports.report8 = function (req, res, next) {
         });
 
 }
-exports.report8_1 = function (req, res, next) {
+exports.report9 = function (req, res, next) {
+    var r = req.r;
+    var query = req.query;
+    var params = {
+        CURRENT_DATE: new Date().toISOString().slice(0, 10),
+        // month: parseInt(year) + '-' + month + '-01',
+        // year: parseInt(year) + 543
+
+    };
+
+    r.db('g2g').table('payment')
+        // .filter(function (pay_filter) {
+        //     return pay_filter('pay_date').year().eq(year)
+        //         .and(
+        //         pay_filter('pay_date').month().eq(month)
+        //         )
+        // })
+        // .merge(function(m){
+        //     return{
+        //         aa:m('pay_no')//pay_date:m('pay_date')//.inTimezone('+07').toISO8601().split('T'),
+        //     }
+        // })
+        
+
+
+        .run()
+        .then(function (result) {
+            res.json(result);
+            res.ireport("finance/report8.jasper", req.query.export || "pdf", result, params);
+        });
+
+}
+exports.report10 = function (req, res, next) {
     var r = req.r;
     var parameters = {
         CURRENT_DATE: new Date().toISOString().slice(0, 10),
@@ -447,7 +479,7 @@ exports.report8_1 = function (req, res, next) {
         });
 
 }
-exports.report9 = function (req, res, next) {
+exports.report11 = function (req, res, next) {
     var r = req.r;
     var parameters = {
         PAGE: '',
@@ -496,7 +528,7 @@ exports.report9 = function (req, res, next) {
         });
 
 }
-exports.report10 = function (req, res, next) {
+exports.report12 = function (req, res, next) {
     var r = req.r;
     var parameters = {
         CURRENT_DATE: new Date().toISOString().slice(0, 10),
@@ -587,7 +619,7 @@ exports.report10 = function (req, res, next) {
         });
 
 }
-exports.report11 = function (req, res, next) {
+exports.report13 = function (req, res, next) {
     var r = req.r;
     var async = require('async');
     var year = parseInt(req.query.year);
@@ -650,6 +682,7 @@ exports.report11 = function (req, res, next) {
     });
 
 }
+
 exports.test = function (req, res) {
     var r = req.r;
     r.db('g2g2').table('shipment_detail').getAll(('2e49a709-6c78-431d-bf0b-704a9d6a9b83'), { index: 'book_id' })
