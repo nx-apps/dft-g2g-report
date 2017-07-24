@@ -14,4 +14,5 @@ module.exports = function (app) {
     app.route('/report9').get(finance.report9); //ok
     app.route('/report10/:id').get(finance.report10); //ok
     app.route('/report11').get(finance.report11);
+    app.route('/test').get(finance.test2);
 }
