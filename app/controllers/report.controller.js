@@ -16,6 +16,7 @@ exports.get = function (req, res) {
             return g.pluck([val.res, val.view])
         }).ungroup()
         .getField('group')
+        .orderBy(val.view)
         .run().then(function (data) {
             res.json(data)
         })
