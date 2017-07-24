@@ -734,3 +734,26 @@ exports.test = function (req, res) {
             res.json(data);
         })
 }
+exports.test2 = function (req, res) {
+    var month = parseInt(req.query.month);
+    var year = parseInt(req.query.year);
+    var table = r.db('g2g').table('payment')
+        .merge(function (m) {
+            return {
+                pay_date: r.branch(m.hasFields('pay_date'), m('pay_date'), null)
+            }
+        })
+    if (req.query.type == 'true') {
+        table = table.filter(r.row('pay_date').ne(null)
+            .and(r.row('pay_date').month().eq(month)
+                .and(r.row('pay_date').year().eq(year))
+            ))
+    }
+    if (req.query.type == 'false') {
+        table = table.filter(r.row('pay_date').eq(null))
+    }
+    table.run()
+        .then(function (data) {
+            res.json(data);
+        })
+}
