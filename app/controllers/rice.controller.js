@@ -8,7 +8,7 @@ exports.report1 = function (req, res, next) {
         // SUBREPORT_DIR: __dirname.replace('controller', 'report') + '\\' + req.baseUrl.replace("/api/", "") + '\\'
     };
 
-    var book = r.db('g2g').table('book').get(query.book_id).pluck('book_no', 'book_remark', 'cl_id', 'cl_no', 'contract_id', 'cut_date', 'cut_time', 'deli_port', 'dest_port', 'id', 'load_port',
+    var book = r.db('g2g').table('book').get(query.id).pluck('book_no', 'book_remark', 'cl_id', 'cl_no', 'contract_id', 'cut_date', 'cut_time', 'deli_port', 'dest_port', 'id', 'load_port',
         'notify_party', 'product_date', 'ship', 'ship_lot', 'shipline', 'surveyor', 'weight_container', 'etd_date')
     book.merge(function (m) {
         var ship = book.getField('ship');
@@ -108,7 +108,7 @@ exports.report2 = function (req, res, next) {
         CURRENT_DATE: new Date().toISOString().slice(0, 10)
     };
 
-    var book = r.db('g2g').table('book').get(query.book_id)
+    var book = r.db('g2g').table('book').get(query.id)
     book.merge(function (m) {
         var ship = book.getField('ship');
         var detail = r.db('g2g').table('book_detail').getAll(m('id'), { index: 'book_id' }).coerceTo('array');
@@ -449,8 +449,8 @@ exports.report3_2 = function (req, res, next) {
 exports.report4 = function (req, res, next) {
     var r = req.r;
     var query = req.query;
-    var cl = r.db('g2g').table('confirm_letter').get(query.cl_id).pluck('cl_no', 'cl_weight');
-    var book = r.db('g2g').table('book').getAll(query.cl_id, { index: 'cl_id' }).pluck('cl_id', 'invoice_no','invoice_type','invoice_year', 'id', 'book_no', 'bl_no', 'product_date', 'packing_date'
+    var cl = r.db('g2g').table('confirm_letter').get(query.id).pluck('cl_no', 'cl_weight');
+    var book = r.db('g2g').table('book').getAll(query.id, { index: 'cl_id' }).pluck('cl_id', 'invoice_no','invoice_type','invoice_year', 'id', 'book_no', 'bl_no', 'product_date', 'packing_date'
         , 'shipline', 'ship', 'load_port', 'dest_port', 'eta_date', 'etd_date', 'cut_date', 'value_d', 'contract_id', 'ship_lot');
         // .eqJoin('contract_id', r.db('g2g').table('contract')).pluck('left', { right: 'buyer' }).zip()
         // .limit(10);

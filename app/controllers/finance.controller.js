@@ -348,7 +348,7 @@ exports.report7 = function (req, res, next) {
 
         .run()
         .then(function (result) {
-            res.json(result);
+            // res.json(result);
             res.ireport("finance/report7.jasper", req.query.export || "pdf", result, parameters);
         });
 
@@ -396,7 +396,9 @@ exports.report9 = function (req, res, next) {
     var month = parseInt(req.query.month);
     var year = parseInt(req.query.year);
     var params = {
-        CURRENT_DATE: new Date().toISOString().slice(0, 10)
+        CURRENT_DATE: new Date().toISOString().slice(0, 10),
+        MONTH: getMonthName(req.query.month),
+        YEAR: year + 543
 
     };
 
@@ -404,10 +406,14 @@ exports.report9 = function (req, res, next) {
         .merge(function (m) {
             return {
                 pay_date: r.branch(m.hasFields('pay_date'), m('pay_date'), null),
-                paid_date: r.branch(m.hasFields('paid_date'), m('paid_date').toISO8601().split('T')(0), null)
+                pay_date2: r.branch(m.hasFields('pay_date'), m('pay_date').toISO8601().split('T')(0), null),
+                paid_date: r.branch(m.hasFields('paid_date'), m('paid_date').toISO8601().split('T')(0), null),
+                bank:r.branch(m.hasFields('bank'), m('bank'), null)
+                // bank:m('bank')
             }
         })
-        .pluck('pay_date', 'pay_no', 'bank', 'company', 'pay_value_b', 'paid_date', 'pay_running', 'pay_year', 'pay_status');
+        .pluck('pay_date', 'pay_date2', 'pay_no', 'bank', 'company', 'pay_value_b', 'paid_date', 'pay_running', 'pay_year', 'pay_status')
+        .orderBy('pay_no');
 
     if (req.query.pay_status == 'true') {
         table = table.filter(r.row('pay_date').ne(null)
@@ -424,7 +430,7 @@ exports.report9 = function (req, res, next) {
     table.run()
         .then(function (result) {
             res.json(result);
-            // res.ireport("finance/report9.jasper", req.query.export || "pdf", result, params);
+            res.ireport("finance/report9.jasper", req.query.export || "pdf", result, params);
         });
 
 }
@@ -761,4 +767,10 @@ exports.test2 = function (req, res) {
         .then(function (data) {
             res.json(data);
         })
+}
+
+function getMonthName(id) {
+    let month = ['เดือน', 'มกราคม', 'กุมภาพันธ์', 'มีนาคม', 'เมษายน', 'พฤษภาคม',
+        'มิถุนายน', 'กรกฎาคม', 'สิงหาคม', 'กันยายน', 'ตุลาคม', 'พฤศจิกายน', 'ธันวาคม'];
+    return month[id];
 }
