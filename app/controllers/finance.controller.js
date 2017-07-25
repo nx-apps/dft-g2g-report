@@ -401,14 +401,14 @@ exports.report9 = function (req, res, next) {
         YEAR: year + 543
 
     };
-
+ 
     var table = r.db('g2g').table('payment')
         .merge(function (m) {
             return {
                 pay_date: r.branch(m.hasFields('pay_date'), m('pay_date'), null),
                 pay_date2: r.branch(m.hasFields('pay_date'), m('pay_date').toISO8601().split('T')(0), null),
                 paid_date: r.branch(m.hasFields('paid_date'), m('paid_date').toISO8601().split('T')(0), null),
-                bank:r.branch(m.hasFields('bank'), m('bank'), null)
+                bank:r.branch(m.hasFields('bank'), m('bank'), { bank_name_th: null })
                 // bank:m('bank')
             }
         })
@@ -429,7 +429,8 @@ exports.report9 = function (req, res, next) {
 
     table.run()
         .then(function (result) {
-            res.json(result);
+            // res.json(params);
+            // res.json(result);
             res.ireport("finance/report9.jasper", req.query.export || "pdf", result, params);
         });
 
