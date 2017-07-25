@@ -156,7 +156,7 @@ exports.report3 = function (req, res, next) {
         CURRENT_DATE: new Date().toISOString().slice(0, 10)
     };
 
-    r.db('g2g').table('book_detail').getAll(r.args(query.book_id.split(',')), { index: 'book_id' })
+    r.db('g2g').table('book_detail').getAll(r.args(query.id.split(',')), { index: 'book_id' })
         .eqJoin('contract_id', r.db('g2g').table('contract')).pluck('left', { right: ['contract_no', 'country'] }).zip()
         .group('exporter_id')
         .ungroup()

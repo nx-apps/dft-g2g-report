@@ -134,9 +134,9 @@ exports.report3 = function (req, res, next) {
     var r = req.r;
     var query = req.query;
     var params = {
-        date_start: query.date
+        date_start: query.fee_date
     };
-    var date = req.query.date + "T00:00:00+07:00";
+    var date = req.query.fee_date + "T00:00:00+07:00";
 
     var datas = r.db('g2g').table('fee').getAll(query.contract_id, { index: 'contract_id' })
         .filter(function (row) {
@@ -210,9 +210,9 @@ exports.report4 = function (req, res, next) {
     var r = req.r;
     var query = req.query;
     var params = {
-        date_start: query.date
+        date_start: query.fee_date
     };
-    var date = req.query.date + "T00:00:00+07:00";
+    var date = req.query.fee_date + "T00:00:00+07:00";
 
     var datas = r.db('g2g').table('fee').getAll(query.contract_id, { index: 'contract_id' })
         .filter(function (row) {
