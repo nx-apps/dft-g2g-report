@@ -3,26 +3,31 @@
 	<property name="ireport.zoom" value="1.0"/>
 	<property name="ireport.x" value="0"/>
 	<property name="ireport.y" value="0"/>
+	<import value="nylon.report.*"/>
 	<parameter name="CURRENT_DATE" class="java.lang.String"/>
 	<parameter name="PAGE" class="java.lang.String"/>
 	<queryString>
 		<![CDATA[]]>
 	</queryString>
-	<field name="pay_amount" class="java.lang.Double"/>
-	<field name="pay_date" class="java.lang.String"/>
+	<field name="value_bal_b" class="java.lang.Double"/>
+	<field name="paid_date" class="java.lang.String"/>
 	<field name="company_address_th" class="java.lang.String"/>
 	<field name="company_name_th" class="java.lang.String"/>
 	<field name="company_taxno" class="java.lang.String"/>
-	<field name="TOTAL" class="java.lang.Double"/>
+	<field name="value_tax_b" class="java.lang.Double"/>
+	<field name="company" class="java.lang.Object"/>
+	<field name="isnull" class="java.lang.Boolean"/>
 	<variable name="SUM_PAY" class="java.lang.Double" calculation="Sum">
-		<variableExpression><![CDATA[$F{pay_amount}]]></variableExpression>
+		<variableExpression><![CDATA[$F{value_bal_b}]]></variableExpression>
 	</variable>
 	<variable name="SUM_TOTAL" class="java.lang.Double" calculation="Sum">
-		<variableExpression><![CDATA[$F{TOTAL}]]></variableExpression>
+		<variableExpression><![CDATA[$F{value_tax_b}]]></variableExpression>
 	</variable>
-	<variable name="PageSum" class="java.lang.Integer" resetType="Page" calculation="Sum"/>
+	<variable name="PageSum" class="java.lang.Integer" resetType="Page" calculation="Sum">
+		<variableExpression><![CDATA[]]></variableExpression>
+	</variable>
 	<variable name="SUM_PAY_1" class="java.lang.Double" resetType="Page" calculation="Sum">
-		<variableExpression><![CDATA[$F{pay_amount}]]></variableExpression>
+		<variableExpression><![CDATA[]]></variableExpression>
 	</variable>
 	<background>
 		<band splitType="Stretch"/>
@@ -274,7 +279,7 @@
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font fontName="TH SarabunPSK" size="10" pdfFontName="THSarabun.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
 				</textElement>
-				<textFieldExpression><![CDATA[($F{company_name_th}!=null)?$V{REPORT_COUNT}:""]]></textFieldExpression>
+				<textFieldExpression><![CDATA[($F{isnull}!=true?$V{REPORT_COUNT}:"")]]></textFieldExpression>
 			</textField>
 			<rectangle>
 				<reportElement mode="Transparent" x="302" y="6" width="52" height="14" uuid="613853bf-50eb-41ff-bdc4-6d4cfe653185"/>
@@ -303,7 +308,7 @@
 				<textElement textAlignment="Right" verticalAlignment="Middle">
 					<font fontName="TH SarabunPSK" size="10" pdfFontName="THSarabun.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
 				</textElement>
-				<textFieldExpression><![CDATA[($F{pay_amount}!=null)?$F{pay_amount}:""]]></textFieldExpression>
+				<textFieldExpression><![CDATA[($F{isnull}!=true?$F{value_bal_b}:"")]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement x="531" y="0" width="28" height="50" uuid="4e3c9350-82c2-4977-8e1e-387cd5a84f7f"/>
@@ -317,7 +322,7 @@
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font fontName="TH SarabunPSK" size="10" pdfFontName="THSarabun.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
 				</textElement>
-				<textFieldExpression><![CDATA[($F{company_taxno}!=null)?"1.00":""]]></textFieldExpression>
+				<textFieldExpression><![CDATA[($F{isnull}!=true?"1.00":"")]]></textFieldExpression>
 			</textField>
 			<rectangle>
 				<reportElement mode="Transparent" x="780" y="0" width="22" height="50" uuid="42dda6d1-f96e-4894-9fdc-43dd7436d204"/>
@@ -334,7 +339,7 @@
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font fontName="TH SarabunPSK" size="10" pdfFontName="THSarabun.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
 				</textElement>
-				<textFieldExpression><![CDATA[($F{pay_date}!=null?new  nylon.utility.NumberFormat().toThaiDateShort($F{pay_date}):"")]]></textFieldExpression>
+				<textFieldExpression><![CDATA[($F{isnull}!=true?new  nylon.utility.NumberFormat().toThaiDateShort($F{paid_date}):"")]]></textFieldExpression>
 			</textField>
 			<line>
 				<reportElement x="333" y="6" width="1" height="14" uuid="b7c371ed-8d87-40e6-b7b9-37581d197a15"/>
@@ -354,7 +359,7 @@
 				<textElement verticalAlignment="Middle">
 					<font fontName="TH SarabunPSK" size="10" pdfFontName="THSarabun.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
 				</textElement>
-				<textFieldExpression><![CDATA[($F{company_taxno}!=null)?"ค่าข้าว":""]]></textFieldExpression>
+				<textFieldExpression><![CDATA[($F{isnull}!=true?"ค่าข้าว":"")]]></textFieldExpression>
 			</textField>
 			<textField pattern="#,##0.00">
 				<reportElement x="664" y="0" width="116" height="50" uuid="72fe216a-bb0f-485e-84be-16bc3172899b"/>
@@ -368,7 +373,7 @@
 				<textElement textAlignment="Right" verticalAlignment="Middle">
 					<font fontName="TH SarabunPSK" size="10" pdfFontName="THSarabun.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
 				</textElement>
-				<textFieldExpression><![CDATA[($F{TOTAL}!=null)?$F{TOTAL}:""]]></textFieldExpression>
+				<textFieldExpression><![CDATA[($F{isnull}!=true?$F{value_tax_b}:"")]]></textFieldExpression>
 			</textField>
 			<line>
 				<reportElement x="312" y="6" width="1" height="14" uuid="41fe923c-5d48-4890-acf1-8cebc2e69007"/>
@@ -399,7 +404,7 @@
 				<textElement verticalAlignment="Top">
 					<font fontName="TH SarabunPSK" size="10" pdfFontName="THSarabun.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
 				</textElement>
-				<textFieldExpression><![CDATA[($F{company_address_th}!=null)?$F{company_address_th}:""]]></textFieldExpression>
+				<textFieldExpression><![CDATA[($F{isnull}!=true?new iJson2Object($F{company}).getValue("company_address_th")+new iJson2Object($F{company}).getValue("company_province_th"):"")]]></textFieldExpression>
 			</textField>
 			<staticText>
 				<reportElement x="37" y="24" width="24" height="13" uuid="08ca0766-d39e-4193-b066-efaf255c26b7"/>
@@ -427,7 +432,7 @@
 				<textElement verticalAlignment="Middle">
 					<font fontName="TH SarabunPSK" size="10" pdfFontName="THSarabun.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
 				</textElement>
-				<textFieldExpression><![CDATA[($F{company_name_th}!=null)?$F{company_name_th}:""]]></textFieldExpression>
+				<textFieldExpression><![CDATA[($F{isnull}!=true?new iJson2Object($F{company}).getValue("company_name_th"):"")]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement x="38" y="2" width="71" height="12" uuid="ab9ee0be-8069-4000-90d3-cbf13e7925f9"/>
@@ -441,7 +446,7 @@
 				<textElement verticalAlignment="Middle">
 					<font fontName="TH SarabunPSK" size="10" pdfFontName="THSarabun.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
 				</textElement>
-				<textFieldExpression><![CDATA[($F{company_taxno}!=null)?$F{company_taxno}:""]]></textFieldExpression>
+				<textFieldExpression><![CDATA[($F{isnull}!=true?new iJson2Object($F{company}).getValue("company_taxno"):"")]]></textFieldExpression>
 			</textField>
 		</band>
 	</detail>
