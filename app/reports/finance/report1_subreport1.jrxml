@@ -2,7 +2,7 @@
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="report1_subreport1" language="groovy" pageWidth="555" pageHeight="405" columnWidth="555" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" uuid="e7281117-f956-43c7-9392-7240c9e90544">
 	<property name="ireport.zoom" value="1.5"/>
 	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="48"/>
+	<property name="ireport.y" value="0"/>
 	<import value="nylon.report.*"/>
 	<field name="buyer" class="java.lang.Object"/>
 	<field name="package_amount" class="java.lang.Integer"/>
@@ -107,7 +107,7 @@
 				<textElement textAlignment="Center">
 					<font fontName="TH SarabunPSK" size="12" pdfFontName="THSarabun.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
 				</textElement>
-				<textFieldExpression><![CDATA[new iJson2Object($F{buyer}).getValue("buyer_masks")]]></textFieldExpression>
+				<textFieldExpression><![CDATA[new iJson2Object($F{buyer}).getValue("buyer_masks").toUpperCase()]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement x="80" y="0" width="80" height="20" uuid="3e8f896a-5e85-421a-9625-ea4b9f71a7f7"/>
@@ -123,11 +123,11 @@
 				<textElement textAlignment="Justified">
 					<font fontName="TH SarabunPSK" size="12" pdfFontName="THSarabun.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
 				</textElement>
-				<textFieldExpression><![CDATA[new iJson2Object($F{hamonize}).getValue("hamonize_en")+" BROKENS, "+$F{project_en}.toUpperCase()+".\n"+
+				<textFieldExpression><![CDATA[new iJson2Object($F{hamonize}).getValue("hamonize_en").toUpperCase()+" BROKENS, "+$F{project_en}.toUpperCase()+".\n"+
 "PACKING : IN STRONG EXPORT SEAWORTHY "+new iJson2Object($F{package}).getValue("package_name_en").toUpperCase()+
-"NET WITH MINIMUM TARE WEIGHT TO BE AT "+new iJson2Object($F{package}).getValue("package_weight_bag")+" GRAM/BAG."+
+" WITH MINIMUM TARE WEIGHT TO BE AT "+new iJson2Object($F{package}).getValue("package_weight_bag")+" GRAM/BAG."+
 "TWO PERCENT (2%) MARKED SPARE EMPTY BAGS TO BE SUPPLIED FREE OF CHARGE BY THE SELLER ALONG WITH THE SHIPENT.\n"+
-"PRICE : USD "+$F{net_weight}+"PER METRIC TON, "+$F{incoterms}.toUpperCase()+
+"PRICE : USD "+$F{net_weight}+" PER METRIC TON, "+$F{incoterms}.toUpperCase()+
 " BANGKOK OR LEAM CHABANG AT BUYER'S OPTION."]]></textFieldExpression>
 			</textField>
 		</band>
@@ -253,10 +253,10 @@ new nylon.utility.NumberFormat().toEngString(
    $V{sum_value_d}.intValue()
 )
 +" ONLY)"+
-"\nUNDER THE SALE AND PURCHASE CONTRACT NO."+$F{contract_name}+
-" BETWEEN "+new iJson2Object($F{buyer}).getValue("buyer_name")+" AND DEPARTMENT OF FOREIGN TRADE,"+
+"\nUNDER THE SALE AND PURCHASE CONTRACT NO."+$F{contract_name}.toUpperCase()+
+" BETWEEN "+new iJson2Object($F{buyer}).getValue("buyer_name").toUpperCase()+" AND DEPARTMENT OF FOREIGN TRADE,"+
 " MINISTRY OF COMMERCE OF THAILAND DATED "+
-new nylon.utility.NumberFormat().toEngDateShort($F{contract_date})+
+new nylon.utility.NumberFormat().toEngDate($F{contract_date}).toUpperCase()+
 ".\n"+
 "PAYMENT BY T/T TO: KRUNG THAI BANK PUBLIC COMPANY LIMITED, BANGKOK THAILAND\n"+
 "SWIFT CODE : KRTHTHBK\n"+
