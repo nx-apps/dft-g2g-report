@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="report8" language="groovy" pageWidth="842" pageHeight="595" orientation="Landscape" columnWidth="802" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="c42b060a-7016-429a-813a-53c8f6eb978c">
 	<property name="ireport.zoom" value="1.0"/>
-	<property name="ireport.x" value="0"/>
+	<property name="ireport.x" value="87"/>
 	<property name="ireport.y" value="0"/>
 	<import value="nylon.report.*"/>
 	<parameter name="MONTH" class="java.lang.String"/>
@@ -300,7 +300,7 @@
 				<textElement textAlignment="Right" verticalAlignment="Middle">
 					<font fontName="TH SarabunPSK" size="10" isBold="false" pdfFontName="THSarabun.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
 				</textElement>
-				<textFieldExpression><![CDATA["รายงาน report9"]]></textFieldExpression>
+				<textFieldExpression><![CDATA["รายงาน report8"]]></textFieldExpression>
 			</textField>
 			<textField evaluationTime="Auto">
 				<reportElement x="572" y="0" width="230" height="20" uuid="cf21826b-9ee9-442c-b643-5ae7144d5402"/>
