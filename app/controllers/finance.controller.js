@@ -485,7 +485,7 @@ exports.report11 = function (req, res, next) {
     var year = parseInt(req.query.pay_year);
     var month = parseInt(req.query.month);
     r.db('g2g').table('payment')
-        .getAll(req.query.buyer_id, year, month, { index: 'BuyerPayYearMonth' })
+        .getAll([req.query.buyer_id, year, month], { index: 'BuyerPayYearMonth' })
         // .filter(function (f) {
         //     return f('paid_date').month().eq(month)
         // })
