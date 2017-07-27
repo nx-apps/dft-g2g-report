@@ -99,7 +99,7 @@ exports.report1 = function (req, res, next) {
             params.YEAR = result.contract_date;
             params.SHIP_LOT = result.ship_lot;
             params.REMARK = result.book_remark;
-            params.FONTSIZE = 14;
+            params.FONTSIZE = parseInt(req.query.size);
             res.ireport("rice/report1.jasper", req.query.export || "pdf", [result], params);
         });
 }

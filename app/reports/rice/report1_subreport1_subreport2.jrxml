@@ -4,6 +4,21 @@
 	<property name="ireport.x" value="0"/>
 	<property name="ireport.y" value="0"/>
 	<import value="nylon.report.*"/>
+	<style name="style1" fontName="TH SarabunPSK" fontSize="16" pdfFontName="THSarabun.ttf" pdfEncoding="Identity-H">
+		<conditionalStyle>
+			<conditionExpression><![CDATA[$P{FONTSIZE}==16]]></conditionExpression>
+			<style fontSize="16"/>
+		</conditionalStyle>
+		<conditionalStyle>
+			<conditionExpression><![CDATA[$P{FONTSIZE}==14]]></conditionExpression>
+			<style fontSize="14"/>
+		</conditionalStyle>
+		<conditionalStyle>
+			<conditionExpression><![CDATA[$P{FONTSIZE}==12]]></conditionExpression>
+			<style fontSize="12"/>
+		</conditionalStyle>
+	</style>
+	<parameter name="FONTSIZE" class="java.lang.Integer"/>
 	<field name="inct_id" class="java.lang.String"/>
 	<field name="price_d" class="java.lang.String"/>
 	<background>
@@ -11,11 +26,8 @@
 	</background>
 	<detail>
 		<band height="20" splitType="Stretch">
-			<textField isStretchWithOverflow="true" pattern="#,##0">
-				<reportElement stretchType="RelativeToBandHeight" x="0" y="0" width="370" height="20" isPrintWhenDetailOverflows="true" uuid="51e1ca72-6b80-4586-a7b7-073b486291b4"/>
-				<textElement>
-					<font fontName="TH SarabunPSK" size="16" pdfFontName="THSarabun.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
-				</textElement>
+			<textField>
+				<reportElement style="style1" x="0" y="0" width="370" height="20" uuid="4c3b3c25-d579-4934-b415-ff37de804a2f"/>
 				<textFieldExpression><![CDATA[$F{inct_id}+" ตันละ "+$F{price_d}+" USD"]]></textFieldExpression>
 			</textField>
 		</band>

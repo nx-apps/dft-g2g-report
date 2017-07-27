@@ -4,6 +4,21 @@
 	<property name="ireport.x" value="0"/>
 	<property name="ireport.y" value="0"/>
 	<import value="nylon.report.*"/>
+	<style name="style1" fontName="TH SarabunPSK" fontSize="16" pdfFontName="THSarabun.ttf" pdfEncoding="Identity-H">
+		<conditionalStyle>
+			<conditionExpression><![CDATA[$P{FONTSIZE}==16]]></conditionExpression>
+			<style fontSize="16"/>
+		</conditionalStyle>
+		<conditionalStyle>
+			<conditionExpression><![CDATA[$P{FONTSIZE}==14]]></conditionExpression>
+			<style fontSize="14"/>
+		</conditionalStyle>
+		<conditionalStyle>
+			<conditionExpression><![CDATA[$P{FONTSIZE}==12]]></conditionExpression>
+			<style fontSize="12"/>
+		</conditionalStyle>
+	</style>
+	<parameter name="FONTSIZE" class="java.lang.Integer"/>
 	<field name="package_name_th" class="java.lang.String"/>
 	<field name="package_weight_bag" class="java.lang.String"/>
 	<field name="shm_det_quantity" class="java.lang.Double"/>
@@ -11,11 +26,8 @@
 	<field name="field1" class="java.lang.String"/>
 	<detail>
 		<band height="20" splitType="Stretch">
-			<textField isStretchWithOverflow="true" pattern="#,##0">
-				<reportElement stretchType="RelativeToBandHeight" x="0" y="0" width="370" height="20" isPrintWhenDetailOverflows="true" uuid="7d1c80da-63e1-42df-8f62-cd265cd3d754"/>
-				<textElement>
-					<font fontName="TH SarabunPSK" size="16" pdfFontName="THSarabun.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
-				</textElement>
+			<textField>
+				<reportElement style="style1" x="0" y="0" width="370" height="20" uuid="4b1a73f7-5eb7-4123-9bd7-768168539c4d"/>
 				<textFieldExpression><![CDATA["กระสอบ PP ขนาด "+$F{package_kg_per_bag}+" กก. น้ำหนักไม่น้อยกว่า "+$F{package_weight_bag}
 +" กรัม"]]></textFieldExpression>
 			</textField>
