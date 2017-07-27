@@ -441,12 +441,13 @@ exports.report10 = function (req, res, next) {
         CURRENT_DATE: new Date().toISOString().slice(0, 10),
 
     };
-    // var year = parseInt(req.query.year);
+    var year = parseInt(req.query.pay_year);
     var month = parseInt(req.query.month);
     var query = r.db('g2g').table('payment')
-        .filter(function (f) {
-            return f('paid_date').month().eq(month)
-        });
+        .getAll([req.query.buyer_id, year, month], { index: 'BuyerPayYearMonth' });
+    // .filter(function (f) {
+    //     return f('paid_date').month().eq(month)
+    // });
 
     // .merge(function (m) {
     //     return {
