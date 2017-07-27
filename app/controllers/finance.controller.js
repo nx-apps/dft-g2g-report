@@ -482,12 +482,13 @@ exports.report11 = function (req, res, next) {
         SUBREPORT_DIR: __dirname.replace('controller', 'report') + '\\' + req.baseUrl.replace("/api/", "") + '\\'
     };
 
-    var year = parseInt(req.query.year);
+    var year = parseInt(req.query.pay_year);
     var month = parseInt(req.query.month);
     r.db('g2g').table('payment')
-        .filter(function (f) {
-            return f('paid_date').month().eq(month)
-        })
+        .getAll(req.query.buyer_id, year, month, { index: 'BuyerPayYearMonth' })
+        // .filter(function (f) {
+        //     return f('paid_date').month().eq(month)
+        // })
         .merge(function (m) {
             return {
                 paid_date: m('paid_date').inTimezone('+07').toISO8601().split('T')(0),
