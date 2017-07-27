@@ -82,7 +82,8 @@ exports.report1 = function (req, res, next) {
             exporter: detail.group('exporter_id').ungroup().map(function (mapExporter) {
                 return {
                     net_weight: mapExporter('reduction').sum('net_weight'),
-                    company_name: mapExporter('reduction')(0)('company')('company_name_th')
+                    company_name: mapExporter('reduction')(0)('company')('company_name_th'),
+                    company_count:detail.group('exporter_id').ungroup().count()
                 }
             }),
             cut_date: m('cut_date').inTimezone('+07').toISO8601(),
@@ -98,6 +99,7 @@ exports.report1 = function (req, res, next) {
             params.YEAR = result.contract_date;
             params.SHIP_LOT = result.ship_lot;
             params.REMARK = result.book_remark;
+            params.FONTSIZE = 14;
             res.ireport("rice/report1.jasper", req.query.export || "pdf", [result], params);
         });
 }
