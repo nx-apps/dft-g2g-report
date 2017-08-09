@@ -83,7 +83,7 @@ exports.report1 = function (req, res, next) {
                 return {
                     net_weight: mapExporter('reduction').sum('net_weight'),
                     company_name: mapExporter('reduction')(0)('company')('company_name_th'),
-                    company_count:detail.group('exporter_id').ungroup().count()
+                    company_count: detail.group('exporter_id').ungroup().count()
                 }
             }),
             cut_date: m('cut_date').inTimezone('+07').toISO8601(),
@@ -455,7 +455,7 @@ exports.report4 = function (req, res, next) {
     var r = req.r;
     var query = req.query;
     var cl = r.db('g2g').table('confirm_letter').get(query.id).pluck('cl_no', 'cl_weight');
-    var book = r.db('g2g').table('book').getAll(query.id, { index: 'cl_id' }).pluck('cl_id', 'invoice_no', 'invoice_type', 'invoice_year', 'id', 'book_no', 'bl_no', 'product_date', 'packing_date'
+    var book = r.db('g2g').table('book').getAll(query.id, { index: 'cl_id' }).limit(20).pluck('cl_id', 'invoice_no', 'invoice_type', 'invoice_year', 'id', 'book_no', 'bl_no', 'product_date', 'packing_date'
         , 'shipline', 'ship', 'load_port', 'dest_port', 'eta_date', 'etd_date', 'cut_date', 'value_d', 'contract_id', 'ship_lot');
     // .eqJoin('contract_id', r.db('g2g').table('contract')).pluck('left', { right: 'buyer' }).zip()
     // .limit(10);
@@ -465,6 +465,7 @@ exports.report4 = function (req, res, next) {
         data: book.coerceTo('array')
             .merge(function (m) {
                 var ship = m('ship');
+                var detail = r.db('g2g').table('book_detail').getAll(m('id'), { index: 'book_id' });
                 return {
                     ship: r.branch(ship.count().gt(1),
                         ship.reduce(function (left, right) {
@@ -479,19 +480,20 @@ exports.report4 = function (req, res, next) {
                         })('data'),
                         ship(0)('ship_name').add(" V.", ship(0)('ship_voy'))
                     ),
-                    detail: r.db('g2g').table('book_detail').getAll(m('id'), { index: 'book_id' }).coerceTo('array')
+                    detail: detail.coerceTo('array')
                         .eqJoin('contract_id', r.db('g2g').table('contract')).pluck('left', { right: 'buyer' }).zip(),
                     cut_date: m('cut_date').inTimezone('+07').toISO8601().split('T')(0),
                     eta_date: m('eta_date').inTimezone('+07').toISO8601().split('T')(0),
                     etd_date: m('etd_date').inTimezone('+07').toISO8601().split('T')(0),
                     packing_date: m('packing_date').inTimezone('+07').toISO8601().split('T')(0),
                     product_date: m('product_date').inTimezone('+07').toISO8601().split('T')(0),
+                    value_d: detail.sum('value_d')
                 }
             }).orderBy('ship_lot')
     })
         .run()
         .then(function (result) {
-            // res.json(result)
+            // res.json(result['data'])
             var params = result.param;
             params.current_date = new Date().toISOString().slice(0, 10);
             params = rpt.keysToUpper(params);
