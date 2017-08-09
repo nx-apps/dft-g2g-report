@@ -15,7 +15,7 @@ exports.report1 = function (req, res, next) {
         var surveyor = book.getField('surveyor');
         var detail = r.db('g2g').table('book_detail').getAll(m('id'), { index: 'book_id' }).coerceTo('array');
         var confirm = r.db('g2g').table('confirm_letter').get(m('cl_id')).getField('incoterms');
-        var contract = r.db('g2g').table('contract').get(m('contract_id')).pluck('buyer_id', 'buyer', 'contract_date', 'contract_name', 'country');
+        var contract = r.db('g2g').table('contract').get(m('contract_id')).pluck('buyer_id', 'buyer', 'contract_date', 'contract_name', 'country','contract_no');
         return contract.merge({
             contract_date: contract('contract_date').year().add(543),
             book_no: detail.getField('book_no').reduce(function (left, right) {
@@ -97,6 +97,7 @@ exports.report1 = function (req, res, next) {
             params.COUNTRY = result.country.country_fullname_th;
             params.CL_NO = result.cl_no;
             params.YEAR = Number(result.cut_date.split('-')[0])+543;
+            params.CONTRACT_NO = result.contract_no;
             params.SHIP_LOT = result.ship_lot;
             params.REMARK = result.book_remark;
             params.FONTSIZE = parseInt(req.query.size);

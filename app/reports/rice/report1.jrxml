@@ -31,6 +31,7 @@
 	<parameter name="SHIP_LOT" class="java.lang.String"/>
 	<parameter name="REMARK" class="java.lang.String"/>
 	<parameter name="FONTSIZE" class="java.lang.Integer"/>
+	<parameter name="CONTRACT_NO" class="java.lang.String"/>
 	<queryString>
 		<![CDATA[]]>
 	</queryString>
@@ -78,7 +79,7 @@
 						<font fontName="TH SarabunPSK" size="16" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Identity-H" isPdfEmbedded="false"/>
 						<paragraph lineSpacing="Single"/>
 					</textElement>
-					<textFieldExpression><![CDATA["รายละเอียดการส่งมอบข้าวให้รัฐบาล"+$P{COUNTRY}+
+					<textFieldExpression><![CDATA["รายละเอียดการส่งมอบข้าวให้รัฐบาล"+$P{COUNTRY}+" สัญญาที่ "+$P{CONTRACT_NO}+
 " งวดที่ "+$P{CL_NO}+
 " ปี "+$P{YEAR}+
 " ("+$P{SHIP_LOT}+")"+
