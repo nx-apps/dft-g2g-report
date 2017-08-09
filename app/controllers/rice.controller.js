@@ -18,7 +18,7 @@ exports.report1 = function (req, res, next) {
         var contract = r.db('g2g').table('contract').get(m('contract_id')).pluck('buyer_id', 'buyer', 'contract_date', 'contract_name', 'country','contract_no');
         return contract.merge({
             contract_date: contract('contract_date').year().add(543),
-            book_no: detail.getField('book_no').reduce(function (left, right) {
+            book_no: detail.getField('book_no').distinct().reduce(function (left, right) {
                 return left.add(', ', right)
             }),
             ship: r.branch(ship.count().gt(1),
