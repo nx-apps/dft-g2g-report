@@ -96,7 +96,7 @@ exports.report1 = function (req, res, next) {
             // res.json(result);
             params.COUNTRY = result.country.country_fullname_th;
             params.CL_NO = result.cl_no;
-            params.YEAR = result.contract_date;
+            params.YEAR = Number(result.cut_date.split('-')[0])+543;
             params.SHIP_LOT = result.ship_lot;
             params.REMARK = result.book_remark;
             params.FONTSIZE = parseInt(req.query.size);
