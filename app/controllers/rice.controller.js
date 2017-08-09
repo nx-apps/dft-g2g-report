@@ -455,7 +455,7 @@ exports.report4 = function (req, res, next) {
     var r = req.r;
     var query = req.query;
     var cl = r.db('g2g').table('confirm_letter').get(query.id).pluck('cl_no', 'cl_weight');
-    var book = r.db('g2g').table('book').getAll(query.id, { index: 'cl_id' }).limit(20).pluck('cl_id', 'invoice_no', 'invoice_type', 'invoice_year', 'id', 'book_no', 'bl_no', 'product_date', 'packing_date'
+    var book = r.db('g2g').table('book').getAll(query.id, { index: 'cl_id' }).pluck('cl_id', 'invoice_no', 'invoice_type', 'invoice_year', 'id', 'book_no', 'bl_no', 'product_date', 'packing_date'
         , 'shipline', 'ship', 'load_port', 'dest_port', 'eta_date', 'etd_date', 'cut_date', 'value_d', 'contract_id', 'ship_lot');
     // .eqJoin('contract_id', r.db('g2g').table('contract')).pluck('left', { right: 'buyer' }).zip()
     // .limit(10);
