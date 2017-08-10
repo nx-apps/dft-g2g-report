@@ -4,6 +4,7 @@
 	<property name="ireport.x" value="0"/>
 	<property name="ireport.y" value="0"/>
 	<import value="nylon.report.*"/>
+	<parameter name="country_fullname_th" class="java.lang.String"/>
 	<field name="ship" class="java.lang.String"/>
 	<field name="weight" class="java.lang.Double"/>
 	<field name="dest_port" class="java.lang.Object"/>
@@ -13,11 +14,23 @@
 	<background>
 		<band splitType="Stretch"/>
 	</background>
+	<title>
+		<band height="20">
+			<textField isStretchWithOverflow="true">
+				<reportElement x="0" y="0" width="454" height="20" isPrintWhenDetailOverflows="true" uuid="2929c4e1-a3b3-456d-ac53-e0fdb63959f4"/>
+				<textElement verticalAlignment="Top">
+					<font fontName="TH SarabunPSK" size="16" pdfFontName="THSarabun.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA["\t\tกองบริหารการค้าข้าว กรมการค้าต่างประเทศ ขอเรียนว่ารัฐบาล" + $P{country_fullname_th}+
+" ได้แจ้งชื่อเรือเพื่อเข้ามารับมอบข้าว ดังนี้"]]></textFieldExpression>
+			</textField>
+		</band>
+	</title>
 	<detail>
 		<band height="20" splitType="Stretch">
 			<textField isStretchWithOverflow="true">
 				<reportElement x="0" y="0" width="454" height="20" isPrintWhenDetailOverflows="true" uuid="2a1f3746-5192-4a61-aefc-0c33e85ec535"/>
-				<textElement verticalAlignment="Middle">
+				<textElement verticalAlignment="Top">
 					<font fontName="TH SarabunPSK" size="16" pdfFontName="THSarabun.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
 				</textElement>
 				<textFieldExpression><![CDATA["\t\t"+
