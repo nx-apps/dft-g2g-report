@@ -224,7 +224,7 @@ exports.report3 = function (req, res, next) {
                 ship_count: book.count(),
                 net_weight: book.sum('reduction'),
                 cl_no: book2.getField('cl_no')(0),
-                ship_lot: book2.getField('ship_lot')
+                ship_lot: book2.orderBy('ship_lot').getField('ship_lot')
                     .reduce(function (left, right) {
                         return left.coerceTo('string').add(',', right.coerceTo('string'))
                     })
