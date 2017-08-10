@@ -14,20 +14,19 @@
 	<detail>
 		<band height="20" splitType="Stretch">
 			<textField>
-				<reportElement x="0" y="1" width="454" height="19" uuid="93da2b2a-0eb0-4cd1-84ad-a822c8ba1c4f"/>
+				<reportElement stretchType="RelativeToBandHeight" x="0" y="1" width="454" height="19" uuid="93da2b2a-0eb0-4cd1-84ad-a822c8ba1c4f"/>
 				<textElement verticalAlignment="Middle">
 					<font fontName="TH SarabunPSK" size="16" pdfFontName="THSarabun.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
 				</textElement>
-				<textFieldExpression><![CDATA["\t\t" +
-new nylon.utility.NumberFormat().toThaiNumber ($V{COLUMN_COUNT})
-+". " +
+				<textFieldExpression><![CDATA["ได้แจ้งชื่อเรือ "+
 new nylon.utility.NumberFormat().toThaiNumber ($F{ship})
-+
++" เข้ามารับมอบข้าว"+
 " ปริมาณ "+
 new nylon.utility.NumberFormat().toThaiNumber(
     new nylon.utility.NumberFormat().toFormat($F{weight},"#,###.##")
 )
-+" ตัน "+" ส่งไปเมืองท่า "+new iJson2Object($F{dest_port}).getValue("port_name")]]></textFieldExpression>
++" ตัน "+" ส่งไปเมืองท่า "+new iJson2Object($F{dest_port}).getValue("port_name")
++" โดยมีรายละเอียดตามสิ่งที่ส่งมาด้วย"]]></textFieldExpression>
 			</textField>
 		</band>
 	</detail>

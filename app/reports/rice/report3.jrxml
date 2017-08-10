@@ -11,6 +11,7 @@
 	<parameter name="SUBREPORT_DIR" class="java.lang.String" isForPrompting="false">
 		<defaultValueExpression><![CDATA["C:\\Users\\tawatchai.w\\My Projects\\dft.go.th\\report-g2g\\59-DFT-RICEDB-II\\app\\reports\\shipment\\"]]></defaultValueExpression>
 	</parameter>
+	<parameter name="SHIPCOUNT" class="java.lang.Integer"/>
 	<field name="country_fullname_th" class="java.lang.String"/>
 	<field name="contract_no" class="java.lang.String"/>
 	<field name="cl_no" class="java.lang.Integer"/>
@@ -20,6 +21,9 @@
 	<field name="book" class="java.lang.Object"/>
 	<field name="net_weight" class="java.lang.Double"/>
 	<field name="company_name_th" class="java.lang.String"/>
+	<field name="hamonize" class="java.lang.Object"/>
+	<field name="project_en" class="java.lang.String"/>
+	<field name="buyer" class="java.lang.String"/>
 	<group name="GROUP" isStartNewPage="true">
 		<groupExpression><![CDATA[$F{exporter_id}]]></groupExpression>
 	</group>
@@ -113,7 +117,7 @@ new nylon.utility.NumberFormat().toThaiNumber(
 				<textElement textAlignment="Justified" verticalAlignment="Bottom">
 					<font fontName="TH SarabunPSK" size="16" pdfFontName="THSarabun.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
 				</textElement>
-				<textFieldExpression><![CDATA["หนังสือกรมการค้าต่างประเทศ ด่วนที่สุด ที่ ๐๓๐๕/ ลงวันที่ "+
+				<textFieldExpression><![CDATA["หนังสือสมาคมผู้ส่งออกข้าวไทยที่ ๖๑๙/๒๕๖๐ ลงวันที่ "+
 new nylon.utility.NumberFormat().toThaiNumber(
     new nylon.utility.NumberFormat().toThaiDate($P{CURRENT_DATE})
 )]]></textFieldExpression>
@@ -135,23 +139,36 @@ new nylon.utility.NumberFormat().toThaiNumber($F{ship_count})
 					<font fontName="TH SarabunPSK" size="16" pdfFontName="THSarabun.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
 					<paragraph lineSpacing="Proportional" lineSpacingSize="1.1"/>
 				</textElement>
-				<textFieldExpression><![CDATA["\t\tตามหนังสือที่อ้างถึง กรมการค้าต่างประเทศได้แจ้งให้บริษัทฯ ส่งมอบข้าวรัฐบาล " +
-$F{country_fullname_th} +
-" โดยเรือ "+
-new nylon.utility.NumberFormat().toThaiNumber($F{ship_count})
-+" ลำ "+"ปริมาณ   ตัน ความละเอียดแจ้งแล้ว นั้น"+
-"\n\t\tกองบริหารการค้าข้าว กรมการค้าต่างประเทศ ขอเรียนว่ารัฐบาล" + $F{country_fullname_th}+
-  " ได้แจ้งชื่อเรือเพื่อเข้ามารับมอบข้าวเพิ่มเติม ดังนี้ "]]></textFieldExpression>
+				<textFieldExpression><![CDATA["\t\tตามหนังสือที่อ้างถึง สมาคมผู้ส่งออกข้าวไทยได้จัดสรร" +new nylon.utility.NumberFormat().toThaiNumber(new iJson2Object($F{hamonize}).getValue("hamonize_th2"))+
+" ปีการผลิต "+new nylon.utility.NumberFormat().toThaiNumber($F{project_en})+" ฤดูใหม่ (ขัดสี 2 ครั้ง และคัดแยกเมล็ดข้าว) "
++"ปริมาณ "+new nylon.utility.NumberFormat().toThaiNumber(
+    new nylon.utility.NumberFormat().toFormat($F{net_weight},"#,###.##")
+    )+"  ตัน ให้บริษัทส่งมอบข้าวให้ "+$F{buyer}+
+" ความละเอียดแจ้งแล้ว นั้น"+
+"\n\t\tกองบริหารการค้าข้าว กรมการค้าต่างประเทศ ขอเรียนว่ารัฐบาล" + $F{country_fullname_th}
+]]></textFieldExpression>
 			</textField>
 		</band>
 		<band height="19">
+			<printWhenExpression><![CDATA[$F{ship_count}==1]]></printWhenExpression>
 			<subreport>
-				<reportElement x="0" y="0" width="454" height="19" uuid="a4ce9718-5f56-452e-9c31-938d46e3990e"/>
+				<reportElement stretchType="RelativeToBandHeight" x="0" y="0" width="454" height="19" uuid="a4ce9718-5f56-452e-9c31-938d46e3990e"/>
 				<subreportParameter name="SUBREPORT_DIR">
 					<subreportParameterExpression><![CDATA[$P{SUBREPORT_DIR}]]></subreportParameterExpression>
 				</subreportParameter>
 				<dataSourceExpression><![CDATA[new iJsonDS($F{book})]]></dataSourceExpression>
 				<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "/rice/report3_subreport1.jasper"]]></subreportExpression>
+			</subreport>
+		</band>
+		<band height="20">
+			<printWhenExpression><![CDATA[$F{ship_count}>1]]></printWhenExpression>
+			<subreport>
+				<reportElement x="0" y="0" width="454" height="20" uuid="706d0462-1b02-428e-861a-9651aa1f530c"/>
+				<subreportParameter name="SUBREPORT_DIR">
+					<subreportParameterExpression><![CDATA[$P{SUBREPORT_DIR}]]></subreportParameterExpression>
+				</subreportParameter>
+				<dataSourceExpression><![CDATA[new iJsonDS($F{book})]]></dataSourceExpression>
+				<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "/rice/report3_subreport2.jasper"]]></subreportExpression>
 			</subreport>
 		</band>
 		<band height="95">

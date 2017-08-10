@@ -15,7 +15,7 @@ exports.report1 = function (req, res, next) {
         var surveyor = book.getField('surveyor');
         var detail = r.db('g2g').table('book_detail').getAll(m('id'), { index: 'book_id' }).coerceTo('array');
         var confirm = r.db('g2g').table('confirm_letter').get(m('cl_id')).getField('incoterms');
-        var contract = r.db('g2g').table('contract').get(m('contract_id')).pluck('buyer_id', 'buyer', 'contract_date', 'contract_name', 'country','contract_no');
+        var contract = r.db('g2g').table('contract').get(m('contract_id')).pluck('buyer_id', 'buyer', 'contract_date', 'contract_name', 'country', 'contract_no');
         return contract.merge({
             contract_date: contract('contract_date').year().add(543),
             book_no: detail.getField('book_no').distinct().reduce(function (left, right) {
@@ -96,7 +96,7 @@ exports.report1 = function (req, res, next) {
             // res.json(result);
             params.COUNTRY = result.country.country_fullname_th;
             params.CL_NO = result.cl_no;
-            params.YEAR = Number(result.cut_date.split('-')[0])+543;
+            params.YEAR = Number(result.cut_date.split('-')[0]) + 543;
             params.CONTRACT_NO = result.contract_no;
             params.SHIP_LOT = result.ship_lot;
             params.REMARK = result.book_remark;
@@ -158,12 +158,36 @@ exports.report2 = function (req, res, next) {
 exports.report3 = function (req, res, next) {
     var r = req.r;
     var query = req.query;
-    var params = {
-        CURRENT_DATE: new Date().toISOString().slice(0, 10)
-    };
 
-    r.db('g2g').table('book_detail').getAll(r.args(query.id.split(',')), { index: 'book_id' })
-        .eqJoin('contract_id', r.db('g2g').table('contract')).pluck('left', { right: ['contract_no', 'country'] }).zip()
+    var shiplot = query.shiplot.split(',');
+    var num = [];
+    for (var x = 0; x < shiplot.length; x++) {
+        if (isNaN(shiplot[x])) {
+            var range = shiplot[x].split('-');
+            for (var y = Number(range[0]); y <= Number(range[1]); y++) {
+                num.push(y);
+            }
+        } else {
+            num.push(Number(shiplot[x]))
+        }
+    }
+
+    var params = {
+        CURRENT_DATE: new Date().toISOString().slice(0, 10),
+        // SHIPCOUNT: num.length
+    };
+    // res.json(num)
+    // r.db('g2g').table('book')//.getAll([r.args(query.id.split(',')),Number(query.cl_no)], { index: 'bookCl' })
+    //     .getAll(query.cl_id, { index: 'cl_id' })
+    //     .filter(function (f) {
+    //         return r.expr(num).contains(f('ship_lot'))
+    //     })
+    r.db('g2g').table('book_detail')//.getAll([r.args(query.id.split(',')),Number(query.cl_no)], { index: 'bookCl' })
+        .getAll(query.cl_id, { index: 'cl_id' })
+        .filter(function (f) {
+            return r.expr(num).contains(f('ship_lot'))
+        })
+        .eqJoin('contract_id', r.db('g2g').table('contract')).pluck('left', { right: ['contract_no', 'country', 'buyer'] }).zip()
         .group('exporter_id')
         .ungroup()
         .map(function (m) {
@@ -174,6 +198,9 @@ exports.report3 = function (req, res, next) {
                 company_name_th: m('reduction')(0)('company')('company_name_th'),
                 country_fullname_th: m('reduction')(0)('country')('country_fullname_th'),
                 contract_no: m('reduction')(0)('contract_no'),
+                hamonize: m('reduction')(0)('hamonize'),
+                project_en: m('reduction')(0)('project_en'),
+                buyer: m('reduction')(0)('buyer')('buyer_name'),
                 book: book2
                     .merge(function (m2) {
                         var ship = m2('ship');
@@ -197,7 +224,10 @@ exports.report3 = function (req, res, next) {
                 ship_count: book.count(),
                 net_weight: book.sum('reduction'),
                 cl_no: book2.getField('cl_no')(0),
-                ship_lot: book2.getField('ship_lot')(0)
+                ship_lot: book2.getField('ship_lot')
+                    .reduce(function (left, right) {
+                        return left.coerceTo('string').add(',', right.coerceTo('string'))
+                    })
             }
         })
         .run()
