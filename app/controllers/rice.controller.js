@@ -19,7 +19,7 @@ exports.report1 = function (req, res, next) {
         return contract.merge({
             contract_date: contract('contract_date').year().add(543),
             book_no: detail.getField('book_no').distinct().reduce(function (left, right) {
-                return left.add(', ', right)
+                return left.add(',', right)
             }),
             ship: r.branch(ship.count().gt(1),
                 ship.reduce(function (left, right) {
@@ -159,7 +159,7 @@ exports.report3 = function (req, res, next) {
     var r = req.r;
     var query = req.query;
 
-    var shiplot = query.shiplot.split(',');
+    var shiplot = query.ship_lot.split(',');
     var num = [];
     for (var x = 0; x < shiplot.length; x++) {
         if (isNaN(shiplot[x])) {
@@ -512,6 +512,11 @@ exports.report4 = function (req, res, next) {
                         ship(0)('ship_name').add(" V.", ship(0)('ship_voy'))
                     ),
                     detail: detail.coerceTo('array')
+                        .merge(function (m2) {
+                            return {
+                                detail_count: detail.count()
+                            }
+                        })
                         .eqJoin('contract_id', r.db('g2g').table('contract')).pluck('left', { right: 'buyer' }).zip(),
                     cut_date: m('cut_date').inTimezone('+07').toISO8601().split('T')(0),
                     eta_date: m('eta_date').inTimezone('+07').toISO8601().split('T')(0),
