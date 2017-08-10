@@ -17,12 +17,11 @@
 		<initialValueExpression><![CDATA[1]]></initialValueExpression>
 	</variable>
 	<detail>
-		<band height="10">
-			<printWhenExpression><![CDATA[$V{COUNT_DETAIL}!=$F{detail_count}]]></printWhenExpression>
-			<textField isStretchWithOverflow="true">
-				<reportElement positionType="Float" stretchType="RelativeToBandHeight" x="0" y="0" width="85" height="10" isPrintWhenDetailOverflows="true" uuid="dd43bfba-db3c-403a-8831-7b4b28f398e0"/>
-				<box leftPadding="5">
-					<topPen lineWidth="0.75"/>
+		<band height="10" splitType="Stretch">
+			<textField>
+				<reportElement positionType="Float" stretchType="RelativeToTallestObject" x="0" y="0" width="85" height="10" isPrintWhenDetailOverflows="true" uuid="dd43bfba-db3c-403a-8831-7b4b28f398e0"/>
+				<box>
+					<topPen lineWidth="0.0"/>
 					<leftPen lineWidth="0.75"/>
 					<bottomPen lineWidth="0.75"/>
 					<rightPen lineWidth="0.75"/>
@@ -32,10 +31,10 @@
 				</textElement>
 				<textFieldExpression><![CDATA[new iJson2Object($F{company}).getValue("company_name_en")]]></textFieldExpression>
 			</textField>
-			<textField isStretchWithOverflow="true">
-				<reportElement positionType="Float" stretchType="RelativeToBandHeight" x="125" y="0" width="25" height="10" isPrintWhenDetailOverflows="true" uuid="aac3ccdf-6ba3-4416-99c1-4fe452cf9297"/>
+			<textField>
+				<reportElement positionType="Float" stretchType="RelativeToTallestObject" x="85" y="0" width="65" height="10" isPrintWhenDetailOverflows="true" uuid="aac3ccdf-6ba3-4416-99c1-4fe452cf9297"/>
 				<box>
-					<topPen lineWidth="0.75"/>
+					<topPen lineWidth="0.0"/>
 					<leftPen lineWidth="0.75"/>
 					<bottomPen lineWidth="0.75"/>
 					<rightPen lineWidth="0.75"/>
@@ -45,10 +44,10 @@
 				</textElement>
 				<textFieldExpression><![CDATA[new iJson2Object($F{hamonize}).getValue("hamonize_en2")+" "+new iJson2Object($F{package}).getValue("package_kg_per_bag")+" KG"]]></textFieldExpression>
 			</textField>
-			<textField isStretchWithOverflow="true">
-				<reportElement positionType="Float" stretchType="RelativeToBandHeight" x="150" y="0" width="35" height="10" isPrintWhenDetailOverflows="true" uuid="ef6d9bb2-adc9-4b43-ac31-e3d6ed9563cb"/>
+			<textField>
+				<reportElement positionType="Float" stretchType="RelativeToTallestObject" x="150" y="0" width="35" height="10" isPrintWhenDetailOverflows="true" uuid="ef6d9bb2-adc9-4b43-ac31-e3d6ed9563cb"/>
 				<box>
-					<topPen lineWidth="0.75"/>
+					<topPen lineWidth="0.0"/>
 					<leftPen lineWidth="0.75"/>
 					<bottomPen lineWidth="0.75"/>
 					<rightPen lineWidth="0.75"/>
@@ -58,10 +57,10 @@
 				</textElement>
 				<textFieldExpression><![CDATA[new nylon.utility.NumberFormat().toFormat($F{net_weight},"#,###.##")]]></textFieldExpression>
 			</textField>
-			<textField isStretchWithOverflow="true">
-				<reportElement positionType="Float" stretchType="RelativeToBandHeight" x="185" y="0" width="35" height="10" isPrintWhenDetailOverflows="true" uuid="c0b25647-d8bc-4817-b6c9-db96e85a7d73"/>
+			<textField>
+				<reportElement positionType="Float" stretchType="RelativeToTallestObject" x="185" y="0" width="35" height="10" isPrintWhenDetailOverflows="true" uuid="c0b25647-d8bc-4817-b6c9-db96e85a7d73"/>
 				<box>
-					<topPen lineWidth="0.75"/>
+					<topPen lineWidth="0.0"/>
 					<leftPen lineWidth="0.75"/>
 					<bottomPen lineWidth="0.75"/>
 					<rightPen lineWidth="0.75"/>
@@ -71,10 +70,10 @@
 				</textElement>
 				<textFieldExpression><![CDATA[$F{num_of_container}]]></textFieldExpression>
 			</textField>
-			<textField isStretchWithOverflow="true">
-				<reportElement positionType="Float" stretchType="RelativeToBandHeight" x="220" y="0" width="30" height="10" isPrintWhenDetailOverflows="true" uuid="eeef9967-a604-4103-8de9-3c10b71c7bf6"/>
+			<textField>
+				<reportElement positionType="Float" stretchType="RelativeToTallestObject" x="220" y="0" width="30" height="10" isPrintWhenDetailOverflows="true" uuid="eeef9967-a604-4103-8de9-3c10b71c7bf6"/>
 				<box>
-					<topPen lineWidth="0.75"/>
+					<topPen lineWidth="0.0"/>
 					<leftPen lineWidth="0.75"/>
 					<bottomPen lineWidth="0.75"/>
 					<rightPen lineWidth="0.75"/>
@@ -84,10 +83,10 @@
 				</textElement>
 				<textFieldExpression><![CDATA[new iJson2Object($F{buyer}).getValue("buyer_masks")]]></textFieldExpression>
 			</textField>
-			<textField isStretchWithOverflow="true">
-				<reportElement positionType="Float" stretchType="RelativeToBandHeight" x="250" y="0" width="40" height="10" isPrintWhenDetailOverflows="true" uuid="110a2198-fd20-4b21-830b-1e3add5e0228"/>
+			<textField>
+				<reportElement positionType="Float" stretchType="RelativeToTallestObject" x="250" y="0" width="40" height="10" isPrintWhenDetailOverflows="true" uuid="110a2198-fd20-4b21-830b-1e3add5e0228"/>
 				<box>
-					<topPen lineWidth="0.75"/>
+					<topPen lineWidth="0.0"/>
 					<leftPen lineWidth="0.75"/>
 					<bottomPen lineWidth="0.75"/>
 					<rightPen lineWidth="0.75"/>
@@ -96,115 +95,6 @@
 					<font fontName="TH SarabunPSK" size="6" isBold="false" pdfFontName="THSarabun.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{book_no}]]></textFieldExpression>
-			</textField>
-			<textField>
-				<reportElement x="102" y="0" width="23" height="10" uuid="df82a47d-2b9f-4315-b978-69b9db91440e"/>
-				<textElement>
-					<font size="5"/>
-				</textElement>
-				<textFieldExpression><![CDATA[$V{REPORT_COUNT}]]></textFieldExpression>
-			</textField>
-			<textField>
-				<reportElement x="85" y="0" width="17" height="10" uuid="f79b3c21-1180-45be-9665-c7e607306092"/>
-				<textElement>
-					<font size="5"/>
-				</textElement>
-				<textFieldExpression><![CDATA[$V{COLUMN_COUNT}]]></textFieldExpression>
-			</textField>
-		</band>
-		<band height="10">
-			<printWhenExpression><![CDATA[$V{COUNT_DETAIL}==$F{detail_count}]]></printWhenExpression>
-			<textField isStretchWithOverflow="true">
-				<reportElement stretchType="RelativeToTallestObject" x="0" y="0" width="85" height="10" isPrintWhenDetailOverflows="true" uuid="237154a3-9d3f-46c9-bda6-6218671fb7fc"/>
-				<box leftPadding="5">
-					<topPen lineWidth="0.75"/>
-					<leftPen lineWidth="0.75"/>
-					<bottomPen lineWidth="0.0"/>
-					<rightPen lineWidth="0.75"/>
-				</box>
-				<textElement verticalAlignment="Middle">
-					<font fontName="TH SarabunPSK" size="6" isBold="false" pdfFontName="THSarabun.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
-				</textElement>
-				<textFieldExpression><![CDATA[new iJson2Object($F{company}).getValue("company_name_en")]]></textFieldExpression>
-			</textField>
-			<textField isStretchWithOverflow="true">
-				<reportElement stretchType="RelativeToTallestObject" x="125" y="0" width="25" height="10" isPrintWhenDetailOverflows="true" uuid="0ea9b03f-b541-4d24-8446-9bd8bdf535c0"/>
-				<box>
-					<topPen lineWidth="0.75"/>
-					<leftPen lineWidth="0.75"/>
-					<bottomPen lineWidth="0.0"/>
-					<rightPen lineWidth="0.75"/>
-				</box>
-				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font fontName="TH SarabunPSK" size="6" isBold="false" pdfFontName="THSarabun.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
-				</textElement>
-				<textFieldExpression><![CDATA[new iJson2Object($F{hamonize}).getValue("hamonize_en2")+" "+new iJson2Object($F{package}).getValue("package_kg_per_bag")+" KG"]]></textFieldExpression>
-			</textField>
-			<textField isStretchWithOverflow="true">
-				<reportElement stretchType="RelativeToTallestObject" x="150" y="0" width="35" height="10" isPrintWhenDetailOverflows="true" uuid="d6ee4d7f-f391-4b44-a4f2-18290bab88eb"/>
-				<box>
-					<topPen lineWidth="0.75"/>
-					<leftPen lineWidth="0.75"/>
-					<bottomPen lineWidth="0.0"/>
-					<rightPen lineWidth="0.75"/>
-				</box>
-				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font fontName="TH SarabunPSK" size="6" isBold="false" pdfFontName="THSarabun.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
-				</textElement>
-				<textFieldExpression><![CDATA[new nylon.utility.NumberFormat().toFormat($F{net_weight},"#,###.##")]]></textFieldExpression>
-			</textField>
-			<textField isStretchWithOverflow="true">
-				<reportElement stretchType="RelativeToTallestObject" x="185" y="0" width="35" height="10" isPrintWhenDetailOverflows="true" uuid="4ebaffe3-127b-4112-b2ac-23f337fae8d8"/>
-				<box>
-					<topPen lineWidth="0.75"/>
-					<leftPen lineWidth="0.75"/>
-					<bottomPen lineWidth="0.0"/>
-					<rightPen lineWidth="0.75"/>
-				</box>
-				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font fontName="TH SarabunPSK" size="6" isBold="false" pdfFontName="THSarabun.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
-				</textElement>
-				<textFieldExpression><![CDATA[$F{num_of_container}]]></textFieldExpression>
-			</textField>
-			<textField isStretchWithOverflow="true">
-				<reportElement stretchType="RelativeToTallestObject" x="220" y="0" width="30" height="10" isPrintWhenDetailOverflows="true" uuid="c8669184-9e84-41be-ba61-d291e60407c6"/>
-				<box>
-					<topPen lineWidth="0.75"/>
-					<leftPen lineWidth="0.75"/>
-					<bottomPen lineWidth="0.0"/>
-					<rightPen lineWidth="0.75"/>
-				</box>
-				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font fontName="TH SarabunPSK" size="6" isBold="false" pdfFontName="THSarabun.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
-				</textElement>
-				<textFieldExpression><![CDATA[new iJson2Object($F{buyer}).getValue("buyer_masks")]]></textFieldExpression>
-			</textField>
-			<textField isStretchWithOverflow="true">
-				<reportElement stretchType="RelativeToTallestObject" x="250" y="0" width="40" height="10" isPrintWhenDetailOverflows="true" uuid="19c528f1-6e22-46f5-af20-c790fbca04ff"/>
-				<box>
-					<topPen lineWidth="0.75"/>
-					<leftPen lineWidth="0.75"/>
-					<bottomPen lineWidth="0.0"/>
-					<rightPen lineWidth="0.75"/>
-				</box>
-				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font fontName="TH SarabunPSK" size="6" isBold="false" pdfFontName="THSarabun.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
-				</textElement>
-				<textFieldExpression><![CDATA[$F{book_no}]]></textFieldExpression>
-			</textField>
-			<textField>
-				<reportElement x="85" y="0" width="17" height="10" uuid="dffa48b9-d92f-4a12-927e-b4852348321f"/>
-				<textElement>
-					<font size="5"/>
-				</textElement>
-				<textFieldExpression><![CDATA[$V{COLUMN_COUNT}]]></textFieldExpression>
-			</textField>
-			<textField>
-				<reportElement x="102" y="0" width="23" height="10" uuid="9a09a273-73e6-4d43-a2d5-82a11c367170"/>
-				<textElement>
-					<font size="5"/>
-				</textElement>
-				<textFieldExpression><![CDATA[$V{REPORT_COUNT}]]></textFieldExpression>
 			</textField>
 		</band>
 	</detail>

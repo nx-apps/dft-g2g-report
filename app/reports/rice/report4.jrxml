@@ -323,7 +323,7 @@ Port]]></text>
 		</band>
 	</columnHeader>
 	<detail>
-		<band height="10" splitType="Stretch">
+		<band height="10">
 			<textField isStretchWithOverflow="true">
 				<reportElement stretchType="RelativeToBandHeight" x="0" y="0" width="12" height="10" isPrintWhenDetailOverflows="true" uuid="d0d9ad3b-e443-4607-be5e-2bc5d62b995f"/>
 				<box>
@@ -480,7 +480,7 @@ Port]]></text>
 				</textElement>
 				<textFieldExpression><![CDATA[new nylon.utility.NumberFormat().toFormat($F{value_d},"#,###.##")]]></textFieldExpression>
 			</textField>
-			<subreport>
+			<subreport runToBottom="false">
 				<reportElement positionType="Float" stretchType="RelativeToBandHeight" x="50" y="0" width="290" height="10" isPrintWhenDetailOverflows="true" uuid="0393b1e3-0bc5-4af2-a0fc-09cc1505e4f4"/>
 				<subreportParameter name="SUBREPORT_DIR">
 					<subreportParameterExpression><![CDATA[$P{SUBREPORT_DIR}]]></subreportParameterExpression>
