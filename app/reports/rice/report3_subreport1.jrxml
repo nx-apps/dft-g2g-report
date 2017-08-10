@@ -13,8 +13,8 @@
 	</background>
 	<detail>
 		<band height="20" splitType="Stretch">
-			<textField>
-				<reportElement stretchType="RelativeToBandHeight" x="0" y="1" width="454" height="19" uuid="93da2b2a-0eb0-4cd1-84ad-a822c8ba1c4f"/>
+			<textField isStretchWithOverflow="true">
+				<reportElement stretchType="RelativeToBandHeight" x="0" y="1" width="454" height="19" isPrintWhenDetailOverflows="true" uuid="93da2b2a-0eb0-4cd1-84ad-a822c8ba1c4f"/>
 				<textElement verticalAlignment="Middle">
 					<font fontName="TH SarabunPSK" size="16" pdfFontName="THSarabun.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
 				</textElement>

@@ -220,7 +220,7 @@ exports.report3 = function (req, res, next) {
                             ),
                             weight: m2('reduction')
                         }
-                    }),
+                    }).orderBy('ship_lot'),
                 ship_count: book.count(),
                 net_weight: book.sum('reduction'),
                 cl_no: book2.getField('cl_no')(0),
