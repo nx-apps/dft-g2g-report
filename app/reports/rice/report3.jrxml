@@ -2,7 +2,7 @@
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="report3" language="groovy" pageWidth="595" pageHeight="842" columnWidth="454" leftMargin="85" rightMargin="56" topMargin="70" bottomMargin="56" uuid="03566586-1cd4-40da-a543-9ba8be19ecfd">
 	<property name="ireport.zoom" value="1.0"/>
 	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="0"/>
+	<property name="ireport.y" value="70"/>
 	<import value="nylon.report.*"/>
 	<parameter name="CURRENT_DATE" class="java.lang.String"/>
 	<parameter name="KROT_BASE64" class="java.lang.String">
@@ -145,8 +145,8 @@ new nylon.utility.NumberFormat().toThaiNumber($F{ship_count})
     new nylon.utility.NumberFormat().toFormat($F{net_weight},"#,###.##")
     )+"  ตัน ให้บริษัทส่งมอบข้าวให้ "+$F{buyer}+
 " ความละเอียดแจ้งแล้ว นั้น"+
-"\n\t\tกองบริหารการค้าข้าว กรมการค้าต่างประเทศ ขอเรียนว่ารัฐบาล" + $F{country_fullname_th}
-]]></textFieldExpression>
+"\n\t\tกองบริหารการค้าข้าว กรมการค้าต่างประเทศ ขอเรียนว่ารัฐบาล" + $F{country_fullname_th}+
+($F{ship_count}>1?"ได้แจ้งชื่อเรือเพื่อเข้ามารับมอบข้าว ดังนี้":"")]]></textFieldExpression>
 			</textField>
 		</band>
 		<band height="19">
