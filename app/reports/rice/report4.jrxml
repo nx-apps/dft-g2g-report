@@ -481,7 +481,7 @@ Port]]></text>
 				<textFieldExpression><![CDATA[new nylon.utility.NumberFormat().toFormat($F{value_d},"#,###.##")]]></textFieldExpression>
 			</textField>
 			<subreport runToBottom="false">
-				<reportElement positionType="Float" stretchType="RelativeToBandHeight" x="50" y="0" width="290" height="10" isPrintWhenDetailOverflows="true" uuid="0393b1e3-0bc5-4af2-a0fc-09cc1505e4f4"/>
+				<reportElement stretchType="RelativeToBandHeight" x="50" y="0" width="290" height="10" isPrintWhenDetailOverflows="true" uuid="0393b1e3-0bc5-4af2-a0fc-09cc1505e4f4"/>
 				<subreportParameter name="SUBREPORT_DIR">
 					<subreportParameterExpression><![CDATA[$P{SUBREPORT_DIR}]]></subreportParameterExpression>
 				</subreportParameter>
