@@ -484,6 +484,7 @@
 	</title>
 	<columnHeader>
 		<band height="40" splitType="Stretch">
+			<printWhenExpression><![CDATA[($P{FILE_TYPE}=="excel"&&$V{PAGE_NUMBER}==1)||($P{FILE_TYPE}!="excel")]]></printWhenExpression>
 			<staticText>
 				<reportElement x="0" y="0" width="195" height="40" uuid="cc6b064c-57f5-4f31-beb7-582247382e0b"/>
 				<box>
@@ -700,6 +701,7 @@
 	</detail>
 	<columnFooter>
 		<band height="20">
+			<printWhenExpression><![CDATA[$P{FILE_TYPE}!="excel"]]></printWhenExpression>
 			<textField>
 				<reportElement x="505" y="0" width="30" height="20" uuid="388827d9-9840-42ae-8a95-e992b6ec002a"/>
 				<box leftPadding="0" rightPadding="0">
