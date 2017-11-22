@@ -3,6 +3,7 @@
 	<property name="ireport.zoom" value="0.9090909090909092"/>
 	<property name="ireport.x" value="0"/>
 	<property name="ireport.y" value="0"/>
+	<property name="net.sf.jasperreports.export.xls.remove.empty.space.between.rows" value="true"/>
 	<parameter name="FILE_TYPE" class="java.lang.String"/>
 	<parameter name="MONTH_DATE" class="java.lang.String">
 		<defaultValueExpression><![CDATA[new SimpleDateFormat("-MM-dd").format(new Date())]]></defaultValueExpression>
@@ -361,6 +362,7 @@
 	</title>
 	<columnHeader>
 		<band height="60" splitType="Stretch">
+			<printWhenExpression><![CDATA[($P{FILE_TYPE}=="excel"&&$V{PAGE_NUMBER}==1)||($P{FILE_TYPE}!="excel")]]></printWhenExpression>
 			<staticText>
 				<reportElement x="0" y="0" width="47" height="60" uuid="b5c4bf6b-7f93-416f-98fe-0535016a24c7"/>
 				<box>
@@ -912,6 +914,7 @@
 	</detail>
 	<columnFooter>
 		<band height="20">
+			<printWhenExpression><![CDATA[$P{FILE_TYPE}!="excel"]]></printWhenExpression>
 			<textField>
 				<reportElement x="752" y="0" width="30" height="20" uuid="52d9a3ac-d0b8-4bf8-aebf-f89c7515724c"/>
 				<box leftPadding="0" rightPadding="0">
