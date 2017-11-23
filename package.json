@@ -18,6 +18,7 @@
   },
   "homepage": "https://github.com/nx-apps/dft-g2g#readme",
   "dependencies": {
-    "async": "^2.4.0"
+    "async": "^2.4.0",
+    "xlsx": "^0.10.4"
   }
 }
